@@ -72,7 +72,7 @@ class DiscoverWorkflow:
                 or "/Users/evan.scharfer/projects/Slalom/new-modernization-sdlc/docs",
             ).expanduser(),
         )
-        agent_provider = "claude"
+        agent_provider = workflow_input.agent_provider
 
         workflow.set_current_details(
             f"Discovering {legacy_dir} (domain={domain}, target_stack={target_stack or 'unset'}).",

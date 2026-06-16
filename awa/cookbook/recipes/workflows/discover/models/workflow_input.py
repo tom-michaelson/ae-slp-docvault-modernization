@@ -57,6 +57,14 @@ class DiscoverWorkflowInput(BaseModel):
             "'/Users/evan.scharfer/projects/Slalom/new-modernization-sdlc'."
         ),
     )
+    agent_provider: str = Field(
+        default="claude",
+        description=(
+            "Agent provider used to execute slash commands in each phase. "
+            "Supported values: 'claude', 'github_copilot', 'goose', 'codex', "
+            "'opencode', 'gemini', 'q'. Defaults to 'claude'."
+        ),
+    )
     max_concurrency: int = Field(
         default=5,
         description="Maximum number of concurrent child workflows within a phase.",
