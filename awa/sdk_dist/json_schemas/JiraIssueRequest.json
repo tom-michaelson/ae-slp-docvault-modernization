@@ -1,0 +1,54 @@
+{
+  "properties": {
+    "project_id": {
+      "title": "Project Id",
+      "type": "string"
+    },
+    "key": {
+      "default": null,
+      "title": "Key",
+      "type": "string"
+    },
+    "summary": {
+      "default": null,
+      "title": "Summary",
+      "type": "string"
+    },
+    "description": {
+      "default": null,
+      "title": "Description",
+      "type": "string"
+    },
+    "issue_type": {
+      "default": null,
+      "title": "Issue Type",
+      "type": "string"
+    },
+    "parent": {
+      "default": null,
+      "title": "Parent",
+      "type": "string"
+    },
+    "tags": {
+      "default": null,
+      "items": {
+        "type": "string"
+      },
+      "title": "Tags",
+      "type": "array"
+    },
+    "comments": {
+      "default": null,
+      "items": {
+        "type": "string"
+      },
+      "title": "Comments",
+      "type": "array"
+    }
+  },
+  "required": [
+    "project_id"
+  ],
+  "title": "JiraIssueRequest",
+  "type": "object"
+}

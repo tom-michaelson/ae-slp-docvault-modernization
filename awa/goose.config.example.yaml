@@ -1,0 +1,30 @@
+GOOSE_MODEL: us.anthropic.claude-sonnet-4-20250514-v1:0
+GOOSE_PROVIDER: aws_bedrock
+OPENAI_HOST: http://host.docker.internal:4002
+GOOSE_CLI_MIN_PRIORITY: 0.8
+AWS_PROFILE: slalomdev
+OPENAI_BASE_PATH: v1/chat/completions
+extensions:
+  developer:
+    display_name: Developer
+    enabled: true
+    name: developer
+    timeout: 300
+    type: builtin
+  knowledgegraphmemory:
+    args:
+    - -y
+    - '@modelcontextprotocol/server-memory'
+    cmd: npx
+    description: null
+    enabled: true
+    envs: {}
+    name: knowledge graph memory
+    timeout: 300
+    type: stdio
+  memory:
+    display_name: Memory
+    enabled: true
+    name: memory
+    timeout: 300
+    type: builtin

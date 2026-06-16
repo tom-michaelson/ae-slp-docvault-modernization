@@ -1,0 +1,152 @@
+@font-face {
+  font-family: "SlalomSans";
+  src: url("/fonts/SlalomSans_Regular-6da8edab.otf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "SlalomSans";
+  src: url("/fonts/SlalomSans_Regular-6da8edab.otf");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "SlalomSans";
+  src: url("/fonts/SlalomSans_Bold-f682725d.otf");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "SlalomSansBold";
+  src: url("/fonts/SlalomSans_Bold-f682725d.otf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "SlalomSansLight";
+  src: url("/fonts/SlalomSans_Light-ddfd55de.otf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "SlalomSans";
+  src: url("/fonts/SlalomSans_Light-ddfd55de.otf");
+  font-weight: normal;
+  font-style: italic;
+}
+
+:root {
+  --slalom-blue: #0C62FB;
+  --slalom-light-blue: #7ca8f7;
+  --slalom-dark-blue: #002FAF;
+  --slalom-white: #FFFFFF;
+  --slalom-black: #000000;
+  --slalom-dark-gray: #666666;
+  --slalom-light-gray: #E6E6E6;
+  --slalom-cyan: #1BE1F2;
+  --slalom-coral-red: #FF4D5F;
+  --slalom-purple: #C7B9FF;
+  --slalom-chartreuse: #DEFF4D;
+
+  strong {
+    font-family: "SlalomSansBold";
+  }
+
+  em {
+    font-family: "SlalomSansLight";
+  }
+
+
+}
+
+:root {
+  --vp-c-default-1: var(--slalom-dark-gray);
+  --vp-c-default-2: var(--slalom-cyan);
+  --vp-c-default-3: var(--slalom-light-gray);
+  --vp-c-default-soft: var(--slalom-light-gray);
+
+  --vp-c-brand-1: var(--slalom-blue);
+  --vp-c-brand-2: var(--slalom-cyan);
+  --vp-c-brand-3: var(--slalom-dark-blue);
+  --vp-c-brand-soft: var(--slalom-light-blue);
+
+  --vp-c-tip-1: var(--vp-c-brand-1);
+  --vp-c-tip-2: var(--vp-c-brand-2);
+  --vp-c-tip-3: var(--vp-c-brand-3);
+  --vp-c-tip-soft: var(--vp-c-brand-soft);
+
+  --vp-c-warning-1: var(--vp-c-yellow-1);
+  --vp-c-warning-2: var(--vp-c-yellow-2);
+  --vp-c-warning-3: var(--vp-c-yellow-3);
+  --vp-c-warning-soft: var(--vp-c-yellow-soft);
+
+  --vp-c-danger-1: var(--vp-c-red-1);
+  --vp-c-danger-2: var(--vp-c-red-2);
+  --vp-c-danger-3: var(--vp-c-red-3);
+  --vp-c-danger-soft: var(--vp-c-red-soft);
+}
+
+html.dark a.VPButton.medium.alt {
+  background-color: var(--slalom-dark-gray)
+}
+
+/**
+ * Component: Button
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --vp-button-brand-border: transparent;
+  --vp-button-brand-text: var(--vp-c-white);
+  --vp-button-brand-bg: var(--vp-c-brand-3);
+  --vp-button-brand-hover-border: transparent;
+  --vp-button-brand-hover-text: var(--vp-c-white);
+  --vp-button-brand-hover-bg: var(--vp-c-brand-2);
+  --vp-button-brand-active-border: transparent;
+  --vp-button-brand-active-text: var(--vp-c-white);
+  --vp-button-brand-active-bg: var(--vp-c-brand-1);
+}
+
+/**
+ * Component: Home
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --vp-home-hero-name-background: var(--slalom-dark-blue);
+}
+
+body {
+  font-family: "SlalomSans", "sans-serif";
+}
+
+div.is-home div.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+div.is-home div.logo-container img {
+  max-height: 42px;
+}
+
+div.is-home div.logo-container span {
+  margin: 0px;
+  /* color: #FFFFFF !important; */
+}
+
+div.is-home div.logo-container span.version {
+  -webkit-text-fill-color: var(--slalom-cyan);
+  font-size: 40px;
+}
+
+/* div.is-home div.main h1.name span.version {
+  margin-left: 10px;
+  font-size: 40px;
+  -webkit-text-fill-color: var(--slalom-cyan);
+  -webkit-text-stroke-color: transparent;
+} */

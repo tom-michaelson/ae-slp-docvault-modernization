@@ -1,0 +1,18 @@
+[
+  {
+    "type": "table",
+    "name": "CatalogItems",
+    "key": "catalog-items",
+    "operations": ["select", "insert", "update"],
+    "columns": ["Id", "Name", "Description", "Price", "PictureUri", "CatalogTypeId", "CatalogBrandId"],
+    "locations": [
+      "src/ApplicationCore/Specifications/CatalogItemNameSpecification.cs",
+      "src/ApplicationCore/Entities/CatalogItem.cs",
+      "src/Infrastructure/Data/Migrations/20201202111507_InitialModel.cs"
+    ],
+    "notes": [
+      "Counted once by name before insert to enforce uniqueness; if count > 0 the request is rejected with HTTP 409.",
+      "Inserted once with all supplied fields, then immediately updated a second time to overwrite PictureUri with the default placeholder — the Java target can collapse these into a single INSERT."
+    ]
+  }
+]

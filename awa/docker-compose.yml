@@ -1,0 +1,127 @@
+# docker-compose.yml
+services:
+
+  postgresql:
+    extends:
+      file: docker-compose.awa.yml
+      service: postgresql
+    networks:
+      - awa-network
+
+  temporal:
+    extends:
+      file: docker-compose.awa.yml
+      service: temporal
+    networks:
+      - awa-network
+
+  temporal-admin-tools:
+    extends:
+      file: docker-compose.awa.yml
+      service: temporal-admin-tools
+    networks:
+      - awa-network
+
+  temporal-ui:
+    extends:
+      file: docker-compose.awa.yml
+      service: temporal-ui
+    networks:
+      - awa-network
+
+  temporal-worker:
+    extends:
+      file: docker-compose.awa.yml
+      service: temporal-worker
+    networks:
+      - awa-network
+
+  api:
+    extends:
+      file: docker-compose.awa.yml
+      service: api
+    networks:
+      - awa-network
+
+  ui:
+    extends:
+      file: docker-compose.awa.yml
+      service: ui
+    networks:
+      - awa-network
+
+  litellm-postgres:
+    extends:
+      file: docker-compose.litellm.yml
+      service: litellm-postgres
+    networks:
+      - awa-network
+
+  litellm:
+    extends:
+      file: docker-compose.litellm.yml
+      service: litellm
+    networks:
+      - awa-network
+    environment:
+      LANGFUSE_HOST: http://langfuse-web:3000
+
+  langfuse-worker:
+    extends:
+      file: docker-compose.langfuse.yml
+      service: langfuse-worker
+    networks:
+      - awa-network
+
+  langfuse-web:
+    extends:
+      file: docker-compose.langfuse.yml
+      service: langfuse-web
+    networks:
+      - awa-network
+
+  clickhouse:
+    extends:
+      file: docker-compose.langfuse.yml
+      service: clickhouse
+    networks:
+      - awa-network
+
+  minio:
+    extends:
+      file: docker-compose.langfuse.yml
+      service: minio
+    networks:
+      - awa-network
+
+  redis:
+    extends:
+      file: docker-compose.langfuse.yml
+      service: redis
+    networks:
+      - awa-network
+
+  postgres:
+    extends:
+      file: docker-compose.langfuse.yml
+      service: postgres
+    networks:
+      - awa-network
+
+volumes:
+  postgres_data:
+    driver: local
+  litellm_postgres_data:
+    driver: local
+  langfuse_postgres_data:
+    driver: local
+  langfuse_clickhouse_data:
+    driver: local
+  langfuse_clickhouse_logs:
+    driver: local
+  langfuse_minio_data:
+    driver: local
+
+networks:
+  awa-network:
+    driver: bridge

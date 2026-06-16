@@ -1,0 +1,49 @@
+# docker-compose.yml
+name: awa-litellm
+services:
+  litellm-postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: litellm
+      POSTGRES_USER: litellm
+      POSTGRES_PASSWORD: litellm
+    ports:
+      - "5435:5432"
+    volumes:
+      - litellm_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U litellm -d litellm"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  litellm:
+    image: ghcr.io/berriai/litellm:main-latest
+    env_file: .env
+    depends_on:
+      - litellm-postgres
+    ports:
+      - "4002:4000"
+    volumes:
+      - type: bind
+        source: ./litellm_config.yaml
+        target: /app/config.yaml
+      - $HOME/.aws:/root/.aws:ro
+      - $HOME/.awa:/root/.awa:ro
+    command: --config /app/config.yaml --detailed_debug
+    environment:
+      AWS_PROFILE: ${AWS_PROFILE}
+      AWS_REGION: ${AWS_REGION}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      LANGFUSE_HOST: http://host.docker.internal:3001
+      LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY}
+      LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY}
+      DATABASE_URL: postgresql://litellm:litellm@litellm-postgres:5432/litellm
+      # GitHub Copilot uses OAuth device flow - LiteLLM will prompt for auth on first use
+      # Token is stored in container at /root/.awa (mounted from host)
+
+volumes:
+  litellm_postgres_data:
+    driver: local

@@ -1,0 +1,1821 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AWA API",
+    "description": "Agentic Workflow Accelerator API",
+    "version": "0.2.0"
+  },
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Health",
+        "description": "Check the health of the AWA services.",
+        "operationId": "health_api_v1_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workflows/list": {
+      "get": {
+        "tags": [
+          "workflows"
+        ],
+        "summary": "Workflows: List all workflows",
+        "description": "List all available workflows from both core application and external workers.",
+        "operationId": "list_workflows_api_v1_workflows_list_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "task_queue",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by task queue",
+              "title": "Task Queue"
+            },
+            "description": "Filter by task queue"
+          },
+          {
+            "name": "awa_auth_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Awa Auth Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkflowListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workflows/runs": {
+      "get": {
+        "tags": [
+          "workflows"
+        ],
+        "summary": "Workflow Runs: List workflow runs",
+        "description": "List all running and completed workflow runs.",
+        "operationId": "workflow_runs_api_v1_workflows_runs_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "awa_auth_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Awa Auth Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkflowRunListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workflows": {
+      "post": {
+        "tags": [
+          "workflows"
+        ],
+        "summary": "Workflows: Run workflow",
+        "description": "Run a workflow.",
+        "operationId": "run_workflow_api_v1_workflows_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "awa_auth_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Awa Auth Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkflowRunPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Run Workflow Api V1 Workflows Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workflows/runs/{run_id}": {
+      "get": {
+        "tags": [
+          "workflows"
+        ],
+        "summary": "Workflows: Get workflow run details",
+        "description": "Get detailed information about a specific workflow run by run ID.",
+        "operationId": "get_workflow_run_api_v1_workflows_runs__run_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Run Id"
+            }
+          },
+          {
+            "name": "awa_auth_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Awa Auth Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkflowRun"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workflows/{workflow_id}/agent-sessions": {
+      "get": {
+        "tags": [
+          "workflows",
+          "agent-streaming"
+        ],
+        "summary": "Get workflow agent sessions",
+        "description": "Get all agent streaming sessions associated with a specific workflow.",
+        "operationId": "get_workflow_agent_sessions_api_v1_workflows__workflow_id__agent_sessions_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workflow_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Workflow Id"
+            }
+          },
+          {
+            "name": "awa_auth_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Awa Auth Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkflowAgentSessionsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/hitl/tasks": {
+      "get": {
+        "tags": [
+          "hitl"
+        ],
+        "summary": "HITL: List HITL tasks",
+        "description": "List all Human-in-the-Loop tasks awaiting interaction.",
+        "operationId": "list_hitl_tasks_api_v1_hitl_tasks_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "awa_auth_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Awa Auth Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HITLTaskInfo"
+                  },
+                  "title": "Response List Hitl Tasks Api V1 Hitl Tasks Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/hitl/tasks/{workflow_id}": {
+      "get": {
+        "tags": [
+          "hitl"
+        ],
+        "summary": "HITL: List HITL tasks for workflow",
+        "description": "List all HITL tasks for a specific parent workflow.",
+        "operationId": "list_hitl_tasks_for_workflow_api_v1_hitl_tasks__workflow_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workflow_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Workflow Id"
+            }
+          },
+          {
+            "name": "awa_auth_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Awa Auth Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HITLTaskInfo"
+                  },
+                  "title": "Response List Hitl Tasks For Workflow Api V1 Hitl Tasks  Workflow Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/hitl/task/{workflow_id}": {
+      "get": {
+        "tags": [
+          "hitl"
+        ],
+        "summary": "HITL: Get HITL task details",
+        "description": "Get detailed information about a specific HITL task.",
+        "operationId": "get_hitl_task_api_v1_hitl_task__workflow_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workflow_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Workflow Id"
+            }
+          },
+          {
+            "name": "awa_auth_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Awa Auth Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HITLTaskDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/hitl/task/{workflow_id}/submit": {
+      "post": {
+        "tags": [
+          "hitl"
+        ],
+        "summary": "HITL: Submit HITL task response",
+        "description": "Submit a response to complete a HITL task.",
+        "operationId": "submit_hitl_task_api_v1_hitl_task__workflow_id__submit_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workflow_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Workflow Id"
+            }
+          },
+          {
+            "name": "awa_auth_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Awa Auth Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "title": "Response"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Submit Hitl Task Api V1 Hitl Task  Workflow Id  Submit Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/hitl/task/{workflow_id}/message": {
+      "post": {
+        "tags": [
+          "hitl"
+        ],
+        "summary": "HITL: Send HITL chat message",
+        "description": "Send a chat message to a HITL task in chat mode.",
+        "operationId": "send_hitl_message_api_v1_hitl_task__workflow_id__message_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workflow_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Workflow Id"
+            }
+          },
+          {
+            "name": "awa_auth_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Awa Auth Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "title": "Message Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Send Hitl Message Api V1 Hitl Task  Workflow Id  Message Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/hitl/task/{workflow_id}/chat/history": {
+      "get": {
+        "tags": [
+          "hitl"
+        ],
+        "summary": "HITL: Get HITL chat history",
+        "description": "Get the current chat history for a HITL task.",
+        "operationId": "get_hitl_chat_history_api_v1_hitl_task__workflow_id__chat_history_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workflow_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Workflow Id"
+            }
+          },
+          {
+            "name": "awa_auth_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Awa Auth Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "title": "Response Get Hitl Chat History Api V1 Hitl Task  Workflow Id  Chat History Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/hitl/task/{workflow_id}/chat/user-message": {
+      "post": {
+        "tags": [
+          "hitl"
+        ],
+        "summary": "HITL: Send user message to HITL task",
+        "description": "Send a user message to a HITL task, triggering workflow processing.",
+        "operationId": "send_hitl_user_message_api_v1_hitl_task__workflow_id__chat_user_message_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workflow_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Workflow Id"
+            }
+          },
+          {
+            "name": "awa_auth_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Awa Auth Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "title": "Message Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Send Hitl User Message Api V1 Hitl Task  Workflow Id  Chat User Message Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/logs/workflows/{workflow_id}": {
+      "get": {
+        "tags": [
+          "logs"
+        ],
+        "summary": "Logs: Get workflow logs",
+        "description": "Get execution logs for a workflow.",
+        "operationId": "get_workflow_logs_api_v1_logs_workflows__workflow_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workflow_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Workflow Id"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1000,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "awa_auth_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Awa Auth Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkflowLogsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workers/register": {
+      "post": {
+        "tags": [
+          "workers"
+        ],
+        "summary": "Registration: Register worker capabilities",
+        "description": "Register a worker with its available workflows and activities.\n\n#### Schema Requirements:\n* Must have `type: object` at root level\n* Must include `properties` field containing property definitions\n* Each property must specify a `type` field\n* Optional: Include `required` array for mandatory fields\n* Optional: Add validation rules (minimum, maximum, pattern, etc.)",
+        "operationId": "register_worker_api_v1_workers_register_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkerRegistration"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkerRegistrationResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/agents/stream/emit": {
+      "post": {
+        "tags": [
+          "agent-streaming"
+        ],
+        "summary": "Emit stream event",
+        "description": "Emit a stream event via HTTP (stores and broadcasts via Socket.IO). Service-authenticated only.",
+        "operationId": "emit_stream_event_api_v1_agents_stream_emit_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StreamEventRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StreamEventResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ActivityDefinition": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Name",
+            "description": "Activity function name"
+          },
+          "task_queue": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Task Queue",
+            "description": "Task queue for activity execution"
+          },
+          "input_schema": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Input Schema",
+            "description": "Valid JSON Schema for activity input validation."
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "task_queue",
+          "input_schema"
+        ],
+        "title": "ActivityDefinition",
+        "description": "Definition of an activity that can be executed.\n\nAttributes:\n    name: The activity function name\n    task_queue: Task queue for activity execution\n    input_schema: JSON Schema for activity input validation (must be valid JSON Schema)"
+      },
+      "AgentSession": {
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "title": "Session Id",
+            "description": "Unique session identifier"
+          },
+          "session_type": {
+            "$ref": "#/components/schemas/AgentSessionType",
+            "description": "Type of session"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_id",
+          "session_type"
+        ],
+        "title": "AgentSession",
+        "description": "Model for an individual agent streaming session.\n\nAttributes:\n    session_id: Unique session identifier (typically the workflow ID)\n    session_type: Type of session ('agent' or 'parent')"
+      },
+      "AgentSessionType": {
+        "type": "string",
+        "enum": [
+          "agent",
+          "parent"
+        ],
+        "title": "AgentSessionType",
+        "description": "Type of agent streaming session."
+      },
+      "HITLChatMessage": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data"
+          },
+          "timestamp": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timestamp"
+          },
+          "is_human": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Human"
+          }
+        },
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "title": "HITLChatMessage",
+        "description": "Represents a message in the chat history.\n\nWhen used as an inbound payload for the `add_system_message` signal, only\n`message` and optional `data` need to be supplied. `timestamp` and\n`is_human` will be normalized by the workflow (timestamp assigned, is_human\nforced to False for system messages / True for human responses)."
+      },
+      "HITLTaskDetail": {
+        "properties": {
+          "workflow_id": {
+            "type": "string",
+            "title": "Workflow Id"
+          },
+          "id": {
+            "type": "string",
+            "title": "Id",
+            "description": "Temporal run id"
+          },
+          "parent_run_id": {
+            "type": "string",
+            "title": "Parent Run Id",
+            "description": "Parent workflow run id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "start_time": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start Time"
+          },
+          "markdown": {
+            "type": "string",
+            "title": "Markdown"
+          },
+          "input_schema": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Input Schema"
+          },
+          "attachments": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Attachments",
+            "description": "List of attachment file paths"
+          },
+          "chat_mode": {
+            "type": "boolean",
+            "title": "Chat Mode",
+            "description": "Whether task uses chat mode",
+            "default": false
+          },
+          "chat_history": {
+            "items": {
+              "$ref": "#/components/schemas/HITLChatMessage"
+            },
+            "type": "array",
+            "title": "Chat History",
+            "description": "List of chat messages"
+          },
+          "response_received": {
+            "type": "boolean",
+            "title": "Response Received",
+            "description": "Whether a response has been received",
+            "default": false
+          },
+          "timed_out": {
+            "type": "boolean",
+            "title": "Timed Out",
+            "description": "Whether the task has timed out",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "workflow_id",
+          "id",
+          "parent_run_id",
+          "title",
+          "description",
+          "start_time",
+          "markdown",
+          "input_schema"
+        ],
+        "title": "HITLTaskDetail",
+        "description": "Detailed Information around a HITL Task.\n\nAttributes:\n    workflow_id: Parent workflow id\n    id: Temporal run id\n    parent_run_id: Parent workflow run id\n    title: Task title\n    description: Description of task\n    start_time: Datetime of task start\n    markdown: Task Markdown\n    input_schema: Task Schema\n    attachments: List of attachment file paths\n    chat_mode: Whether task uses chat mode\n    chat_history: List of chat messages\n    response_received: Whether a response has been received\n    timed_out: Whether the task has timed out"
+      },
+      "HITLTaskInfo": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "workflow_id": {
+            "type": "string",
+            "title": "Workflow Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "start_time": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start Time"
+          },
+          "chat_mode": {
+            "type": "boolean",
+            "title": "Chat Mode",
+            "description": "Whether task uses chat mode",
+            "default": false
+          },
+          "non_blocking": {
+            "type": "boolean",
+            "title": "Non Blocking",
+            "description": "Whether task is non-blocking",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "workflow_id",
+          "title",
+          "description",
+          "start_time"
+        ],
+        "title": "HITLTaskInfo",
+        "description": "Information around a HITL Task.\n\nAttributes:\n    id: Unique identifier for a task\n    workflow_id: Parent workflow id\n    title: Task title\n    description: Description of task\n    start_time: Datetime of task start\n    chat_mode: Whether task uses chat mode\n    non_blocking: Whether task is non-blocking"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/HealthStatus"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "HealthResponse",
+        "description": "Complete health check response.\n\nAttributes:\n    status: The health status containing all service components"
+      },
+      "HealthStatus": {
+        "properties": {
+          "temporal_service": {
+            "$ref": "#/components/schemas/ServiceStatus"
+          },
+          "temporal_worker": {
+            "$ref": "#/components/schemas/ServiceStatus"
+          }
+        },
+        "type": "object",
+        "required": [
+          "temporal_service",
+          "temporal_worker"
+        ],
+        "title": "HealthStatus",
+        "description": "Overall health status containing all service components.\n\nAttributes:\n    temporal_service: Status of the Temporal server service\n    temporal_worker: Status of the Temporal worker service"
+      },
+      "ServiceStatus": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "ServiceStatus",
+        "description": "Status of an individual service component.\n\nAttributes:\n    status: The status of the service (\"up\" or \"down\")\n    message: Optional message providing additional details about the status"
+      },
+      "StreamEventRequest": {
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "title": "Session Id"
+          },
+          "event_type": {
+            "type": "string",
+            "title": "Event Type"
+          },
+          "event_data": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Event Data"
+          },
+          "timestamp": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timestamp"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_id",
+          "event_type",
+          "event_data"
+        ],
+        "title": "StreamEventRequest",
+        "description": "Request model for emitting a stream event."
+      },
+      "StreamEventResponse": {
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "event_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Event Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "success",
+          "message"
+        ],
+        "title": "StreamEventResponse",
+        "description": "Response model for stream event operations."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "WorkerRegistration": {
+        "properties": {
+          "worker_name": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Worker Name",
+            "description": "Unique identifier for the worker"
+          },
+          "worker_version": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Worker Version",
+            "description": "Version of the worker"
+          },
+          "task_queue": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Task Queue",
+            "description": "Primary task queue for the worker"
+          },
+          "generated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Generated At",
+            "description": "Timestamp when registration was generated"
+          },
+          "workflows": {
+            "items": {
+              "$ref": "#/components/schemas/WorkflowDefinition"
+            },
+            "type": "array",
+            "title": "Workflows",
+            "description": "List of available workflows"
+          },
+          "activities": {
+            "items": {
+              "$ref": "#/components/schemas/ActivityDefinition"
+            },
+            "type": "array",
+            "title": "Activities",
+            "description": "List of available activities"
+          }
+        },
+        "type": "object",
+        "required": [
+          "worker_name",
+          "worker_version",
+          "task_queue"
+        ],
+        "title": "WorkerRegistration",
+        "description": "Worker registration payload.\n\nAttributes:\n    worker_name: Unique identifier for the worker\n    worker_version: Version of the worker\n    task_queue: Primary task queue for the worker\n    generated_at: Timestamp when registration was generated\n    workflows: List of available workflows\n    activities: List of available activities"
+      },
+      "WorkerRegistrationResponse": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Success message"
+          },
+          "worker_name": {
+            "type": "string",
+            "title": "Worker Name",
+            "description": "Name of the registered worker"
+          },
+          "registration_id": {
+            "type": "string",
+            "title": "Registration Id",
+            "description": "Unique registration identifier"
+          }
+        },
+        "type": "object",
+        "required": [
+          "message",
+          "worker_name",
+          "registration_id"
+        ],
+        "title": "WorkerRegistrationResponse",
+        "description": "Response for successful worker registration.\n\nAttributes:\n    message: Success message\n    worker_name: Name of the registered worker\n    registration_id: Unique registration identifier"
+      },
+      "WorkflowAgentSessionsResponse": {
+        "properties": {
+          "workflow_id": {
+            "type": "string",
+            "title": "Workflow Id",
+            "description": "The parent workflow ID"
+          },
+          "sessions": {
+            "items": {
+              "$ref": "#/components/schemas/AgentSession"
+            },
+            "type": "array",
+            "title": "Sessions",
+            "description": "List of discovered agent sessions"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count",
+            "description": "Total number of sessions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workflow_id",
+          "sessions",
+          "count"
+        ],
+        "title": "WorkflowAgentSessionsResponse",
+        "description": "Response model for workflow agent sessions query.\n\nAttributes:\n    workflow_id: The parent workflow ID that was queried\n    sessions: List of discovered agent sessions\n    count: Total number of sessions discovered"
+      },
+      "WorkflowDefinition": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Name",
+            "description": "Workflow class name"
+          },
+          "task_queue": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Task Queue",
+            "description": "Task queue for workflow execution"
+          },
+          "input_schema": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Input Schema",
+            "description": "Valid JSON Schema for workflow input validation."
+          },
+          "exposed": {
+            "type": "boolean",
+            "title": "Exposed",
+            "description": "Whether this workflow should be publicly exposed (API and MCP)",
+            "default": false
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description",
+            "description": "Human-readable description for exposed workflows"
+          },
+          "mcp_exposed": {
+            "type": "boolean",
+            "title": "Mcp Exposed",
+            "description": "[DEPRECATED] Use 'exposed' instead. Whether this workflow should be exposed as an MCP tool",
+            "default": false
+          },
+          "mcp_description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mcp Description",
+            "description": "[DEPRECATED] Use 'description' instead. Human-readable description for MCP tool"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "task_queue",
+          "input_schema"
+        ],
+        "title": "WorkflowDefinition",
+        "description": "Definition of a workflow that can be executed.\n\nAttributes:\n    name: The workflow class name\n    task_queue: Task queue for workflow execution\n    input_schema: JSON Schema for workflow input validation (must be valid JSON Schema)\n    exposed: Whether this workflow should be publicly exposed (API and MCP)\n    description: Human-readable description for exposed workflows"
+      },
+      "WorkflowInfo": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "module": {
+            "type": "string",
+            "title": "Module"
+          },
+          "parameters": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Parameters"
+          },
+          "queues": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Queues",
+            "description": "Task queues this workflow is registered to"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description",
+            "description": "Human-readable description of the workflow"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "module",
+          "parameters"
+        ],
+        "title": "WorkflowInfo",
+        "description": "Information about a discovered workflow.\n\nAttributes:\n    name: The name of the workflow\n    module: The module where the workflow is defined\n    parameters: List of parameter names with types for the workflow's run method\n    queues: List of task queues this workflow is registered to\n    description: Optional human-readable description of the workflow"
+      },
+      "WorkflowListResponse": {
+        "properties": {
+          "workflows": {
+            "items": {
+              "$ref": "#/components/schemas/WorkflowInfo"
+            },
+            "type": "array",
+            "title": "Workflows"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workflows"
+        ],
+        "title": "WorkflowListResponse",
+        "description": "Response containing a list of available workflows.\n\nAttributes:\n    workflows: List of workflow information objects"
+      },
+      "WorkflowLogsResponse": {
+        "properties": {
+          "workflow_id": {
+            "type": "string",
+            "title": "Workflow Id"
+          },
+          "logs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Logs"
+          },
+          "total_lines": {
+            "type": "integer",
+            "title": "Total Lines"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workflow_id",
+          "logs",
+          "total_lines",
+          "has_more"
+        ],
+        "title": "WorkflowLogsResponse",
+        "description": "Response containing workflow logs."
+      },
+      "WorkflowRun": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "workflow_id": {
+            "type": "string",
+            "title": "Workflow Id"
+          },
+          "status": {
+            "$ref": "#/components/schemas/WorkflowRunStatus"
+          },
+          "started": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Started"
+          },
+          "duration": {
+            "type": "string",
+            "title": "Duration"
+          },
+          "monitor": {
+            "type": "string",
+            "title": "Monitor"
+          },
+          "pending_tasks_count": {
+            "type": "integer",
+            "title": "Pending Tasks Count",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "type",
+          "id",
+          "workflow_id",
+          "status",
+          "started",
+          "duration",
+          "monitor"
+        ],
+        "title": "WorkflowRun",
+        "description": "Overall workflow run data.\n\nAttributes:\n    type: Name of the workflow\n    id: Temporal Run id\n    workflow_id: Temporal Workflow id\n    status: Workflow status from Temporal\n    started: Timestamp for when the workflow started\n    duration: Duration for how long the workflow ran (or has been running, if it's not completed or terminated)\n    monitor: Link to Temporal UI for monitoring this workflow run\n    pending_tasks_count: Count of pending child tasks (0 for non-running workflows)"
+      },
+      "WorkflowRunListResponse": {
+        "properties": {
+          "workflows": {
+            "items": {
+              "$ref": "#/components/schemas/WorkflowRun"
+            },
+            "type": "array",
+            "title": "Workflows"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workflows"
+        ],
+        "title": "WorkflowRunListResponse",
+        "description": "Lists running and completed workflows.\n\nAttributes:\n    data: List of Workflow Runs"
+      },
+      "WorkflowRunPayload": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "input": {
+            "type": "string",
+            "title": "Input"
+          },
+          "task_queue": {
+            "type": "string",
+            "title": "Task Queue",
+            "description": "Optional task queue for workflow execution"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "input"
+        ],
+        "title": "WorkflowRunPayload",
+        "description": "POST data needed to initate a new workflow run.\n\nAttributes:\n    name: The name of the workflow to initiate\n    input: Input payload to initiate workflow, in json\n    task_queue: Optional task queue to use for workflow execution"
+      },
+      "WorkflowRunStatus": {
+        "type": "string",
+        "enum": [
+          "Canceled",
+          "Completed",
+          "Continued As New",
+          "Failed",
+          "Running",
+          "Terminated",
+          "Timed Out",
+          "Unspecified",
+          "Unknown"
+        ],
+        "title": "WorkflowRunStatus"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "entryPoint": {
+    "method": "Microsoft.eShopWeb.PublicApi.CatalogItemEndpoints.DeleteCatalogItemEndpoint.HandleAsync",
+    "file": "src/PublicApi/CatalogItemEndpoints/DeleteCatalogItemEndpoint.cs",
+    "line": 30,
+    "signature": "Task<IResult> HandleAsync(DeleteCatalogItemRequest request, IRepository<CatalogItem> itemRepository)"
+  },
+  "calls": [
+    {
+      "method": "IRepository<CatalogItem>.GetByIdAsync(request.CatalogItemId)",
+      "db": {"table": "CatalogItems", "op": "select"},
+      "notes": "SELECT by primary key. Returns null when no row exists — causes immediate HTTP 404 return."
+    },
+    {
+      "method": "IRepository<CatalogItem>.DeleteAsync(itemToDelete)",
+      "db": {"table": "CatalogItems", "op": "delete"},
+      "notes": "Only called when item is found (non-null path). EF Core executes DELETE WHERE Id = catalogItemId."
+    }
+  ]
+}

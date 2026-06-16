@@ -1,0 +1,97 @@
+[
+  {
+    "description": "Minimal WorkerRegistration with required fields only",
+    "payload": {
+      "worker_name": "worker",
+      "worker_version": "1.0",
+      "task_queue": "default"
+    }
+  },
+  {
+    "description": "Complete WorkerRegistration with all fields",
+    "payload": {
+      "worker_name": "test-worker",
+      "worker_version": "1.0.0",
+      "task_queue": "default-task-queue",
+      "generated_at": "2025-08-08T17:36:19.255526+00:00",
+      "workflows": [
+        {
+          "name": "awa-hello-world",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "title": "Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "title": "HelloWorldInput"
+          }
+        },
+        {
+          "name": "awa-hello-world",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "title": "Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "title": "HelloWorldInput"
+          }
+        }
+      ],
+      "activities": [
+        {
+          "name": "test-activity",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string",
+                "description": "Activity input data"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          }
+        },
+        {
+          "name": "test-activity",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string",
+                "description": "Activity input data"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "description": "WorkerRegistration with edge case values",
+    "payload": {
+      "worker_name": "test-worker",
+      "worker_version": "1.0.0",
+      "task_queue": "default-task-queue"
+    }
+  }
+]

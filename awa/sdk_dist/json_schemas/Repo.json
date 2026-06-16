@@ -1,0 +1,16 @@
+{
+  "properties": {
+    "path": {
+      "default": "",
+      "title": "Path",
+      "type": "string"
+    },
+    "branch": {
+      "default": "",
+      "title": "Branch",
+      "type": "string"
+    }
+  },
+  "title": "Repo",
+  "type": "object"
+}

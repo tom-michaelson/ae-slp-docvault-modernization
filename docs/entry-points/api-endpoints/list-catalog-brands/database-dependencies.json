@@ -1,0 +1,17 @@
+[
+  {
+    "type": "table",
+    "name": "CatalogBrands",
+    "key": "catalog-brands",
+    "operations": ["select"],
+    "columns": ["Id", "Brand"],
+    "locations": [
+      "src/ApplicationCore/Entities/CatalogBrand.cs",
+      "src/Infrastructure/Data/Migrations/20201202111507_InitialModel.cs"
+    ],
+    "notes": [
+      "All rows selected with no WHERE clause — ListAsync() is called with no specification argument.",
+      "The entity property is named 'Brand'; AutoMapper maps it to 'Name' in CatalogBrandDto for the response."
+    ]
+  }
+]

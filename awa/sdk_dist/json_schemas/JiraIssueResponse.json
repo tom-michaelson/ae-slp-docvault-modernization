@@ -1,0 +1,26 @@
+{
+  "properties": {
+    "key": {
+      "default": null,
+      "title": "Key",
+      "type": "string"
+    },
+    "summary": {
+      "default": null,
+      "title": "Summary",
+      "type": "string"
+    },
+    "description": {
+      "default": null,
+      "title": "Description",
+      "type": "string"
+    },
+    "issue_type": {
+      "default": null,
+      "title": "Issue Type",
+      "type": "string"
+    }
+  },
+  "title": "JiraIssueResponse",
+  "type": "object"
+}

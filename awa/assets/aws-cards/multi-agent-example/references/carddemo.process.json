@@ -1,0 +1,109 @@
+{
+    "project_id": "AWS-CardDemo-0001-Requirements",
+    "process": "CardDemo Mainframe Modernization",
+    "processDefinition": "This phase of the project focuses on generating a refining a clear set of technical and business requirements to translate functionality from a COBOL system to a modern one.",
+    "roles": [
+      {
+        "role": "COBOL Developer",
+        "roleDefinition": "Specializes in maintaining and interpreting legacy COBOL code, ensuring that business logic and functionality are preserved for modernization projects.",
+        "taskSpecialization": "Extract business logic and technical specifications from COBOL Code.",
+        "techniques": [
+          "Analyze COBOL code structure",
+          "Describe legacy user interfaces in detail"
+        ],
+        "roleSpecificSkills": [
+          "COBOL programming",
+          "Generating Markdown documentation",
+          "Generating text representations of mainframe screens"
+        ],
+        "tasks": [
+          {
+            "taskId": "CO1",
+            "action": "transform",
+            "task": "Analyze the provided source code and generate a text representation of the screen.  Include any spacing, blank lines, or alignment details but do not include any extra padding after all screen elements have been accounted for.  For fields, use an underscore to represent the empty field using the correct length.  The result should be wrapped in an HTML tag like this:  <code format='plaintext'>\nTHE TEXT OF THE SCREEN\n</code>.  Add any additional notes to a ## Notes section following the code block.",
+            "expected_outcome": "A text representation of the BMS screen wrapped in an HTML tag followed by any additional notes or details.",
+            "dependencies": [],
+            "unlocks": [
+              "BA1"
+            ],
+            "artifacts": [
+              {
+                "artifact": "ScreenRender",
+                "description": "A text representation of the legacy screen.",
+                "source": "COACTVW.bms"
+              }
+            ],
+            "predecessor_context_limit": "1"
+          },
+          {
+            "taskId": "CO2",
+            "action": "transform",
+            "task": "Analyze the provided source code and generate Markdown which could be added to a Wiki article detailing its functionality.  Divide content areas across 'Overview', 'Screen Layout', 'Fields and Labels', and 'Notes'.  Be particularly precise in making sure that all fields and labels are accounted for.  Indicate whether fields are editable or read only and any formatting required.",
+            "expected_outcome": "A wiki-ready Markdown document which contains sections detailing 'Overview', 'Screen Layout', 'Fields and Labels', and 'Notes'",
+            "dependencies": [],
+            "unlocks": [
+              "BA1"
+            ],
+            "artifacts": [
+              {
+                "artifact": "TechnicalRequirements",
+                "description": "A Markdown file providing detailed descriptions of the screen elements represented by the input file.",
+                "source": "COACTVW.bms"
+              }
+            ],
+            "predecessor_context_limit": "1"
+          }
+        ]
+      },
+      {
+        "role": "Business Analyst",
+        "roleDefinition": "Responsible for gathering, analyzing, and documenting business requirements to ensure the development team understands the business goals and processes.",
+        "taskSpecialization": "Extract detailed business requirements from documentation and reviewing documentation for completeness.",
+        "techniques": [
+          "Review existing documentation",
+          "Explain legacy functionality"
+        ],
+        "roleSpecificSkills": [
+          "Documentation analysis",
+          "Business process mapping"
+        ],
+        "tasks": [
+          {
+            "taskId": "BA1",
+            "action": "transform",
+            "task": "Cross Reference the ScreenRender and TechnicalRequirements produced by COBOL Developer to make sure that the same fields are present in each document.  If any fields are missing, add them to a new '## TODO' section in the TechnicalRequirements for human evaluation.",
+            "expected_outcome": "Updated technical requirements which cross-check the previous outputs for completeness and accuracy.",
+            "dependencies": [
+              "CO1",
+              "CO2"
+            ],
+            "unlocks": [],
+            "artifacts": [
+              {
+                "artifact": "TechnicalRequirements",
+                "description": "A Markdown file providing detailed descriptions of the screen elements contained in the legacy application, with # TODO added for any topics which require additional analysis.",
+                "source": "COACTVW.q_explain.txt"
+              }
+            ],
+            "predecessor_context_limit": "1"
+          },
+          {
+            "taskId": "BA2",
+            "action": "transform",
+            "task": "Extract and summarize the business purpose from legacy code documentation.",
+            "expected_outcome": "Analysis which describes the business function this screen serves.",
+            "dependencies": [],
+            "unlocks": [],
+            "artifacts": [
+              {
+                "artifact": "BusinessPurpose",
+                "description": "A clear explanation of what purpose this file serves which can be used to ground future development efforts.",
+                "source": "COACTVW.q_explain.txt"
+              }
+            ],
+            "predecessor_context_limit": "1"
+          }
+        ]
+      }
+    ]
+  }

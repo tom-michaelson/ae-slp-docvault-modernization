@@ -1,0 +1,27 @@
+{
+  "key": "list-catalog-items-paged",
+  "name": "List catalog items (paginated)",
+  "type": "api-endpoint",
+  "domain": "catalog",
+  "legacyEntryPoint": "Microsoft.eShopWeb.PublicApi.CatalogItemEndpoints.CatalogItemListPagedEndpoint.HandleAsync",
+  "legacyLocation": "src/PublicApi/CatalogItemEndpoints/CatalogItemListPagedEndpoint.cs:40",
+  "targetRestContract": {
+    "method": "GET",
+    "path": "/api/catalog-items",
+    "queryParams": [
+      {"name": "pageSize",       "type": "int",  "default": 0,    "optional": true},
+      {"name": "pageIndex",      "type": "int",  "default": 0,    "optional": true},
+      {"name": "catalogBrandId", "type": "int?", "optional": true},
+      {"name": "catalogTypeId",  "type": "int?", "optional": true}
+    ],
+    "responseModel": "ListPagedCatalogItemResponse",
+    "auth": "none",
+    "notes": "MinimalApi endpoint already HTTP-exposed. Default pageSize=0 returns all matching items (take=int.MaxValue); Spring Boot target should preserve this behaviour. pageCount = ceil(totalItems/pageSize), or 1 (items present) / 0 (empty) when pageSize=0."
+  },
+  "usedByUiFeatures": [],
+  "notes": [
+    "A deliberate Task.Delay(1000) exists at the top of HandleAsync — do NOT carry this over to the Java target.",
+    "AutoMapper maps CatalogItem entity to CatalogItemDto; the Java port should use a manual mapper or MapStruct.",
+    "BlazorAdmin CatalogItemService calls GET catalog-items?PageSize=10 and GET catalog-items (no params) — both map to this endpoint. No web-side Razor Page calls this endpoint; the Razor homepage uses the in-process ICatalogViewModelService instead."
+  ]
+}

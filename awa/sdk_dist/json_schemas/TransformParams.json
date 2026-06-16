@@ -1,0 +1,70 @@
+{
+  "properties": {
+    "model_name": {
+      "default": null,
+      "title": "Model Name",
+      "type": "string"
+    },
+    "baml_function_name": {
+      "title": "Baml Function Name",
+      "type": "string"
+    },
+    "baml_content": {
+      "default": null,
+      "title": "Baml Content",
+      "type": "string"
+    },
+    "baml_content_dir": {
+      "default": null,
+      "description": "Path to a directory containing BAML files to be compiled and used for transformation",
+      "title": "Baml Content Dir",
+      "type": "string"
+    },
+    "request": {
+      "title": "Request"
+    },
+    "inputs": {
+      "default": null,
+      "items": {
+        "$ref": "./InputParams.json"
+      },
+      "title": "Inputs",
+      "type": "array"
+    },
+    "images": {
+      "default": null,
+      "items": {
+        "$ref": "./BamlImageInputParams.json"
+      },
+      "title": "Images",
+      "type": "array"
+    },
+    "timeout_seconds": {
+      "default": 120,
+      "title": "Timeout Seconds",
+      "type": "integer"
+    },
+    "output_path": {
+      "default": null,
+      "title": "Output Path",
+      "type": "string"
+    },
+    "output_json_path": {
+      "default": null,
+      "description": "JSON Path query to extract specific data from the BAML response before writing to output_path",
+      "title": "Output Json Path",
+      "type": "string"
+    },
+    "baml_src_dir": {
+      "default": null,
+      "title": "Baml Src Dir",
+      "type": "string"
+    }
+  },
+  "required": [
+    "baml_function_name",
+    "request"
+  ],
+  "title": "TransformParams",
+  "type": "object"
+}

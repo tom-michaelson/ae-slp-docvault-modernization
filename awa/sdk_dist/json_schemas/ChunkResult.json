@@ -1,0 +1,33 @@
+{
+  "description": "Model representing a single chunk result.",
+  "properties": {
+    "text": {
+      "description": "The text content of the chunk",
+      "title": "Text",
+      "type": "string"
+    },
+    "token_count": {
+      "description": "Number of tokens in the chunk",
+      "title": "Token Count",
+      "type": "integer"
+    },
+    "start_index": {
+      "description": "Starting character index in original text",
+      "title": "Start Index",
+      "type": "integer"
+    },
+    "end_index": {
+      "description": "Ending character index in original text",
+      "title": "End Index",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "text",
+    "token_count",
+    "start_index",
+    "end_index"
+  ],
+  "title": "ChunkResult",
+  "type": "object"
+}

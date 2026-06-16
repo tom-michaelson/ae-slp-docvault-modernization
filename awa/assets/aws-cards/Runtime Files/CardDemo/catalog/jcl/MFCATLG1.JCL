@@ -1,0 +1,86 @@
+//MFCATLG1 JOB 'MFCATLG1',CLASS=A,MSGCLASS=X,TIME=1440,
+//        COND=(8,LT),NOTIFY=MYUSERID,RESTART=*,LINES=(500,CANCEL)
+//*
+//*-------------------------------------------------------------------*
+//*   CATALOG PS  ==> MICRO FOCUS ONLY <==
+//*-------------------------------------------------------------------*
+//*
+//STEP01  EXEC PGM=IEFBR14
+//*
+//SYSOUT   DD  SYSOUT=*
+//*
+//PS0001   DD  DSN=AWS.M2.CARDDEMO.ACCTDATA.PS,
+//             DISP=(MOD,CATLG,DELETE),
+//             DCB=(RECFM=LSEQ,LRECL=300,DSORG=PS)
+//*MFE: %PCDSN='<CATALOGFOLDER>\jcl-job\ACCTDATA.TXT'
+//*
+//PS0002   DD  DSN=AWS.M2.CARDDEMO.CARDDATA.PS,
+//             DISP=(MOD,CATLG,DELETE),
+//             DCB=(RECFM=LSEQ,LRECL=150,DSORG=PS)
+//*MFE: %PCDSN='<CATALOGFOLDER>\jcl-job\CARDDATA.TXT'
+//*
+//PS0003   DD  DSN=AWS.M2.CARDDEMO.CARDXREF.PS,
+//             DISP=(MOD,CATLG,DELETE),
+//             DCB=(RECFM=LSEQ,LRECL=50,DSORG=PS)
+//*MFE: %PCDSN='<CATALOGFOLDER>\jcl-job\CARDXREF.TXT'
+//*
+//PS0004   DD  DSN=AWS.M2.CARDDEMO.CUSTDATA.PS,
+//             DISP=(MOD,CATLG,DELETE),
+//             DCB=(RECFM=LSEQ,LRECL=500,DSORG=PS)
+//*MFE: %PCDSN='<CATALOGFOLDER>\jcl-job\CUSTDATA.TXT'
+//*
+//PS0005   DD  DSN=AWS.M2.CARDDEMO.DALYTRAN.PS.INIT,
+//             DISP=(MOD,CATLG,DELETE),
+//             DCB=(RECFM=LSEQ,LRECL=350,DSORG=PS)
+//*MFE: %PCDSN='<CATALOGFOLDER>\jcl-job\DAILYTRAN.TXT'
+//*
+//PS0006   DD  DSN=AWS.M2.CARDDEMO.DISCGRP.PS,
+//             DISP=(MOD,CATLG,DELETE),
+//             DCB=(RECFM=LSEQ,LRECL=50,DSORG=PS)
+//*MFE: %PCDSN='<CATALOGFOLDER>\jcl-job\DISCGRP.TXT'
+//*
+//PS0007   DD  DSN=AWS.M2.CARDDEMO.TCATBALF.PS,
+//             DISP=(MOD,CATLG,DELETE),
+//             DCB=(RECFM=LSEQ,LRECL=50,DSORG=PS)
+//*MFE: %PCDSN='<CATALOGFOLDER>\jcl-job\TCATBAL.TXT'
+//*
+//PS0008   DD  DSN=AWS.M2.CARDDEMO.TRANCATG.PS,
+//             DISP=(MOD,CATLG,DELETE),
+//             DCB=(RECFM=LSEQ,LRECL=60,DSORG=PS)
+//*MFE: %PCDSN='<CATALOGFOLDER>\jcl-job\TRANCATG.TXT'
+//*
+//PS0009   DD  DSN=AWS.M2.CARDDEMO.TRANTYPE.PS,
+//             DISP=(MOD,CATLG,DELETE),
+//             DCB=(RECFM=LSEQ,LRECL=60,DSORG=PS)
+//*MFE: %PCDSN='<CATALOGFOLDER>\jcl-job\TRANTYPE.TXT'
+//*
+//PS0010   DD  DSN=AWS.M2.CARDDEMO.DALYTRAN.PS,
+//             DISP=(MOD,CATLG,DELETE),
+//             DCB=(RECFM=LSEQ,LRECL=350,DSORG=PS)
+//*MFE: %PCDSN='<CATALOGFOLDER>\jcl-job\DAILYTRAN.TXT'
+//*
+//*
+//*-------------------------------------------------------------------*
+//*   CATALOG PDS  ==> MICRO FOCUS ONLY <==
+//*-------------------------------------------------------------------*
+//*
+//STEP02  EXEC PGM=IEFBR14
+//*
+//SYSOUT   DD  SYSOUT=*
+//*
+//PDS001   DD  DSN=AWS.M2.CARDDEMO.JCL,
+//             DISP=(MOD,CATLG,DELETE),
+//             DCB=(RECFM=LSEQ,LRECL=80,DSORG=PO)
+//*MFE: %PCDSN='<CATALOGFOLDER>\jcl-job\*.JCL'
+//*
+//PDS002   DD  DSN=AWS.M2.CARDDEMO.PROC,
+//             DISP=(MOD,CATLG,DELETE),
+//             DCB=(RECFM=LSEQ,LRECL=80,DSORG=PO)
+//*MFE: %PCDSN='<CATALOGFOLDER>\jcl-job\*.PRC'
+//*
+//PDS003   DD  DSN=AWS.M2.CARDDEMO.CNTL,
+//             DISP=(MOD,CATLG,DELETE),
+//             DCB=(RECFM=LSEQ,LRECL=80,DSORG=PO)
+//*MFE: %PCDSN='<CATALOGFOLDER>\jcl-job\*.CTL'
+//*
+//

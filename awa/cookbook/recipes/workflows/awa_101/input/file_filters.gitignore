@@ -1,0 +1,6 @@
+# Only include C# files
+*
+!*/
+!**/*.cs
+bin/
+obj/

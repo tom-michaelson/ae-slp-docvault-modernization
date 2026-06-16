@@ -1,0 +1,687 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Agentic Workflow Accelerator API",
+    "description": "API for the Agentic Workflow Accelerator",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Health",
+        "description": "Health check endpoint that returns the status of the Temporal services.\n\nReturns:\n    HealthResponse containing the status of Temporal server and worker services",
+        "operationId": "health_api_v1_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workflows/list": {
+      "get": {
+        "tags": [
+          "workflows"
+        ],
+        "summary": "List all available workflows",
+        "description": "List all available workflows from both core application and external workers.",
+        "operationId": "list_workflows_api_v1_workflows_list_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "task_queue",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by task queue",
+              "title": "Task Queue"
+            },
+            "description": "Filter by task queue"
+          },
+          {
+            "name": "awa_auth_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Awa Auth Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkflowListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workflows/runs": {
+      "get": {
+        "tags": [
+          "workflows"
+        ],
+        "summary": "Workflow Runs",
+        "description": "Workflow runs endpoint that returns a list of running and completed workflows.\n\nReturns:\n    WorkflowRunsResponse containing the list of workflow runs",
+        "operationId": "workflow_runs_api_v1_workflows_runs_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "awa_auth_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Awa Auth Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkflowRunListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workers/register": {
+      "post": {
+        "tags": [
+          "workers"
+        ],
+        "summary": "Register worker capabilities",
+        "description": "Register a worker with its available workflows and activities.\n\n    **Important: Workflow input_schema Requirements**\n\n    Each workflow must provide a valid JSON Schema for its input_schema field:\n\n    ```json\n    {\n        \"name\": \"MyWorkflow\",\n        \"task_queue\": \"my-queue\",\n        \"input_schema\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"message\": {\n                    \"type\": \"string\",\n                    \"description\": \"The message to process\"\n                },\n                \"count\": {\n                    \"type\": \"integer\",\n                    \"minimum\": 1,\n                    \"description\": \"Number of times to repeat\"\n                }\n            },\n            \"required\": [\"message\"]\n        }\n    }\n    ```\n\n    **Schema Requirements:**\n    - Must have `\"type\": \"object\"` at root level\n    - Must include `\"properties\"` field containing property definitions\n    - Each property must specify a `\"type\"` field\n    - Optional: Include `\"required\"` array for mandatory fields\n    - Optional: Add validation rules (minimum, maximum, pattern, etc.)\n\n    **Migration from Old Format:**\n    If you previously used simple key-value pairs like `{\"hello\": \"world\"}`,\n    update to proper JSON Schema format like:\n    ```json\n    {\n        \"type\": \"object\",\n        \"properties\": {\n            \"hello\": {\"type\": \"string\"}\n        }\n    }\n    ```",
+        "operationId": "register_worker_api_v1_workers_register_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "awa_auth_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Awa Auth Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkerRegistration"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkerRegistrationResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workflows": {
+      "post": {
+        "tags": [
+          "workflows"
+        ],
+        "summary": "Run Workflow",
+        "description": "Run Workflow endpoint to iniate new workflow run.\n\nArgs:\n    run_payload: Workflow run configuration\n    current_user: Authenticated user\n\nReturns:\n    PostResponse with success message",
+        "operationId": "run_workflow_api_v1_workflows_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "awa_auth_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Awa Auth Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkflowRunPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Run Workflow Api V1 Workflows Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ActivityDefinition": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Name",
+            "description": "Activity function name"
+          },
+          "task_queue": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Task Queue",
+            "description": "Task queue for activity execution"
+          },
+          "input_schema": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Input Schema",
+            "description": "Valid JSON Schema for activity input validation."
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "task_queue",
+          "input_schema"
+        ],
+        "title": "ActivityDefinition",
+        "description": "Definition of an activity that can be executed.\n\nAttributes:\n    name: The activity function name\n    task_queue: Task queue for activity execution\n    input_schema: JSON Schema for activity input validation (must be valid JSON Schema)"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/HealthStatus"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "HealthResponse",
+        "description": "Complete health check response.\n\nAttributes:\n    status: The health status containing all service components"
+      },
+      "HealthStatus": {
+        "properties": {
+          "temporal_service": {
+            "$ref": "#/components/schemas/ServiceStatus"
+          },
+          "temporal_worker": {
+            "$ref": "#/components/schemas/ServiceStatus"
+          }
+        },
+        "type": "object",
+        "required": [
+          "temporal_service",
+          "temporal_worker"
+        ],
+        "title": "HealthStatus",
+        "description": "Overall health status containing all service components.\n\nAttributes:\n    temporal_service: Status of the Temporal server service\n    temporal_worker: Status of the Temporal worker service"
+      },
+      "ServiceStatus": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "ServiceStatus",
+        "description": "Status of an individual service component.\n\nAttributes:\n    status: The status of the service (\"up\" or \"down\")\n    message: Optional message providing additional details about the status"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "WorkerRegistration": {
+        "properties": {
+          "worker_name": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Worker Name",
+            "description": "Unique identifier for the worker"
+          },
+          "worker_version": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Worker Version",
+            "description": "Version of the worker"
+          },
+          "task_queue": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Task Queue",
+            "description": "Primary task queue for the worker"
+          },
+          "generated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Generated At",
+            "description": "Timestamp when registration was generated"
+          },
+          "workflows": {
+            "items": {
+              "$ref": "#/components/schemas/WorkflowDefinition"
+            },
+            "type": "array",
+            "title": "Workflows",
+            "description": "List of available workflows"
+          },
+          "activities": {
+            "items": {
+              "$ref": "#/components/schemas/ActivityDefinition"
+            },
+            "type": "array",
+            "title": "Activities",
+            "description": "List of available activities"
+          }
+        },
+        "type": "object",
+        "required": [
+          "worker_name",
+          "worker_version",
+          "task_queue"
+        ],
+        "title": "WorkerRegistration",
+        "description": "Worker registration payload.\n\nAttributes:\n    worker_name: Unique identifier for the worker\n    worker_version: Version of the worker\n    task_queue: Primary task queue for the worker\n    generated_at: Timestamp when registration was generated\n    workflows: List of available workflows\n    activities: List of available activities"
+      },
+      "WorkerRegistrationResponse": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Success message"
+          },
+          "worker_name": {
+            "type": "string",
+            "title": "Worker Name",
+            "description": "Name of the registered worker"
+          },
+          "registration_id": {
+            "type": "string",
+            "title": "Registration Id",
+            "description": "Unique registration identifier"
+          }
+        },
+        "type": "object",
+        "required": [
+          "message",
+          "worker_name",
+          "registration_id"
+        ],
+        "title": "WorkerRegistrationResponse",
+        "description": "Response for successful worker registration.\n\nAttributes:\n    message: Success message\n    worker_name: Name of the registered worker\n    registration_id: Unique registration identifier"
+      },
+      "WorkflowDefinition": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Name",
+            "description": "Workflow class name"
+          },
+          "task_queue": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Task Queue",
+            "description": "Task queue for workflow execution"
+          },
+          "input_schema": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Input Schema",
+            "description": "Valid JSON Schema for workflow input validation."
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "task_queue",
+          "input_schema"
+        ],
+        "title": "WorkflowDefinition",
+        "description": "Definition of a workflow that can be executed.\n\nAttributes:\n    name: The workflow class name\n    task_queue: Task queue for workflow execution\n    input_schema: JSON Schema for workflow input validation (must be valid JSON Schema)"
+      },
+      "WorkflowInfo": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "module": {
+            "type": "string",
+            "title": "Module"
+          },
+          "parameters": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Parameters"
+          },
+          "queues": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Queues",
+            "description": "Task queues this workflow is registered to"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "module",
+          "parameters"
+        ],
+        "title": "WorkflowInfo",
+        "description": "Information about a discovered workflow.\n\nAttributes:\n    name: The name of the workflow\n    module: The module where the workflow is defined\n    parameters: List of parameter names with types for the workflow's run method\n    queues: List of task queues this workflow is registered to"
+      },
+      "WorkflowListResponse": {
+        "properties": {
+          "workflows": {
+            "items": {
+              "$ref": "#/components/schemas/WorkflowInfo"
+            },
+            "type": "array",
+            "title": "Workflows"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workflows"
+        ],
+        "title": "WorkflowListResponse",
+        "description": "Response containing a list of available workflows.\n\nAttributes:\n    workflows: List of workflow information objects"
+      },
+      "WorkflowRun": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "status": {
+            "$ref": "#/components/schemas/WorkflowRunStatus"
+          },
+          "started": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Started"
+          },
+          "duration": {
+            "type": "string",
+            "title": "Duration"
+          },
+          "monitor": {
+            "type": "string",
+            "title": "Monitor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "type",
+          "id",
+          "status",
+          "started",
+          "duration",
+          "monitor"
+        ],
+        "title": "WorkflowRun",
+        "description": "Overall workflow run data.\n\nAttributes:\n    type: Name of the workflow\n    id: Temporal Run id\n    status: Workflow status from Temporal\n    started: Timestamp for when the workflow started\n    duration: Duration for how long the workflow ran (or has been running, if it's not completed or terminated)\n    monitor: Link to Temporal UI for monitoring this workflow run"
+      },
+      "WorkflowRunListResponse": {
+        "properties": {
+          "workflows": {
+            "items": {
+              "$ref": "#/components/schemas/WorkflowRun"
+            },
+            "type": "array",
+            "title": "Workflows"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workflows"
+        ],
+        "title": "WorkflowRunListResponse",
+        "description": "Lists running and completed workflows.\n\nAttributes:\n    data: List of Workflow Runs"
+      },
+      "WorkflowRunPayload": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "input": {
+            "type": "string",
+            "title": "Input"
+          },
+          "task_queue": {
+            "type": "string",
+            "title": "Task Queue",
+            "description": "Optional task queue for workflow execution"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "input"
+        ],
+        "title": "WorkflowRunPayload",
+        "description": "POST data needed to initate a new workflow run.\n\nAttributes:\n    name: The name of the workflow to initiate\n    input: Input payload to initiate workflow, in json\n    task_queue: Optional task queue to use for workflow execution"
+      },
+      "WorkflowRunStatus": {
+        "type": "string",
+        "enum": [
+          "Canceled",
+          "Completed",
+          "Continued As New",
+          "Failed",
+          "Running",
+          "Terminated",
+          "Timed Out",
+          "Unspecified",
+          "Unknown"
+        ],
+        "title": "WorkflowRunStatus"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

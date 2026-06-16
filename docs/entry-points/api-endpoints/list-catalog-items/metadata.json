@@ -1,0 +1,21 @@
+{
+  "key": "list-catalog-items",
+  "name": "List catalog items (paginated, filterable)",
+  "type": "api-endpoint",
+  "domain": "catalog",
+  "legacyEntryPoint": "Microsoft.eShopWeb.Web.Services.CatalogViewModelService.GetCatalogItems",
+  "legacyLocation": "src/Web/Services/CatalogViewModelService.cs:40",
+  "targetRestContract": {
+    "method": "GET",
+    "path": "/api/catalog-items",
+    "queryParams": [
+      {"name": "pageIndex", "type": "int", "default": 0, "notes": "0-indexed"},
+      {"name": "itemsPerPage", "type": "int", "default": 10},
+      {"name": "brandId", "type": "int", "optional": true},
+      {"name": "typeId", "type": "int", "optional": true}
+    ],
+    "responseModel": "CatalogIndexResponse",
+    "notes": "In legacy, this is an in-process service, not HTTP. The target Java/Spring will expose it as a REST endpoint that the Angular homepage consumes."
+  },
+  "usedByUiFeatures": ["homepage-catalog-list"]
+}

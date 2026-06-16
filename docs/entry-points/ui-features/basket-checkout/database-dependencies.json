@@ -1,0 +1,89 @@
+[
+  {
+    "type": "table",
+    "name": "Baskets",
+    "key": "baskets",
+    "operations": ["select", "insert", "update", "delete"],
+    "columns": ["Id", "BuyerId"],
+    "locations": [
+      "src/ApplicationCore/Specifications/BasketWithItemsSpecification.cs",
+      "src/ApplicationCore/Entities/BasketAggregate/Basket.cs",
+      "src/ApplicationCore/Services/BasketService.cs",
+      "src/Web/Services/BasketViewModelService.cs",
+      "src/Infrastructure/Data/Migrations/20201202111507_InitialModel.cs"
+    ],
+    "notes": [
+      "Selected four times in a single OnPost request: once in SetBasketModelAsync (view load), once in SetQuantities, once in CreateOrderAsync, once in DeleteBasketAsync — the Spring Boot port should consolidate with a single basket fetch where possible.",
+      "Deleted after order creation completes successfully; EF cascade propagates the delete to all associated BasketItems rows."
+    ]
+  },
+  {
+    "type": "table",
+    "name": "BasketItems",
+    "key": "basket-items",
+    "operations": ["select", "update", "delete"],
+    "columns": ["Id", "BasketId", "CatalogItemId", "Quantity", "UnitPrice"],
+    "locations": [
+      "src/ApplicationCore/Entities/BasketAggregate/BasketItem.cs",
+      "src/ApplicationCore/Specifications/BasketWithItemsSpecification.cs",
+      "src/ApplicationCore/Services/BasketService.cs",
+      "src/Infrastructure/Data/Migrations/20201202111507_InitialModel.cs"
+    ],
+    "notes": [
+      "Always loaded via .Include(b => b.Items) on every Baskets query — never queried independently.",
+      "Quantities updated by SetQuantities before order creation; items with Quantity=0 deleted by RemoveEmptyItems; all remaining rows cascade-deleted when the basket is deleted after order creation."
+    ]
+  },
+  {
+    "type": "table",
+    "name": "CatalogItems",
+    "key": "catalog-items",
+    "operations": ["select"],
+    "columns": ["Id", "Name", "PictureUri"],
+    "locations": [
+      "src/ApplicationCore/Specifications/CatalogItemsSpecification.cs",
+      "src/ApplicationCore/Entities/CatalogItem.cs",
+      "src/Web/Services/BasketViewModelService.cs",
+      "src/ApplicationCore/Services/OrderService.cs",
+      "src/Infrastructure/Data/Migrations/20201202111507_InitialModel.cs"
+    ],
+    "notes": [
+      "Read twice in OnPost: once in GetBasketItems (for display) and once in CreateOrderAsync to build CatalogItemOrdered snapshots — both fetch Id, Name, PictureUri via CatalogItemsSpecification.",
+      "CatalogItem.Price is NOT read at checkout — order line-item prices come from BasketItem.UnitPrice, which was set when the item was added to the basket."
+    ]
+  },
+  {
+    "type": "table",
+    "name": "Orders",
+    "key": "orders",
+    "operations": ["insert"],
+    "columns": ["Id", "BuyerId", "OrderDate", "ShipToAddress_Street", "ShipToAddress_City", "ShipToAddress_State", "ShipToAddress_Country", "ShipToAddress_ZipCode"],
+    "locations": [
+      "src/ApplicationCore/Entities/OrderAggregate/Order.cs",
+      "src/ApplicationCore/Entities/OrderAggregate/Address.cs",
+      "src/ApplicationCore/Services/OrderService.cs",
+      "src/Infrastructure/Data/Migrations/20201202111507_InitialModel.cs"
+    ],
+    "notes": [
+      "One row inserted per successful checkout; BuyerId is copied from Basket.BuyerId; OrderDate is set to DateTimeOffset.Now on construction.",
+      "ShipToAddress is an EF owned entity (Address value object) stored as ShipToAddress_* columns on the Orders table; the address is hardcoded as '123 Main St., Kent, OH, United States, 44240' — the Spring Boot rebuild must replace this with a real address input."
+    ]
+  },
+  {
+    "type": "table",
+    "name": "OrderItems",
+    "key": "order-items",
+    "operations": ["insert"],
+    "columns": ["Id", "OrderId", "ItemOrdered_CatalogItemId", "ItemOrdered_ProductName", "ItemOrdered_PictureUri", "UnitPrice", "Units"],
+    "locations": [
+      "src/ApplicationCore/Entities/OrderAggregate/OrderItem.cs",
+      "src/ApplicationCore/Entities/OrderAggregate/CatalogItemOrdered.cs",
+      "src/ApplicationCore/Services/OrderService.cs",
+      "src/Infrastructure/Data/Migrations/20201202111507_InitialModel.cs"
+    ],
+    "notes": [
+      "One row inserted per basket item; CatalogItemOrdered is an EF owned entity stored as ItemOrdered_* columns — it is a point-in-time snapshot (name and picture URI at order time, not current catalog values).",
+      "UnitPrice and Units come from BasketItem.UnitPrice and BasketItem.Quantity respectively — prices are snapshotted at add-to-basket time, not at checkout time."
+    ]
+  }
+]

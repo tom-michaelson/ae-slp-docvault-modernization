@@ -1,0 +1,34 @@
+{
+  "key": "update-catalog-item",
+  "name": "Update catalog item",
+  "type": "api-endpoint",
+  "domain": "catalog",
+  "legacyEntryPoint": "Microsoft.eShopWeb.PublicApi.CatalogItemEndpoints.UpdateCatalogItemEndpoint.HandleAsync",
+  "legacyLocation": "src/PublicApi/CatalogItemEndpoints/UpdateCatalogItemEndpoint.cs:37",
+  "targetRestContract": {
+    "method": "PUT",
+    "path": "/api/catalog-items",
+    "requestModel": {
+      "id": "int [Range(1,10000)] — identifies the item to update (in request body, not path)",
+      "catalogBrandId": "int [Range(1,10000)]",
+      "catalogTypeId": "int [Range(1,10000)]",
+      "description": "string [Required]",
+      "name": "string [Required]",
+      "price": "decimal [Range(0.01,10000)]",
+      "pictureUri": "string (accepted but ignored — PictureUri is not updated by this endpoint)",
+      "pictureBase64": "string (accepted but ignored — upload disabled)",
+      "pictureName": "string (accepted but ignored — upload disabled)"
+    },
+    "responseModel": "UpdateCatalogItemResponse",
+    "auth": "jwt (ADMINISTRATORS role required)",
+    "notes": "The item ID is embedded in the request body, not the URL path — the legacy route is PUT api/catalog-items with no path parameter. The Java target should use PUT /api/catalog-items/{id} for RESTful conformance. PictureUri is NOT updated by this endpoint regardless of what the request body contains."
+  },
+  "usedByUiFeatures": [],
+  "notes": [
+    "The legacy route embeds the item ID in the request body (not the path). The Java target should move it to a path parameter: PUT /api/catalog-items/{id}.",
+    "PictureUri, PictureBase64, and PictureName are accepted in the request but completely ignored — UpdateDetails only updates Name, Description, and Price; UpdateBrand and UpdateType handle their respective fields.",
+    "DataAnnotations on UpdateCatalogItemRequest ([Range], [Required]) are metadata only — MinimalApi does not auto-validate them. The Guard.Against clauses inside the entity mutation methods are the actual runtime validation. If they throw, ExceptionMiddleware returns HTTP 500.",
+    "No AutoMapper — CatalogItemDto is manually constructed field-by-field inside HandleAsync.",
+    "Requires JWT Bearer token with ADMINISTRATORS role (BlazorShared.Authorization.Constants.Roles.ADMINISTRATORS = 'Administrators')."
+  ]
+}

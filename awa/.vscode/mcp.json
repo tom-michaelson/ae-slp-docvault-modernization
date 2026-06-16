@@ -1,0 +1,14 @@
+{
+	"servers": {
+		"awa": {
+			"type": "stdio",
+			"command": "uv",
+			"args": [
+				"run",
+				"-m",
+				"awa.main",
+				"mcp"
+			]
+		}
+	}
+}

@@ -1,0 +1,118 @@
+[project]
+name = "slalom-agentic-workflow-accelerator"
+version = "0.2.0"
+description = "Slalom Agentic Workflow Accelerator"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "baml-agents>=0.46.1,<0.47.0",
+    "baml-py==0.214.0",
+    "beautifulsoup4>=4.13.4",
+    "cffi>=1.17.1",
+    "chonkie>=1.1.1",
+    "chromadb>=1.0.16",
+    "cryptography>=45.0.5",
+    "dotenv>=0.9.9",
+    "fastapi[standard]>=0.115.12",
+    "fastmcp>=2.7.1",
+    "fsspec>=2025.5.1",
+    "gitignore-parser>=0.1.12",
+    "gitpython>=3.1.43",
+    "httpx>=0.24.0",
+    "langfuse<3.0.0",
+    "loguru>=0.7.3",
+    "markdown>=3.8.2",
+    "markitdown[pdf,docx,xlsx,xls,pptx,outlook]>=0.1.2",
+    "openai>=1.99.7",
+    "pathspec>=0.12.1",
+    "psutil>=5.9.0",
+    "pydantic>=2.11.5",
+    "pydantic-ai>=0.0.18",
+    "logfire[httpx]>=2.0.0",
+    "pydantic-settings>=2.9.1",
+    "azure-identity>=1.19.0",
+    "pytest-timeout>=2.4.0",
+    "python-dotenv>=1.1.0",
+    "python-jose>=3.5.0",
+    "python-multipart>=0.0.20",
+    "pyyaml>=6.0.0",
+    "s3fs>=2025.5.1",
+    "scikit-learn>=1.7.1",
+    "temporalio[openai-agents]>=1.12.0",
+    "openai-agents>=0.3.1",
+    "litellm>=1.0.0",
+    "typer>=0.16.0",
+    "yaspin>=2.1.0",
+    "python-socketio>=5.11.4",
+    "websocket-client>=1.8.0",
+    "logfire>=4.10.0",
+]
+
+[project.scripts]
+awa = "awa.main:main"
+
+# [build-system]
+# requires = ["setuptools>=61.0", "wheel"]
+# build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["awa", "cookbook"]
+
+[tool.setuptools.packages.find]
+exclude = ["ui*", "docs*", "tests*", "planning*", "node_modules*"]
+
+[tool.setuptools.package-data]
+"awa.static" = ["**/*"]
+
+[dependency-groups]
+dev = [
+    "dagger-io>=0.18.10",
+    "pytest>=8.4.0",
+    "pytest-asyncio>=1.0.0",
+    "ruff~=0.13.2",
+    "pre-commit>=4.2.0",
+    "pytest-cov>=6.2.1",
+    "pytest-timeout>=2.4.0",
+    "pytest-xprocess>=0.23.0",
+    "httpx>=0.24.0",
+    "boto3>=1.39.11",
+]
+
+[tool.coverage.run]
+source = ["awa", "scripts"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    "*/site-packages/*",
+    "*/.venv/*",
+    "*/language_client_python/*",
+    "*.rs",
+    "*.toml",
+    "*.json",
+    "*.yaml",
+    "*/node_modules/*",
+    "*/baml_client/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.ruff]
+exclude = ["planning/*", "sdk_dist/*"]
+
+[tool.uv]
+# Added to prevent uv from attempting to install a standalone Python if the required version of Python is not available.
+# This is helpful in some cases, but corporate proxies can interfere.
+python-downloads = "manual"

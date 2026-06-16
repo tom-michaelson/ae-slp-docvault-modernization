@@ -1,0 +1,82 @@
+[
+  {
+    "key": "basket-list",
+    "name": "Basket",
+    "elementType": "ui-page",
+    "location": "src/Web/Pages/Basket/Index.cshtml",
+    "uri": "/basket",
+    "domain": "catalog",
+    "notes": [
+      "Razor Page. PageModel: IndexModel.",
+      "Auth: public — anonymous users identified by GUID stored in a 10-year essential cookie (Constants.BASKET_COOKIENAME); authenticated users identified by username.",
+      "Loads basket via IBasketViewModelService.GetOrCreateBasketForUser(cookieOrUserName) on OnGet.",
+      "OnPost(CatalogItemViewModel) — adds a catalog item to the basket; validates item exists via IRepository<CatalogItem>; price resolved server-side from CatalogItem entity (client-supplied price ignored); redirects back to /basket.",
+      "OnPostUpdate(IEnumerable<BasketItemViewModel>) — updates all item quantities in batch via IBasketService.SetQuantities; guarded by ModelState.IsValid.",
+      "Empty-state: 'Basket is empty.' with no form when BasketModel.Items is empty."
+    ],
+    "javaEquivalent": "Angular 19 page component at /basket; Angular BasketService fetches basket via HttpClient from Spring @RestController @GetMapping(\"/api/basket\"); IBasketService and IBasketViewModelService become Spring @Service beans; anonymous basket tracked by session cookie or UUID claim"
+  },
+  {
+    "key": "basket-list-basket-form",
+    "name": "Basket Items Form",
+    "elementType": "ui-form",
+    "location": "src/Web/Pages/Basket/Index.cshtml:16-78",
+    "parentKey": "basket-list",
+    "domain": "catalog",
+    "notes": [
+      "POST form. No explicit asp-page — submits to /basket (current page route).",
+      "Rendered only when BasketModel.Items is non-empty.",
+      "Fields: Items[i].Id (hidden, int) and Items[i].Quantity (number input, min=0) for each row i.",
+      "Validation: OnPostUpdate checks ModelState.IsValid; no client-side validation markup.",
+      "On Update success: stays on /basket; page re-renders with refreshed quantities and totals.",
+      "Also contains [Checkout] anchor (navigation to /basket/checkout) — not a form submit."
+    ],
+    "javaEquivalent": "Angular reactive form with FormArray of FormGroups (one per basket item); on Update submit calls Angular BasketService HTTP PUT /api/basket with quantities array; Spring @RestController @PutMapping; @Valid on @RequestBody DTO"
+  },
+  {
+    "key": "basket-list-items-table",
+    "name": "Basket Items Table",
+    "elementType": "ui-panel",
+    "location": "src/Web/Pages/Basket/Index.cshtml:17-63",
+    "parentKey": "basket-list-basket-form",
+    "domain": "catalog",
+    "notes": [
+      "Renders one row per BasketItemViewModel in BasketModel.Items via @for loop (index-bound for model binding).",
+      "Columns: Product image (hidden on screens below lg), Product name, Unit price ($ N2), Quantity (editable number input, min=0), Line total (Quantity × UnitPrice, $ N2, computed in template).",
+      "Footer row: 'Total' label and BasketModel.Total() ($ N2) spanning full width.",
+      "Row count equals BasketModel.Items.Count; no pagination."
+    ],
+    "javaEquivalent": "Angular 19 component with @for over basketItems FormArray; quantity inputs two-way bound via FormControl; line total computed in template; total computed via component method or Angular signal"
+  },
+  {
+    "key": "basket-list-update",
+    "name": "Update Basket Button",
+    "elementType": "ui-action",
+    "location": "src/Web/Pages/Basket/Index.cshtml:70",
+    "parentKey": "basket-list-basket-form",
+    "domain": "catalog",
+    "actionType": "form-post",
+    "notes": [
+      "Submits to OnPostUpdate handler via asp-page-handler='Update'.",
+      "Posts all Items[i].Id and Items[i].Quantity values from the form.",
+      "OnPostUpdate calls IBasketService.SetQuantities(basketId, {id: quantity} dictionary); items with quantity 0 are removed.",
+      "On success: stays on /basket; page re-renders with updated BasketModel."
+    ],
+    "javaEquivalent": "Angular (ngSubmit) calls Angular BasketService HTTP PUT /api/basket with updated item quantities; Spring @RestController @PutMapping(\"/api/basket\"); on success component reloads basket from service response"
+  },
+  {
+    "key": "basket-list-checkout",
+    "name": "Checkout Link",
+    "elementType": "ui-action",
+    "location": "src/Web/Pages/Basket/Index.cshtml:74",
+    "parentKey": "basket-list-basket-form",
+    "domain": "catalog",
+    "actionType": "navigation",
+    "notes": [
+      "Anchor tag. Navigates to /basket/checkout.",
+      "Visible only when basket has items (inside the non-empty conditional block, line 14).",
+      "Does not submit the basket form — quantity edits are lost if user navigates without clicking [Update] first."
+    ],
+    "javaEquivalent": "Angular routerLink [routerLink]=\"['/basket/checkout']\"; displayed only when basketItems is non-empty via @if"
+  }
+]

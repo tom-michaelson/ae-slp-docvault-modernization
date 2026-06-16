@@ -1,0 +1,22 @@
+[
+  {
+    "description": "Simple world greeting",
+    "input": "{\"name\": \"World\"}"
+  },
+  {
+    "description": "Person greeting",
+    "input": "{\"name\": \"API User\"}"
+  },
+  {
+    "description": "System greeting",
+    "input": "{\"name\": \"AWA System\"}"
+  },
+  {
+    "description": "Number as name",
+    "input": "{\"name\": \"User123\"}"
+  },
+  {
+    "description": "Single character",
+    "input": "{\"name\": \"X\"}"
+  }
+]

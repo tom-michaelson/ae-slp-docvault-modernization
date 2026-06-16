@@ -1,0 +1,198 @@
+{
+  "$defs": {
+    "HandoffConfig": {
+      "description": "Configuration for agent handoffs in the OpenAI agent system.\n\nThis class defines how one agent can hand off control to another agent,\nincluding tool configuration, metadata, and execution parameters.",
+      "example": {
+        "input_type": {
+          "properties": {
+            "query": {
+              "description": "The search query",
+              "type": "string"
+            },
+            "limit": {
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "query"
+          ],
+          "type": "object"
+        },
+        "is_enabled": true,
+        "remove_tools_from_history": false,
+        "target_agent": "data_analyst",
+        "tool_description_override": "Hand off to data analyst for comprehensive data analysis",
+        "tool_name_override": "analyze_data"
+      },
+      "properties": {
+        "target_agent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "./OpenAIAgentConfig.json"
+            }
+          ],
+          "description": "The target agent to hand off to. Can be an agent name (str) or an OpenAIAgentConfig instance.",
+          "title": "Target Agent"
+        },
+        "tool_name_override": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override the default tool name for this handoff. If not provided, uses the target agent's name.",
+          "title": "Tool Name Override"
+        },
+        "tool_description_override": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override the default tool description for this handoff. If not provided, uses the target agent's description.",
+          "title": "Tool Description Override"
+        },
+        "remove_tools_from_history": {
+          "default": false,
+          "description": "Whether to remove handoff tools from the conversation history when executing the handoff.",
+          "title": "Remove Tools From History",
+          "type": "boolean"
+        },
+        "is_enabled": {
+          "default": true,
+          "description": "Whether this handoff configuration is enabled. Disabled handoffs will not be available as tools.",
+          "title": "Is Enabled",
+          "type": "boolean"
+        },
+        "input_type": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "JSON Schema defining the expected structure of input data when handing off to the target agent. This schema is used to validate the data passed during handoff execution. If provided, the schema must include at least a 'type' field.",
+          "title": "Input Type"
+        }
+      },
+      "required": [
+        "target_agent"
+      ],
+      "title": "HandoffConfig",
+      "type": "object"
+    }
+  },
+  "description": "Configuration for agent handoffs in the OpenAI agent system.\n\nThis class defines how one agent can hand off control to another agent,\nincluding tool configuration, metadata, and execution parameters.",
+  "example": {
+    "input_type": {
+      "properties": {
+        "query": {
+          "description": "The search query",
+          "type": "string"
+        },
+        "limit": {
+          "maximum": 100,
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "type": "object"
+    },
+    "is_enabled": true,
+    "remove_tools_from_history": false,
+    "target_agent": "data_analyst",
+    "tool_description_override": "Hand off to data analyst for comprehensive data analysis",
+    "tool_name_override": "analyze_data"
+  },
+  "properties": {
+    "target_agent": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "./OpenAIAgentConfig.json"
+        }
+      ],
+      "description": "The target agent to hand off to. Can be an agent name (str) or an OpenAIAgentConfig instance.",
+      "title": "Target Agent"
+    },
+    "tool_name_override": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Override the default tool name for this handoff. If not provided, uses the target agent's name.",
+      "title": "Tool Name Override"
+    },
+    "tool_description_override": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Override the default tool description for this handoff. If not provided, uses the target agent's description.",
+      "title": "Tool Description Override"
+    },
+    "remove_tools_from_history": {
+      "default": false,
+      "description": "Whether to remove handoff tools from the conversation history when executing the handoff.",
+      "title": "Remove Tools From History",
+      "type": "boolean"
+    },
+    "is_enabled": {
+      "default": true,
+      "description": "Whether this handoff configuration is enabled. Disabled handoffs will not be available as tools.",
+      "title": "Is Enabled",
+      "type": "boolean"
+    },
+    "input_type": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "JSON Schema defining the expected structure of input data when handing off to the target agent. This schema is used to validate the data passed during handoff execution. If provided, the schema must include at least a 'type' field.",
+      "title": "Input Type"
+    }
+  },
+  "required": [
+    "target_agent"
+  ],
+  "title": "HandoffConfig",
+  "type": "object"
+}

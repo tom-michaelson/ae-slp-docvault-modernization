@@ -1,0 +1,23 @@
+{
+  "key": "delete-item-in-basket",
+  "name": "Delete basket (clear after checkout)",
+  "type": "api-endpoint",
+  "domain": "basket",
+  "legacyEntryPoint": "Microsoft.eShopWeb.ApplicationCore.Services.BasketService.DeleteBasketAsync",
+  "legacyLocation": "src/ApplicationCore/Services/BasketService.cs:40",
+  "legacyWebHandler": "Microsoft.eShopWeb.Web.Pages.Basket.CheckoutModel.OnPost",
+  "targetRestContract": {
+    "method": "DELETE",
+    "path": "/api/baskets/{basketId}",
+    "responseModel": "none (204 No Content)",
+    "auth": "none",
+    "notes": "Called as the final step of CheckoutModel.OnPost after the order is successfully created — the basket is purged once the order exists. CheckoutModel is [Authorize], meaning this is always called for authenticated users in legacy; the REST target should require JWT auth. Guard.Against.Null throws if the basket is not found — the REST target should return 404 instead."
+  },
+  "usedByUiFeatures": ["basket-checkout"],
+  "notes": [
+    "Deletes the entire Basket row and all its BasketItems rows (cascade delete via EF Core).",
+    "Called post-order-creation — not a user-initiated standalone delete; it is the cleanup step of the checkout flow.",
+    "Guard.Against.Null(basket) throws ArgumentNullException if the basket row does not exist. In legacy this surfaces as HTTP 500. The REST target should return 404.",
+    "The service accepts basketId (integer PK), not buyerId — the basket must already exist."
+  ]
+}

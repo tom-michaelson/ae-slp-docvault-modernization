@@ -1,0 +1,28 @@
+The tests for the {{ language_name }} SDK are failing.
+
+Please analyze the test output and fix the SDK code (NOT the tests) to make them pass.
+
+<test_command>
+{{ test_command }}
+</test_command>
+
+<working_directory>
+{{ sdk_working_dir }}
+</working_directory>
+
+<test_output>
+{{ test_output }}
+</test_output>
+
+<conventions description="Conventions for {{language_name}} code in the SDK.">
+{{ conventions }}
+</conventions>
+
+<translation_guide description="Translation guide for {{language_name}}, when translating from Python.">
+{{ translation_guide }}
+</translation_guide>
+
+
+IMPORTANT: Focus on fixing the implementation code in the SDK, not the test files.
+
+The goal is to make the existing tests pass by correcting the generated SDK code.

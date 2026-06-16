@@ -1,0 +1,9 @@
+{
+  "type": "string",
+  "enum": [
+    "analyze",
+    "act",
+    "unknown"
+  ],
+  "title": "AgentModeEnum"
+}

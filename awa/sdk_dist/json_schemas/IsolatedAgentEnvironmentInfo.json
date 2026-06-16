@@ -1,0 +1,34 @@
+{
+  "description": "Information about an isolated agent environment.",
+  "properties": {
+    "environment_path": {
+      "description": "Absolute path to the worktree/temporary directory. Must be an absolute path for reliable file system and git operations.",
+      "title": "Environment Path",
+      "type": "string"
+    },
+    "source_directory_path": {
+      "description": "Path to the source directory",
+      "title": "Source Directory Path",
+      "type": "string"
+    },
+    "source_branch": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Source branch name to merge back to (only used for Git repositories in ACT mode)",
+      "title": "Source Branch"
+    }
+  },
+  "required": [
+    "environment_path",
+    "source_directory_path",
+    "source_branch"
+  ],
+  "title": "IsolatedAgentEnvironmentInfo",
+  "type": "object"
+}

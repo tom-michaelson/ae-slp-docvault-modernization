@@ -1,0 +1,58 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <!-- NuGet Package Configuration -->
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Awa.Client</PackageId>
+    <Title>Awa Client SDK</Title>
+    <Description>Client SDK for Awa services and APIs</Description>
+    <Authors>Awa</Authors>
+    <Company>Awa</Company>
+    <Product>Awa Client</Product>
+    <Copyright>Copyright © Awa</Copyright>
+
+    <!-- Versioning -->
+    <Version>1.0.29</Version>
+    <AssemblyVersion>1.0.29</AssemblyVersion>
+    <FileVersion>1.0.29</FileVersion>
+    <PackageVersion>1.0.29</PackageVersion>
+
+    <!-- Package Metadata -->
+    <PackageTags>awa;client;sdk;api</PackageTags>
+    <PackageProjectUrl>https://github.com/your-org/awa-client</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/your-org/awa-client</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+
+    <!-- Documentation -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+
+    <!-- Symbol Package -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+    <!-- Build Configuration -->
+    <LangVersion>12</LangVersion>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <NoWarn>1591</NoWarn> <!-- Missing XML comment warnings -->
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Temporalio" Version="1.7.0" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,18 @@
+{
+  "properties": {
+    "file": {
+      "title": "File",
+      "type": "string"
+    },
+    "content": {
+      "title": "Content",
+      "type": "string"
+    }
+  },
+  "required": [
+    "file",
+    "content"
+  ],
+  "title": "ReadDirectoryResult",
+  "type": "object"
+}

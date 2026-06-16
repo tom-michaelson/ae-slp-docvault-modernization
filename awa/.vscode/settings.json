@@ -1,0 +1,60 @@
+{
+  "editor.formatOnSave": true,
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
+  "editor.trimAutoWhitespace": true,
+  "editor.rulers": [120],
+  "[python]": {
+    "editor.formatOnSaveMode": "file",
+    "editor.formatOnType": false,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    },
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "bluebrown.yamlfmt",
+    "editor.trimAutoWhitespace": false,
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "keep",
+    "editor.renderWhitespace": "all",
+    "editor.wordWrapColumn": 120,
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    }
+  },
+  "ruff.nativeServer": "on",
+  "ruff.configuration": "ruff.toml",
+  "ruff.format.preview": true,
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/*/**": true
+  },
+  "task.autoDetect": "on",
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": "\\.baml$",
+        "cmd": "uv run ${workspaceFolder}/scripts/generate_baml_client.py"
+      }
+    ]
+  },
+  "python.terminal.activateEnvironment": false,
+  "python.testing.pytestArgs": ["tests"],
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true,
+  "makefile.configureOnOpen": false,
+  "workbench.editorAssociations": {
+    "*.mdc": "default"
+  },
+  "files.associations": {
+    "*.mdc": "markdown"
+  },
+  "dotrush.roslyn.projectOrSolutionFiles": []
+}

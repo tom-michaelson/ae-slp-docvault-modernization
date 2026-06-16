@@ -1,0 +1,81 @@
+[
+  {
+    "type": "table",
+    "name": "Baskets",
+    "key": "baskets",
+    "operations": ["select"],
+    "columns": ["Id", "BuyerId"],
+    "locations": [
+      "src/ApplicationCore/Services/OrderService.cs",
+      "src/ApplicationCore/Specifications/BasketWithItemsSpecification.cs"
+    ],
+    "notes": [
+      "Selected by Baskets.Id via BasketWithItemsSpecification — eagerly loads BasketItems collection.",
+      "Not mutated by this service — basket deletion is done by a separate call to BasketService.DeleteBasketAsync."
+    ]
+  },
+  {
+    "type": "table",
+    "name": "BasketItems",
+    "key": "basket-items",
+    "operations": ["select"],
+    "columns": ["CatalogItemId", "UnitPrice", "Quantity"],
+    "locations": [
+      "src/ApplicationCore/Specifications/BasketWithItemsSpecification.cs",
+      "src/ApplicationCore/Entities/BasketAggregate/BasketItem.cs"
+    ],
+    "notes": [
+      "Loaded via the eager-load .Include(b => b.Items) in BasketWithItemsSpecification.",
+      "UnitPrice (the price at add-time) and Quantity are read to populate each OrderItem — never the current catalog price."
+    ]
+  },
+  {
+    "type": "table",
+    "name": "Catalog",
+    "key": "catalog",
+    "operations": ["select"],
+    "columns": ["Id", "Name", "PictureUri"],
+    "locations": [
+      "src/ApplicationCore/Services/OrderService.cs",
+      "src/ApplicationCore/Specifications/CatalogItemsSpecification.cs",
+      "src/ApplicationCore/Entities/OrderAggregate/CatalogItemOrdered.cs"
+    ],
+    "notes": [
+      "Fetched in a single batch SELECT via CatalogItemsSpecification(catalogItemIds[]).",
+      "Only Name and PictureUri are read — they are snapshotted into CatalogItemOrdered as an immutable value object, so order history is unaffected by future catalog changes."
+    ]
+  },
+  {
+    "type": "table",
+    "name": "Orders",
+    "key": "orders",
+    "operations": ["insert"],
+    "columns": ["Id", "BuyerId", "OrderDate", "ShipToAddress_Street", "ShipToAddress_City", "ShipToAddress_State", "ShipToAddress_Country", "ShipToAddress_ZipCode"],
+    "locations": [
+      "src/ApplicationCore/Services/OrderService.cs",
+      "src/ApplicationCore/Entities/OrderAggregate/Order.cs",
+      "src/Infrastructure/Data/Migrations/20201202111507_InitialModel.cs"
+    ],
+    "notes": [
+      "Single row inserted per checkout via IRepository<Order>.AddAsync; OrderDate defaults to DateTimeOffset.Now.",
+      "ShipToAddress is an owned value object stored as flat columns with the ShipToAddress_ prefix — all five address fields are required (non-nullable) as of migration 20211231093753_FixShipToAddress."
+    ]
+  },
+  {
+    "type": "table",
+    "name": "OrderItems",
+    "key": "order-items",
+    "operations": ["insert"],
+    "columns": ["Id", "OrderId", "UnitPrice", "Units", "ItemOrdered_CatalogItemId", "ItemOrdered_ProductName", "ItemOrdered_PictureUri"],
+    "locations": [
+      "src/ApplicationCore/Services/OrderService.cs",
+      "src/ApplicationCore/Entities/OrderAggregate/OrderItem.cs",
+      "src/ApplicationCore/Entities/OrderAggregate/CatalogItemOrdered.cs",
+      "src/Infrastructure/Data/Migrations/20201202111507_InitialModel.cs"
+    ],
+    "notes": [
+      "One row inserted per basket item via EF Core cascade when Order is added.",
+      "CatalogItemOrdered is stored as three flat columns (ItemOrdered_CatalogItemId, ItemOrdered_ProductName, ItemOrdered_PictureUri) — a snapshot of the catalog at order time, not a foreign key to the live Catalog table."
+    ]
+  }
+]

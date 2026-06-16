@@ -1,0 +1,8 @@
+{
+  "type": "string",
+  "enum": [
+    "text",
+    "json_schema"
+  ],
+  "title": "ResponseFormat"
+}

@@ -1,0 +1,24 @@
+{
+  "description": "Result of executing a command.",
+  "properties": {
+    "exit_code": {
+      "title": "Exit Code",
+      "type": "integer"
+    },
+    "output": {
+      "title": "Output",
+      "type": "string"
+    },
+    "success": {
+      "title": "Success",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "exit_code",
+    "output",
+    "success"
+  ],
+  "title": "CommandResult",
+  "type": "object"
+}

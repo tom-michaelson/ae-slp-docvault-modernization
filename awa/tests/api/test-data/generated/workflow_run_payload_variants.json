@@ -1,0 +1,66 @@
+[
+  {
+    "description": "Hello Human workflow with basic name",
+    "payload": {
+      "name": "awa-hello-human",
+      "input": "{\"name\": \"TestUser\"}"
+    }
+  },
+  {
+    "description": "Hello Human workflow with special characters",
+    "payload": {
+      "name": "awa-hello-human",
+      "input": "{\"name\": \"María José\"}"
+    }
+  },
+  {
+    "description": "Hello World workflow with simple input",
+    "payload": {
+      "name": "awa-hello-world",
+      "input": "{\"name\": \"World\"}"
+    }
+  },
+  {
+    "description": "Transform workflow with basic task",
+    "payload": {
+      "name": "awa-transform",
+      "input": "{\"task\": \"Summarize this text\", \"inputs\": [{\"id\": \"doc1\", \"content\": \"This is a sample document for testing purposes.\"}], \"role\": \"Assistant\"}"
+    }
+  },
+  {
+    "description": "Build Prompt workflow",
+    "payload": {
+      "name": "awa-build-prompt",
+      "input": "{\"template\": \"Hello {{name}}\", \"variables\": {\"name\": \"Test\"}}"
+    }
+  },
+  {
+    "description": "Execute Agent workflow",
+    "payload": {
+      "name": "awa-execute-agent",
+      "input": "{\"agent_mode\": \"claude\", \"task\": \"Write a simple hello function\", \"context\": \"\"}"
+    }
+  },
+  {
+    "description": "Minimal WorkflowRunPayload with required fields only",
+    "payload": {
+      "name": "worker",
+      "input": "{}"
+    }
+  },
+  {
+    "description": "Complete WorkflowRunPayload with all fields",
+    "payload": {
+      "name": "test-worker",
+      "input": "{\"name\": \"TestUser\"}",
+      "task_queue": "default-task-queue"
+    }
+  },
+  {
+    "description": "WorkflowRunPayload with edge case values",
+    "payload": {
+      "name": "test-worker",
+      "input": "{\"name\": \"TestUser\"}"
+    }
+  }
+]

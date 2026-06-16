@@ -1,0 +1,56 @@
+target-version = "py312"
+cache-dir = "./.cache/ruff"
+exclude = ["planning/*", "sdk_dist/*", "assets/*"]
+
+line-length = 120
+
+[lint]
+preview = false
+extend-select = ["ALL"]
+ignore = [
+    "D100",    # Missing docstring in public module
+    "D101",    # Missing docstring in public class
+    "D102",    # Missing docstring in public method
+    "D103",    # Missing docstring in public function
+    "D104",    # Missing docstring in public package
+    "D107",    # Missing docstring in `__init__`
+    "D203",    # Incompatible with D211
+    "D213",    # Incompatible with D212
+    "TD003",   # Missing issue link for this TODO
+    "G004",    # Logging statement uses f-string
+    "TRY003",  # Avoid specifying long messages outside the exception class
+    "EM101",   # Exception must not use a string literal, assign to variable first
+    "EM102",   # Exception must not use an f-string literal, assign to variable first
+    "FBT001",  # Boolean-typed positional argument in function definition
+    "FBT002",  # Boolean default positional argument in function definition
+    "C901",    # Function too complex
+    "PLR0913", # Too many arguments in function definition
+    "ERA001",  # Found commented out code
+    "RSE102",  # Unnecessary parentheses on raised exception
+    "TD002",   # Missing author in TODO
+    "TD004",   # Missing colon in TODO
+    "FIX002",  # Line contains TODO
+    "PLR0912", # Too many branches
+    "PLR0911", # Too many returns
+    "RET504",  #Unnecessary assignment before `return` statement
+    "TRY300",  # Consider moving this statement to an `else` block
+    "PLC0415", # Import outside toplevel (intentional for circular imports)
+    "TC",      # Type-checking rules (all TCH/TC rules)
+]
+
+[lint.per-file-ignores]
+"tests/*" = [
+    "INP001",
+    "S101",
+    "PT011",
+    "PT019",
+    "SLF001",
+    "PLR2004",
+    "PLC0415",
+    "ANN001",
+    "FBT003",
+    "S105",
+]
+"scripts/*" = ["S603", "S607", "T201"]
+"awa/core/activities/git.py" = ["S607"]
+"awa/core/api/routes/shared/workflows.py" = ["PLR0915"]

@@ -1,0 +1,26 @@
+{
+  "title": "Sample JSON Document",
+  "description": "This is a sample JSON file for testing document parsing",
+  "metadata": {
+    "version": "1.0",
+    "created": "2025-01-01",
+    "author": "Test Suite"
+  },
+  "data": [
+    {
+      "id": 1,
+      "name": "Item One",
+      "active": true
+    },
+    {
+      "id": 2,
+      "name": "Item Two",
+      "active": false
+    }
+  ],
+  "settings": {
+    "debug": false,
+    "timeout": 30,
+    "retries": 3
+  }
+}

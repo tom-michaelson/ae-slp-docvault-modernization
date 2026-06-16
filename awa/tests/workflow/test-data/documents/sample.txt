@@ -1,0 +1,5 @@
+This is a sample plain text file.
+
+It contains multiple lines and paragraphs to test the document parsing functionality.
+
+Plain text files should be returned as-is without any parsing or modification.

@@ -1,0 +1,16 @@
+{
+  "type": "string",
+  "enum": [
+    "claude",
+    "goose",
+    "codex",
+    "gemini",
+    "q",
+    "opencode",
+    "github_copilot",
+    "default",
+    "pydantic_ai",
+    "unknown"
+  ],
+  "title": "AgentProviderEnum"
+}

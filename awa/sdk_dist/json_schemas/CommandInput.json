@@ -1,0 +1,26 @@
+{
+  "description": "Input parameters for command execution.",
+  "properties": {
+    "command": {
+      "title": "Command",
+      "type": "string"
+    },
+    "working_dir": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Working Dir"
+    }
+  },
+  "required": [
+    "command"
+  ],
+  "title": "CommandInput",
+  "type": "object"
+}

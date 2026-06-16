@@ -1,0 +1,156 @@
+{
+  "project_id": "AWS-CobolDemo-0001",
+  "process": "Deferred Interest Modernization",
+  "processDefinition": "This process focuses on modernizing legacy code into a modern frontend solution. It's critical to infer Cobol functionality and translate legacy logic completely into frontend code.",
+  "roles": [
+    {
+      "role": "Solution Owner",
+      "roleDefinition": "Responsible for capturing and documenting the high-level business requirements for the project.",
+      "taskSpecialization": "Project Management, Coordination, Scope Definition",
+      "techniques": [
+        "Collaborate across team and stakeholders to ensure unified vision and approach",
+        "Manage timelines, estimates and resources",
+        "Create reports and documentation that align implementation strategy with business objectives"
+      ],
+      "roleSpecificSkills": [
+        "Define project scope",
+        "Create project timelines",
+        "Conduct sprint reviews"
+      ],
+      "tasks": [
+        {
+          "taskId": "SO1",
+          "action": "transform",
+          "task": "Review the provided sample code and create detailed business requirements that fully identify all features of the code without making assumptions or adding extra features.",
+          "expected_outcome": "A comprehensive list of business requirements accurately reflecting the functionalities in the sample code.",
+          "dependencies": [],
+          "unlocks": [
+            "SO2"
+          ],
+          "artifacts": [
+            {
+              "artifact": "Requirements Document",
+              "description": "Detailed document outlining the key business processes derived from the legacy Cobol code.",
+              "source": "SourceCode.txt"
+            }
+          ],
+          "predecessor_context": "1"
+        },
+        {
+          "taskId": "SO2",
+          "action": "transform",
+          "task": "Review the provided documentation and adjust the detailed business requirements to fully ensure all features of the code are accurately accounted for.",
+          "expected_outcome": "A detailed and accurate business requirements document reflecting the functionalities in the sample code.",
+          "dependencies": [
+            "SO1"
+          ],
+          "unlocks": [
+            "SA1"
+          ],
+          "artifacts": [
+            {
+              "artifact": "Requirements Document",
+              "description": "Detailed document outlining the key business processes derived from the legacy Cobol code.",
+              "source": "Q_Explain.txt"
+            }
+          ],
+          "predecessor_context": "1"
+        }
+      ]
+    },
+    {
+      "role": "Solution Architect",
+      "roleDefinition": "Responsible for describing system architecture, ensuring business goals are satisfied with technical requirements.",
+      "taskSpecialization": "System Definition, Technical Specifications, Solution approach, and Code examples",
+      "techniques": [
+        "Define system architecture",
+        "Develop initial code scaffolding",
+        "Refactor code based on technical requirements"
+      ],
+      "roleSpecificSkills": [
+        "Technical architecture",
+        "System design",
+        "Code scaffolding"
+      ],
+      "tasks": [
+        {
+          "taskId": "SA1",
+          "action": "transform",
+          "task": "Provide precise technical specifications necessary for implementing business requirements using React and TypeScript. Describe the architecture, including sequence descriptions or textual architecture explanations.",
+          "expected_outcome": "Technical specifications that complement the business requirements, ready for frontend development.",
+          "dependencies": [
+            "SO2"
+          ],
+          "unlocks": [
+            "SA2"
+          ],
+          "artifacts": [
+            {
+              "artifact": "Requirements Document",
+              "description": "Provide necessary technical details and outline refactor implementation details for the requirements document.",
+              "source": "SourceCode.txt"
+            }
+          ],
+          "predecessor_context": "1"
+        },
+        {
+          "taskId": "SA2",
+          "action": "transform",
+          "task": "Review the SA's code outline to ensure it aligns with the technical specifications and project requirements. Provide 3-5 explanatory input examples with expected outcomes to validate functionality.  Use real numbers that illustrate the calculation behavior.",
+          "expected_outcome": "A validated code outline with sample inputs and outcomes, ensuring the solution is complete and robust.",
+          "dependencies": [
+            "SA1"
+          ],
+          "unlocks": [
+            "FE1"
+          ],
+          "artifacts": [
+            {
+              "artifact": "FinCalc-01",
+              "description": "Create well-defined, technical details for the user story based on business and technical requirements with working code examples.",
+              "source": "story_template.txt"
+            }
+          ],
+          "predecessor_context": "1"
+        }
+      ]
+    },
+    {
+      "role": "Frontend Developer",
+      "roleDefinition": "Focuses on the client-side development, interfaces, and user interaction aspects of the application.",
+      "taskSpecialization": "UI Development, Usability Testing, Performance Optimization",
+      "techniques": [
+        "Design UI mockups using design tools",
+        "Implement UI using standard HTML/CSS/JavaScript",
+        "Conduct usability testing with user feedback"
+      ],
+      "roleSpecificSkills": [
+        "UI design",
+        "Front-end development",
+        "Performance optimization"
+      ],
+      "tasks": [
+        {
+          "taskId": "FE1",
+          "action": "transform",
+          "task": "Implement frontend code for the application based on the technical specification. Focus on completeness, ensure the code satisfies all requirements. The result should be wrapped in an HTML tag like this:  <code format='typescript'>\nTHE CODE IMPLEMENTATION\n</code>.  Add any additional notes to a ## Notes section following the code block.",
+          "expected_outcome": "Complete and functional code for a frontend application.",
+          "dependencies": [
+            "SA2"
+          ],
+          "unlocks": [
+            ""
+          ],
+          "artifacts": [
+            {
+              "artifact": "R4-FE-01",
+              "description": "Generated code implementation for the frontend page which satisifies the input requirements.",
+              "source": "page.tsx"
+            }
+          ],
+          "predecessor_context": "1"
+        }
+      ]
+    }
+  ]
+}

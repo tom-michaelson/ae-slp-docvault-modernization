@@ -1,0 +1,19 @@
+{
+  "properties": {
+    "server": {
+      "default": "",
+      "title": "Server",
+      "type": "string"
+    },
+    "tools": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Tools",
+      "type": "array"
+    }
+  },
+  "title": "McpTool",
+  "type": "object"
+}

@@ -1,0 +1,71 @@
+This file defines a Basic Mapping Support (BMS) macro for a CICS application, specifically for a bill payment screen. Let's break down its key components:
+
+Header:
+
+Contains copyright and license information for the CardDemo application.
+
+Main Screen Definition (COBIL00):
+
+Uses DFHMSD macro to set global attributes for the screen.
+
+Specifies LANG=COBOL, indicating it's designed to work with a COBOL program.
+
+Screen Layout (COBIL0A):
+
+Defined using DFHMDI macro.
+
+Sets the screen size to 24 lines by 80 columns.
+
+Header Fields:
+
+Transaction name (TRNNAME)
+
+Date (CURDATE)
+
+Program name (PGMNAME)
+
+Time (CURTIME)
+
+Two title fields (TITLE01 and TITLE02)
+
+Main Content:
+
+"Bill Payment" title at position (4,35)
+
+Account ID input field (ACTIDIN) at (6,21)
+
+Current balance display (CURBAL) at (11,32)
+
+Confirmation prompt for payment at (15,6)
+
+Confirmation input field (CONFIRM) at (15,60)
+
+Field Attributes:
+
+Uses various colors (BLUE, YELLOW, GREEN, TURQUOISE, NEUTRAL)
+
+Input fields (ACTIDIN, CONFIRM) are set as unprotected (UNPROT) and highlighted with underline
+
+Most other fields are protected (ASKIP) for display only
+
+Messages:
+
+Error message field (ERRMSG) at the bottom of the screen
+
+Function Keys:
+
+Displays available function keys at the bottom: ENTER, F3, F4
+
+This BMS macro defines a screen for a bill payment process. Here's a general flow of how it would work:
+
+The user enters an account ID.
+
+The system (via the associated COBOL program) would display the current balance.
+
+The user is then prompted to confirm if they want to pay the balance.
+
+The user can enter 'Y' or 'N' to confirm or decline.
+
+Function keys allow for continuing the process (ENTER), going back (F3), or clearing the screen (F4).
+
+The layout is designed to be user-friendly, with clear labeling and color-coding to guide the user through the bill payment process. The COBOL program associated with this screen would handle the logic for retrieving the account balance, processing the payment if confirmed, and handling any errors or further navigation.

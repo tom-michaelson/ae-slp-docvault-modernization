@@ -1,0 +1,44 @@
+{
+  "description": "Parameters for reading content from either a file or directory.",
+  "properties": {
+    "path": {
+      "title": "Path",
+      "type": "string"
+    },
+    "name": {
+      "default": null,
+      "title": "Name",
+      "type": "string"
+    },
+    "ignore_file_path": {
+      "default": null,
+      "title": "Ignore File Path",
+      "type": "string"
+    },
+    "default": {
+      "type": "string",
+      "default": null,
+      "title": "Default"
+    },
+    "directory_join_template_str": {
+      "default": null,
+      "title": "Directory Join Template Str",
+      "type": "string"
+    },
+    "directory_join_str": {
+      "default": null,
+      "title": "Directory Join Str",
+      "type": "string"
+    },
+    "image_mime_type": {
+      "default": null,
+      "title": "Image Mime Type",
+      "type": "string"
+    }
+  },
+  "required": [
+    "path"
+  ],
+  "title": "InputParams",
+  "type": "object"
+}

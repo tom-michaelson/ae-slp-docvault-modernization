@@ -1,0 +1,21 @@
+----------R4 Demo----------------
+    ----------COBOL Developer----------------
+    As a Cobol Developer, which files do I have access to?
+
+    Review the source code found in SourceCode.txt and the documentation in Q_Explain.txt to create detailed business requirements.  Fully identify all features of the code without making assumptions or adding extra features. Make sure that any generated content is valid Markdown, including code blocks for any sample code.  Do not attempt to write the file until I have reviewed the content.
+
+    This looks good, write it to Requirements.md and copy it to your output folder.
+
+    ----------Solution Architect----------------
+    As a Solution Architect, read the Requirements.md file and then show the raw contents of the file without summarizing or editorializing
+
+    Based on these requirements, create precise technical specifications necessary for implementing business requirements using my preferred technology stack. Describe the architecture, including sequence descriptions or textual architecture explanations. Make sure that any generated content is valid Markdown, including code blocks for any sample code.  Do not attempt to write the file until I have reviewed the content.
+
+    This looks good, write it to TechSpec.md and copy it to your output folder.
+
+    ----------Frontend Developer----------------
+    As a Frontend Developer, which files are available?
+
+    Using page.tsx as a template to guide, implement frontend code for the application based on the technical specification. Focus on completeness, ensure the code satisfies all requirements. Make sure that the final respose is returned as valid Markdown, including code blocks and instructions for any implementation code.  Do not attempt to write the file until I have reviewed the content.
+
+    This looks good, write it to Implementation.md and copy it to your output folder.

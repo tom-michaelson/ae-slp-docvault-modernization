@@ -1,0 +1,134 @@
+#------------------------------#
+#           Recipes            #
+#------------------------------#
+recipes: true
+
+#------------------------------#
+#             LLMs             #
+#------------------------------#
+llm:
+  default_model: my-gpt-4.1
+  providers:
+    openai:
+      # base_url: https://adb-1234567890.18.azuredatabricks.net/serving-endpoints  # Optional custom endpoint (e.g., Databricks)
+    azure_openai:
+      resource_name: my-azure-openai
+      api_version: "2024-02-15-preview"
+      domain: "openai.azure.com"  # Typically "openai.azure.com" or "cognitiveservices.azure.com"
+      use_entra_auth: false  # Use Entra ID (DefaultAzureCredential) authentication. Set to false to use API key instead.
+    google_vertex:
+      location: us-central1
+      # project_id: my-gcp-project  # Optional, will use default from GCP authentication if not specified
+      # credentials_path: /path/to/service-account.json  # Optional, will use GOOGLE_APPLICATION_CREDENTIALS if not specified
+    github_copilot:
+      # No configuration needed here if using device flow authentication (recommended).
+      # If using an API key, it will be read from the GITHUB_COPILOT_API_KEY environment variable.
+    lite_llm:
+      base_url: http://localhost:4002
+      api_key: sk-awa  # Default API key for local LiteLLM proxy
+  models:
+    - name: my-gpt-4.1
+      provider: azureopenai
+      model: gpt-4.1
+      temperature: 0.1
+      max_tokens: 32000
+    - name: my-gemini-pro
+      provider: googlevertex
+      model: gemini-1.5-pro
+      temperature: 0.1
+      max_tokens: 8192
+    - name: my-claude-4
+      provider: anthropic
+      model: claude-sonnet-4-20250514
+      temperature: 0.7
+      max_tokens: 4096
+    - name: my-gpt5-chat
+      provider: azureopenai
+      model: gpt-5                 # This must match your Azure deployment name
+      is_gpt5_model: true          # Explicitly mark as GPT-5 model
+      use_responses_api: false     # Use Chat Completions API
+      verbosity: medium            # GPT-5 verbosity level (low/medium/high)
+      reasoning_effort: medium     # GPT-5 reasoning effort (minimal/low/medium/high)
+      max_completion_tokens: 65536 # For Chat Completions API
+    # GitHub Copilot via LiteLLM Proxy (Recommended)
+    # Due to a BAML parsing bug with GitHub Copilot's API response format (missing index field),
+    # we proxy through LiteLLM which normalizes the responses. See docs/configuration/llms/github-copilot.md
+    - name: claude-sonnet-4.5
+      provider: LiteLLM
+      model: ghcopilot/claude-sonnet-4.5
+      temperature: 0.1
+      max_tokens: 32000
+      use_cache: true
+    - name: gpt-4o-copilot
+      provider: LiteLLM
+      model: ghcopilot/gpt-4o
+      temperature: 0.1
+      max_tokens: 32000
+      use_cache: true
+    # Direct GitHub Copilot (Currently has BAML compatibility issues - use LiteLLM proxy instead)
+    # - name: claude-sonnet-4.5-direct
+    #   provider: GitHubCopilot
+    #   model: claude-sonnet-4.5
+    #   temperature: 0.1
+    #   max_tokens: 32000
+    #   use_cache: true
+  embedding_models:
+    - name: azure-text-embedding-ada-002
+      provider: azureopenai
+      resource_name: your-azure-openai-resource-name
+      api_version: "2023-05-15"
+      domain: "openai.azure.com"  # Optional: override provider-level domain for this model
+      model: text-embedding-ada-002
+
+#------------------------------#
+#             Jira             #
+#------------------------------#
+# jira:
+#   url: "https://slalom.atlassian.net"
+#   api_user: "ryan.henderson@slalom.com"
+
+#------------------------------#
+#           Logging            #
+#------------------------------#
+# Logging configuration - can be a single level or component-specific
+# Option 1: Single log level for all components
+# logging:
+#   log_level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+
+# Option 2: Component-specific log levels
+# logging:
+#   log_level:
+#     api: "INFO"
+#     ui: "ERROR"
+#     worker: "DEBUG"
+#     server: "WARNING"
+#     workflow: "INFO"
+#     activity: "INFO"
+#     cli: "INFO"
+#     client: "INFO"
+#     script: "INFO"
+#     auth: "WARNING"
+#     http: "WARNING"
+#     socketio: "DEBUG"  # Controls both SOCKETIO-SERVER and SOCKETIO-CLIENT
+#     engine: "INFO"    # Note: engine logs use server level
+#     uvicorn: "INFO"   # Controls uvicorn and FastAPI logs
+# Option 3: Mixed configuration (specify some components, others use default)
+# logging:
+#   log_level:
+#     api: "DEBUG"      # Debug API issues
+#     workflow: "INFO"  # Normal workflow logging
+#     http: "ERROR"     # Only show HTTP errors
+#     # Other components will use INFO (default)
+
+#------------------------------#
+#        S3 Vector Store       #
+#------------------------------#
+# Configuration for AWS S3 Vector Store (optional)
+# s3_vector:
+#   enabled: true
+#   region_name: "us-west-2"
+#   vector_bucket_name: "your-vector-bucket"
+#   vector_bucket_arn: "arn:aws:s3:::your-vector-bucket"  # Optional
+#   index_name: "awa-vectors"
+#   distance_metric: "cosine"  # or "euclidean"
+#   embedding_source: "azure_openai"  # "openai", "azure_openai", or "tfidf"

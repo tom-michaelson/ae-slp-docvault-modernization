@@ -1,0 +1,59 @@
+{
+  "properties": {
+    "input": {
+      "title": "Input",
+      "type": "string"
+    },
+    "output": {
+      "title": "Output",
+      "type": "string"
+    },
+    "baml_src": {
+      "title": "Baml Src",
+      "type": "string"
+    },
+    "agent_prompts": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Agent Prompts"
+    },
+    "project_root": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Project Root"
+    },
+    "workflow_root": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Workflow Root"
+    }
+  },
+  "required": [
+    "input",
+    "output",
+    "baml_src"
+  ],
+  "title": "WorkflowPaths",
+  "type": "object"
+}

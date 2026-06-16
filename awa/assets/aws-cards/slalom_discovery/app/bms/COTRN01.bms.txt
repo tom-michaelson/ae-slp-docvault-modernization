@@ -1,0 +1,103 @@
+This file defines a Basic Mapping Support (BMS) macro for a CICS application, specifically for a transaction view screen. Let's break down its key components:
+
+Header:
+
+Contains copyright and license information for the CardDemo application.
+
+Main Screen Definition (COTRN01):
+
+Uses DFHMSD macro to set global attributes for the screen.
+
+Specifies LANG=COBOL, indicating it's designed to work with a COBOL program.
+
+Sets MODE=INOUT for both input and output operations.
+
+Includes CTRL=(ALARM,FREEKB) for keyboard control and alarm capabilities.
+
+Screen Layout (COTRN1A):
+
+Defined using DFHMDI macro.
+
+Sets the screen size to 24 lines by 80 columns.
+
+Header Fields:
+
+Transaction name (TRNNAME) at (1,7)
+
+Date (CURDATE) at (1,71)
+
+Program name (PGMNAME) at (2,7)
+
+Time (CURTIME) at (2,71)
+
+Two title fields (TITLE01 and TITLE02) at (1,21) and (2,21)
+
+Main Content:
+
+"View Transaction" title at (4,30)
+
+Input field for Transaction ID (TRNIDIN) at (6,21)
+
+Display fields for transaction details:
+
+Transaction ID (TRNID) at (10,22)
+
+Card Number (CARDNUM) at (10,58)
+
+Transaction Type Code (TTYPCD) at (12,15)
+
+Transaction Type Description (TTYPDS) at (12,22)
+
+Transaction Date (TRNDAT) at (12,58)
+
+Transaction Amount (TRNAMT) at (14,22)
+
+Merchant Name (MERCHNT) at (16,22)
+
+Field Attributes:
+
+Uses various colors (BLUE, YELLOW, TURQUOISE, GREEN, NEUTRAL)
+
+Input field (TRNIDIN) is set as unprotected (UNPROT) and highlighted with underline
+
+Display fields are protected (ASKIP) for display only
+
+Additional Elements:
+
+Separating lines using dashes to structure the information visually
+
+This BMS macro defines a screen for viewing details of a specific transaction. Here's how it would typically be used:
+
+The screen displays header information and the "View Transaction" title.
+
+Users can enter a Transaction ID in the input field at the top of the screen.
+
+Once a valid Transaction ID is entered, the screen would display detailed information about that transaction, including:
+
+The transaction ID
+
+Associated card number
+
+Transaction type (code and description)
+
+Date of the transaction
+
+Amount
+
+Merchant name
+
+The associated COBOL program would:
+
+Handle user input for the Transaction ID
+
+Retrieve the corresponding transaction details from the database
+
+Populate the display fields with the retrieved information
+
+Handle any error conditions (e.g., invalid Transaction ID)
+
+Possibly provide navigation options to return to a transaction list or perform other actions
+
+This screen serves as a detailed view for individual transactions in the CardDemo application. It allows users (likely customer service representatives or system administrators) to quickly access and review specific transaction details.
+
+The layout is designed for clarity, with labeled fields and visual separation of different information sections. The use of color coding (BLUE for labels, TURQUOISE for some data fields) helps to distinguish between different types of information on the screen.

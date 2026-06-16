@@ -1,0 +1,108 @@
+{
+  "description": "Response model for OpenAI Agent execution.",
+  "properties": {
+    "content": {
+      "description": "The agent's response content",
+      "title": "Content",
+      "type": "string"
+    },
+    "execution_id": {
+      "description": "Unique execution ID",
+      "title": "Execution Id",
+      "type": "string"
+    },
+    "agent_name": {
+      "description": "Name of the agent that executed",
+      "title": "Agent Name",
+      "type": "string"
+    },
+    "model_used": {
+      "description": "Model that was used",
+      "title": "Model Used",
+      "type": "string"
+    },
+    "execution_time_seconds": {
+      "description": "Total execution time",
+      "title": "Execution Time Seconds",
+      "type": "number"
+    },
+    "error": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Error message if execution failed",
+      "title": "Error"
+    },
+    "error_type": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Type of error if occurred",
+      "title": "Error Type"
+    },
+    "metadata": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Additional metadata from the execution",
+      "title": "Metadata"
+    },
+    "handoff_events": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "./HandoffEvent.json"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "List of handoff events that occurred during execution",
+      "title": "Handoff Events"
+    },
+    "final_agent": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Name of the final agent that completed the execution if handoffs occurred",
+      "title": "Final Agent"
+    }
+  },
+  "required": [
+    "content",
+    "execution_id",
+    "agent_name",
+    "model_used",
+    "execution_time_seconds"
+  ],
+  "title": "OpenAIAgentResponse",
+  "type": "object"
+}

@@ -1,0 +1,350 @@
+{
+  "description": "Main configuration for OpenAI Agent execution in Temporal workflow.",
+  "properties": {
+    "name": {
+      "description": "Name of the agent",
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "instructions": {
+      "description": "System instructions for the agent",
+      "minLength": 1,
+      "title": "Instructions",
+      "type": "string"
+    },
+    "input": {
+      "description": "Input for the agent",
+      "minLength": 1,
+      "title": "Input",
+      "type": "string"
+    },
+    "model": {
+      "description": "Name of model. Must be valid default LiteLLM model name.",
+      "minLength": 1,
+      "title": "Model",
+      "type": "string"
+    },
+    "mcp_servers": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "List of MCP server names that match keys in the mcp.json servers object",
+      "title": "Mcp Servers"
+    },
+    "response_format": {
+      "$ref": "./ResponseFormat.json",
+      "default": "text",
+      "description": "Response format: text or JSON schema"
+    },
+    "response_schema": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "JSON schema for structured output (only used when response_format is JSON_SCHEMA)",
+      "title": "Response Schema"
+    },
+    "workflow_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Optional workflow ID for tracking",
+      "title": "Workflow Id"
+    },
+    "metadata": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Additional metadata for the agent execution",
+      "title": "Metadata"
+    },
+    "max_turns": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Maximum number of turns for the agent execution. Defaults to 10 if not specified.",
+      "title": "Max Turns"
+    },
+    "agent_tools": {
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/OpenAIAgentConfig"
+              },
+              {
+                "$ref": "./AgentToolConfig.json"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "List of agents to use as tools. These agents can be called as tools and return results.",
+      "title": "Agent Tools"
+    },
+    "handoffs": {
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "./HandoffConfig.json"
+              },
+              {
+                "$ref": "#/$defs/OpenAIAgentConfig"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "List of possible handoff targets. Can be agent names, HandoffConfig objects, or OpenAIAgentConfig instances.",
+      "title": "Handoffs"
+    },
+    "handoff_description": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Description of how this agent handles handoffs or what types of handoffs it supports.",
+      "title": "Handoff Description"
+    }
+  },
+  "required": [
+    "name",
+    "instructions",
+    "input",
+    "model"
+  ],
+  "title": "OpenAIAgentConfig",
+  "type": "object",
+  "$defs": {
+    "OpenAIAgentConfig": {
+      "description": "Main configuration for OpenAI Agent execution in Temporal workflow.",
+      "properties": {
+        "name": {
+          "description": "Name of the agent",
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "instructions": {
+          "description": "System instructions for the agent",
+          "minLength": 1,
+          "title": "Instructions",
+          "type": "string"
+        },
+        "input": {
+          "description": "Input for the agent",
+          "minLength": 1,
+          "title": "Input",
+          "type": "string"
+        },
+        "model": {
+          "description": "Name of model. Must be valid default LiteLLM model name.",
+          "minLength": 1,
+          "title": "Model",
+          "type": "string"
+        },
+        "mcp_servers": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "List of MCP server names that match keys in the mcp.json servers object",
+          "title": "Mcp Servers"
+        },
+        "response_format": {
+          "$ref": "./ResponseFormat.json",
+          "default": "text",
+          "description": "Response format: text or JSON schema"
+        },
+        "response_schema": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "JSON schema for structured output (only used when response_format is JSON_SCHEMA)",
+          "title": "Response Schema"
+        },
+        "workflow_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional workflow ID for tracking",
+          "title": "Workflow Id"
+        },
+        "metadata": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Additional metadata for the agent execution",
+          "title": "Metadata"
+        },
+        "max_turns": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Maximum number of turns for the agent execution. Defaults to 10 if not specified.",
+          "title": "Max Turns"
+        },
+        "agent_tools": {
+          "anyOf": [
+            {
+              "items": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/OpenAIAgentConfig"
+                  },
+                  {
+                    "$ref": "./AgentToolConfig.json"
+                  }
+                ]
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "List of agents to use as tools. These agents can be called as tools and return results.",
+          "title": "Agent Tools"
+        },
+        "handoffs": {
+          "anyOf": [
+            {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "$ref": "./HandoffConfig.json"
+                  },
+                  {
+                    "$ref": "#/$defs/OpenAIAgentConfig"
+                  }
+                ]
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "List of possible handoff targets. Can be agent names, HandoffConfig objects, or OpenAIAgentConfig instances.",
+          "title": "Handoffs"
+        },
+        "handoff_description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Description of how this agent handles handoffs or what types of handoffs it supports.",
+          "title": "Handoff Description"
+        }
+      },
+      "required": [
+        "name",
+        "instructions",
+        "input",
+        "model"
+      ],
+      "title": "OpenAIAgentConfig",
+      "type": "object"
+    }
+  }
+}

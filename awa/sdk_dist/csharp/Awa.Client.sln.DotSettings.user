@@ -1,0 +1,16 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=4ffd93ab_002D3fc8_002D4c50_002D9c44_002D68220c721744/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GetWorkflowPathsDirect_Default" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;NUnit3x::73B8E718-2F09-4F37-A5E2-0DBD9E6B17B8::net8.0::Awa.Client.Tests.Utilities.WorkflowUtilitiesTests.GetWorkflowPathsDirect_Default&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c51b6767_002Dcbd8_002D4ddb_002Dbec1_002D299dda631049/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GetWorkflowPathsDirect_Default #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;NUnit3x::73B8E718-2F09-4F37-A5E2-0DBD9E6B17B8::net8.0::Awa.Client.Tests.Utilities.WorkflowUtilitiesTests.GetWorkflowPathsDirect_Default&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=f36601bd_002De93b_002D4f61_002D8d01_002D89acbbe45035/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="GetWorkflowPathsDirect_Default #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;NUnit3x::73B8E718-2F09-4F37-A5E2-0DBD9E6B17B8::net8.0::Awa.Client.Tests.Utilities.WorkflowUtilitiesTests.GetWorkflowPathsDirect_Default&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

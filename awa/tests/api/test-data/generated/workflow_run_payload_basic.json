@@ -1,0 +1,5 @@
+{
+  "name": "test-worker",
+  "input": "{\"name\": \"TestUser\"}",
+  "task_queue": "default-task-queue"
+}

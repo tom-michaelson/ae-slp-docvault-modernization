@@ -1,0 +1,23 @@
+{
+  "key": "list-catalog-types",
+  "name": "List catalog types",
+  "type": "api-endpoint",
+  "domain": "catalog",
+  "legacyEntryPoint": "Microsoft.eShopWeb.PublicApi.CatalogTypeEndpoints.CatalogTypeListEndpoint.HandleAsync",
+  "legacyLocation": "src/PublicApi/CatalogTypeEndpoints/CatalogTypeListEndpoint.cs:36",
+  "targetRestContract": {
+    "method": "GET",
+    "path": "/api/catalog-types",
+    "responseModel": "ListCatalogTypesResponse",
+    "auth": "none",
+    "notes": "Returns all CatalogType rows with no filtering or pagination — full table scan every time. No request parameters of any kind."
+  },
+  "usedByUiFeatures": [],
+  "notes": [
+    "The actual location of this file is src/PublicApi/CatalogTypeEndpoints/CatalogTypeListEndpoint.cs — not the CatalogItemEndpoints folder as the command argument stated.",
+    "CatalogType.Type (entity property) is mapped to CatalogTypeDto.Name via AutoMapper ForMember in MappingProfile.cs — the Java target must map type.type to dto.name explicitly.",
+    "No filtering, no pagination, no path parameters — always returns the entire CatalogTypes table.",
+    "AutoMapper is used (same pattern as list-catalog-brands).",
+    "BlazorAdmin calls this to populate type dropdowns in create/edit forms."
+  ]
+}

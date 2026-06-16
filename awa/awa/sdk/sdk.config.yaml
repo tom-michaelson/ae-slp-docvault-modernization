@@ -1,0 +1,23 @@
+output_path: sdk_dist
+languages:
+  - name: csharp
+    enabled: true
+    ext: .cs
+    model_file_name: Models
+    model_path: Awa.Client/Models
+    constants_file_name: Constants
+    constants_path: Awa.Client/Constants
+    namespace: Awa.Client.Models
+    test_command: dotnet test
+    utils_base_path: Awa.Client/Utilities
+    utils_organize_by_type: true
+    utils_use_pascal_case: true
+  - name: python
+    enabled: false
+    ext: .py
+    model_file_name: models
+    model_path: awa/client
+    constants_file_name: constants
+    constants_path: awa/client
+    test_command: python -m pytest
+    utils_base_path: awa/client/utils

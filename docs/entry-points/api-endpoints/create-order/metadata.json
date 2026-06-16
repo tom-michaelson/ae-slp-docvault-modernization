@@ -1,0 +1,35 @@
+{
+  "key": "create-order",
+  "name": "Create order from basket",
+  "type": "api-endpoint",
+  "domain": "orders",
+  "legacyEntryPoint": "Microsoft.eShopWeb.ApplicationCore.Services.OrderService.CreateOrderAsync",
+  "legacyLocation": "src/ApplicationCore/Services/OrderService.cs:30",
+  "legacyWebHandler": "Microsoft.eShopWeb.Web.Pages.Basket.CheckoutModel.OnPost",
+  "targetRestContract": {
+    "method": "POST",
+    "path": "/api/orders",
+    "requestModel": {
+      "basketId": "int",
+      "shippingAddress": {
+        "street": "string",
+        "city": "string",
+        "state": "string",
+        "country": "string",
+        "zipCode": "string"
+      }
+    },
+    "responseModel": "CreateOrderResponse",
+    "auth": "jwt",
+    "notes": "CheckoutModel.OnPost is [Authorize] so this is always an authenticated operation. The legacy handler hardcodes the shipping address as new Address('123 Main St.', 'Kent', 'OH', 'United States', '44240') — the REST target MUST accept a real address from the request body. The service returns void; the REST target should return HTTP 201 with the new order ID."
+  },
+  "usedByUiFeatures": ["basket-checkout"],
+  "notes": [
+    "The shipping address is HARDCODED in CheckoutModel.OnPost in the legacy app — the REST target must accept it from the client in the request body.",
+    "CatalogItemOrdered stores a snapshot of the item name and picture URI at order time — changes to the catalog later do NOT affect historical orders.",
+    "Guard.Against.EmptyBasketOnCheckout throws EmptyBasketOnCheckoutException if basket.Items is empty — CheckoutModel catches this and redirects to /Basket/Index. REST target should return 422 Unprocessable Entity.",
+    "Guard.Against.Null(basket) throws if the basket is not found — REST target should return 404.",
+    "The service returns Task (void) — no order ID is returned to the caller. The REST target should return 201 Created with the order ID from the inserted row.",
+    "Caller always calls SetQuantities before CreateOrderAsync to sync quantities, then calls DeleteBasketAsync after — this endpoint only creates the order."
+  ]
+}

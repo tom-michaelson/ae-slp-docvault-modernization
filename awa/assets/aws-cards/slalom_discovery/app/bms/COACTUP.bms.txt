@@ -1,0 +1,35 @@
+This file appears to be a CICS Basic Mapping Support (BMS) macro definition, which is used to define screen layouts for mainframe applications. Let me break down some key aspects of this file:
+
+Screen Layout: The file defines various fields for what seems to be a customer or account information screen. It includes fields for address details (state, zip, city, country), phone numbers, government ID, EFT account ID, and primary cardholder status.
+
+DFHMDF Macros: These are used to define individual fields on the screen. Each DFHMDF macro specifies attributes like:
+
+ATTRB: Field attributes (e.g., UNPROT for unprotected, allowing user input)
+
+HILIGHT: Highlighting (e.g., UNDERLINE)
+
+LENGTH: Field length
+
+POS: Position on the screen (row, column)
+
+INITIAL: Initial text to display
+
+COLOR: Text color (e.g., TURQUOISE, YELLOW)
+
+Field Names: Fields are given names like ACSSTTE (likely for state), ACSZIPC (zip code), ACSCITY (city), etc. These names are probably used in the associated COBOL program to reference the fields.
+
+Screen Messages: There are fields defined for informational messages (INFOMSG) and error messages (ERRMSG).
+
+Function Keys: The bottom of the screen defines function key information:
+
+ENTER for processing
+
+F3 for exit
+
+F5 for save (displayed dimly)
+
+F12 for cancel (displayed dimly)
+
+Screen Formatting: The macros carefully position each element on the screen, creating a structured layout for data entry and display.
+
+This BMS macro would be used in conjunction with a COBOL program to create an interactive screen for a mainframe application, likely related to customer or account management in a financial or card services system. The screen allows for viewing and potentially editing customer information like address, phone numbers, and account details.

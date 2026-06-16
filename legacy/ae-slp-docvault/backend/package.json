@@ -1,0 +1,25 @@
+{
+  "name": "docvault-backend",
+  "version": "1.0.0",
+  "description": "DocVault document management API",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node src/index.js",
+    "migrate": "node src/db/migrate.js"
+  },
+  "dependencies": {
+    "express": "4.18.2",
+    "body-parser": "1.19.0",
+    "express-session": "1.17.1",
+    "connect-pg-simple": "7.0.0",
+    "jsonwebtoken": "9.0.0",
+    "express-jwt": "8.4.1",
+    "pg": "8.9.0",
+    "bcryptjs": "2.4.3",
+    "multer": "1.4.5-lts.1",
+    "cors": "2.8.5",
+    "dotenv": "16.0.3",
+    "uuid": "9.0.0"
+  }
+}

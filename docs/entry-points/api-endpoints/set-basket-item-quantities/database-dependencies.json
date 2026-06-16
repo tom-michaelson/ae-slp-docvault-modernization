@@ -1,0 +1,30 @@
+[
+  {
+    "type": "table",
+    "name": "Baskets",
+    "key": "baskets",
+    "operations": ["select"],
+    "columns": ["Id", "BuyerId"],
+    "locations": [
+      "src/ApplicationCore/Services/BasketService.cs:49",
+      "src/ApplicationCore/Specifications/BasketWithItemsSpecification.cs"
+    ],
+    "notes": ["SELECT by Id via BasketWithItemsSpecification; eager-loads Items."]
+  },
+  {
+    "type": "table",
+    "name": "BasketItems",
+    "key": "basket-items",
+    "operations": ["update", "delete"],
+    "columns": ["Id", "Quantity", "BasketId"],
+    "locations": [
+      "src/ApplicationCore/Services/BasketService.cs:47",
+      "src/ApplicationCore/Entities/BasketAggregate/Basket.cs:33",
+      "src/ApplicationCore/Entities/BasketAggregate/BasketItem.cs:27"
+    ],
+    "notes": [
+      "UPDATE each row whose id is present in the quantities dictionary.",
+      "DELETE rows whose new quantity is 0 (Basket.RemoveEmptyItems)."
+    ]
+  }
+]

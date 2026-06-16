@@ -1,0 +1,19 @@
+{
+  "properties": {
+    "mcp_json": {
+      "default": null,
+      "title": "Mcp Json",
+      "type": "string"
+    },
+    "allowed": {
+      "default": null,
+      "items": {
+        "$ref": "./McpTool.json"
+      },
+      "title": "Allowed",
+      "type": "array"
+    }
+  },
+  "title": "McpServer",
+  "type": "object"
+}

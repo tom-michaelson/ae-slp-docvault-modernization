@@ -1,0 +1,65 @@
+This file is a Basic Mapping Support (BMS) macro definition for a CICS application screen related to credit card details. Let's break it down:
+
+Header :
+
+Contains copyright and licensing information for the "CardDemo" application.
+
+Screen Definition (COCRDSL) :
+
+Defines the screen using the DFHMSD macro.
+
+Sets attributes like LANG=COBOL (for use with COBOL programs), MODE=INOUT (input/output), STORAGE=AUTO, and TYPE=&SYSPARM (dynamic type).
+
+Screen Layout (CCRDSLA) :
+
+Defined using the DFHMDI macro.
+
+Sets screen size to 24 lines by 80 columns.
+
+Specifies attributes like color, highlighting, field validation, and keyboard control.
+
+Header Fields :
+
+Transaction name (TRNNAME)
+
+Title fields (TITLE01 and TITLE02)
+
+Date (CURDATE)
+
+Program name (PGMNAME)
+
+Time (CURTIME)
+
+Main Content :
+
+Title "View Credit Card Detail" at (4,30)
+
+Account number input field (ACCTSID) at (7,45)
+
+Credit card number input field (CARDSID) at (8,45)
+
+Name on card field (CRDNAME) at (11,25)
+
+Card active status field (CRDSTCD) at (13,25)
+
+Expiry date fields (EXPMON and EXPYEAR) at (15,25) and (15,30)
+
+Information message field (INFOMSG) at (20,25)
+
+Field Attributes :
+
+Uses various colors like BLUE, YELLOW, TURQUOISE, and NEUTRAL.
+
+Input fields (ACCTSID, CARDSID) are unprotected (UNPROT) and highlighted with underline.
+
+Most other fields are protected (ASKIP or PROT) for display only.
+
+Expiry date fields (EXPMON and EXPYEAR) are unprotected (ASKIP) for input.
+
+This BMS macro defines a screen for displaying and potentially updating details of a specific credit card. The user can input an account number and credit card number, which would likely be processed by the associated COBOL program to retrieve and display the card details.
+
+The screen layout includes fields for the card name, active status, and expiry date. The INFOMSG field can be used to display informational messages to the user.
+
+The COBOL program would populate the card details fields based on the input account and card numbers, handle any updates to the expiry date or other fields, and process any actions or navigation based on the user's interaction with the screen.
+
+Overall, this BMS macro provides the user interface structure for a credit card details screen within the CardDemo application, while the COBOL program would provide the underlying logic, data retrieval, and processing.

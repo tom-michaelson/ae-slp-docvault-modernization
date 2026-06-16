@@ -1,0 +1,7 @@
+plugins {
+    // Auto-provisions JDKs (including Java 25) from the Foojay Disco API when the
+    // toolchain declared in build.gradle isn't already installed locally.
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
+}
+
+rootProject.name = 'modernization-target'

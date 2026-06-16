@@ -1,0 +1,16 @@
+{
+  "key": "home",
+  "name": "Catalog Homepage",
+  "type": "ui-feature",
+  "elementType": "ui-page",
+  "uri": "/",
+  "location": "src/Web/Pages/Index.cshtml",
+  "codeBehind": "src/Web/Pages/Index.cshtml.cs",
+  "domain": "catalog",
+  "notes": [
+    "Single OnGet handler only — no POST on this page; basket add-item POSTs go to /Basket/Index via the _product.cshtml partial.",
+    "Brand and type filter dropdowns are populated from the database on every page load (no caching); both prepend an 'All' sentinel with null value.",
+    "Pagination state (pageId) and filter state (BrandFilterApplied, TypesFilterApplied) are carried as GET query parameters — no session or cookie state.",
+    "Product image URLs are composed at render time by IUriComposer from the raw PictureUri path stored in the Catalog table."
+  ]
+}

@@ -1,0 +1,134 @@
+/**
+ * FUTURE IMPLEMENTATION: Generic Chat Widget
+ * See AWA-306 - https://slalom.atlassian.net/browse/AWA-306
+ *
+ * This component is ready to use once the generic chat backend is implemented.
+ *
+ * Prerequisites:
+ * 1. Implement backend chat API endpoints (see useChatQuery.ts.future)
+ * 2. Create genericChatSocket service for real-time updates
+ * 3. Rename useChatQuery.ts.future to useChatQuery.ts
+ * 4. Implement the genericChatApi service
+ * 5. Rename this file to ChatWidget.tsx
+ *
+ * This widget provides:
+ * - Floating action button with unread badge
+ * - Expandable chat window
+ * - Real-time message updates
+ * - Connection status indication
+ * - Responsive design
+ */
+
+import { useState, useCallback } from 'react';
+import { Paper, Fab, Badge, Fade, Zoom } from '@mui/material';
+import { Chat as ChatIcon } from '@mui/icons-material';
+// Future import - uncomment when implemented:
+// import { useChatQuery } from '@/hooks/useChatQuery';
+import ChatHeader from './ChatHeader';
+import ChatMessages from './ChatMessages';
+import ChatInput from './ChatInput';
+
+interface ChatWidgetProps {
+    taskId?: string;
+    workflowId?: string;
+    hidden?: boolean;
+}
+
+const ChatWidget = ({ taskId, workflowId, hidden }: ChatWidgetProps) => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    // Temporary mock data - replace with useChatQuery when available
+    const messages: any[] = [];
+    const isConnected = false;
+    const sendMessage = (message: string) => {
+        console.log('Chat not implemented. Message:', message);
+    };
+    const prefetchRelatedChats = () => {};
+
+    /* Future implementation:
+    const {
+        messages,
+        isConnected,
+        sendMessage,
+        prefetchRelatedChats,
+    } = useChatQuery({
+        conversationId: taskId || workflowId,
+        enablePersistence: true,
+        enableRealtime: true,
+    });
+    */
+
+    const toggleChat = useCallback(() => {
+        setIsOpen(prev => !prev);
+
+        // Prefetch related data when opening chat
+        if (!isOpen) {
+            prefetchRelatedChats();
+        }
+    }, [isOpen, prefetchRelatedChats]);
+
+    const unreadCount = !isOpen ? messages.filter(m => m.sender !== 'user' && !m.read).length : 0;
+
+    return (
+        <>
+            {/* Floating Action Button */}
+            <Fade in={!isOpen}>
+                <Fab
+                    color="primary"
+                    aria-label="open chat"
+                    onClick={toggleChat}
+                    sx={{
+                        position: 'fixed',
+                        bottom: 20,
+                        right: 20,
+                        zIndex: 1300,
+                        display: isOpen || hidden ? 'none' : 'flex',
+                    }}
+                >
+                    <Badge badgeContent={unreadCount} color="error">
+                        <ChatIcon />
+                    </Badge>
+                </Fab>
+            </Fade>
+
+            {/* Chat Window */}
+            <Zoom
+                in={isOpen}
+                timeout={200}
+                style={{
+                    transformOrigin: 'bottom right',
+                }}
+            >
+                <Paper
+                    elevation={8}
+                    sx={{
+                        position: 'fixed',
+                        bottom: 20,
+                        right: 20,
+                        width: { xs: 'calc(100% - 40px)', sm: 380 },
+                        maxWidth: 380,
+                        height: { xs: 'calc(100vh - 100px)', sm: 520 },
+                        maxHeight: 520,
+                        display: isOpen ? 'flex' : 'none',
+                        flexDirection: 'column',
+                        borderRadius: 3,
+                        overflow: 'hidden',
+                        zIndex: 1300,
+                    }}
+                >
+                    <ChatHeader
+                        isConnected={isConnected}
+                        onClose={toggleChat}
+                    />
+                    <ChatMessages messages={messages} />
+                    <ChatInput
+                        onSendMessage={sendMessage}
+                        disabled={!isConnected}
+                    />
+                </Paper>
+            </Zoom>
+        </>
+    );
+};
+
+export default ChatWidget;

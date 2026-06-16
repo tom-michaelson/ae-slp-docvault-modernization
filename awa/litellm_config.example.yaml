@@ -1,0 +1,53 @@
+model_list:
+  - model_name: gpt-4.1
+    litellm_params:
+      model: azure/gpt-4.1
+      api_key: os.environ/AZURE_API_KEY
+
+  # GitHub Copilot Models (via LiteLLM Proxy)
+  # These models require GitHub Copilot subscription and use OAuth device flow authentication
+  # The extra_headers simulate VSCode editor for API compatibility
+  - model_name: ghcopilot/claude-sonnet-4.5
+    litellm_params:
+      model: github_copilot/claude-sonnet-4.5
+      extra_headers:
+        Editor-Version: "vscode/1.99.3"
+        Editor-Plugin-Version: "copilot-chat/0.26.7"
+        Copilot-Integration-Id: "vscode-chat"
+        User-Agent: "GitHubCopilotChat/0.26.7"
+
+  - model_name: ghcopilot/claude-sonnet-4
+    litellm_params:
+      model: github_copilot/claude-sonnet-4
+      extra_headers:
+        Editor-Version: "vscode/1.99.3"
+        Editor-Plugin-Version: "copilot-chat/0.26.7"
+        Copilot-Integration-Id: "vscode-chat"
+        User-Agent: "GitHubCopilotChat/0.26.7"
+
+  - model_name: ghcopilot/gpt-4o
+    litellm_params:
+      model: github_copilot/gpt-4o
+      extra_headers:
+        Editor-Version: "vscode/1.99.3"
+        Editor-Plugin-Version: "copilot-chat/0.26.7"
+        Copilot-Integration-Id: "vscode-chat"
+        User-Agent: "GitHubCopilotChat/0.26.7"
+
+  - model_name: ghcopilot/gpt-4
+    litellm_params:
+      model: github_copilot/gpt-4
+      extra_headers:
+        Editor-Version: "vscode/1.99.3"
+        Editor-Plugin-Version: "copilot-chat/0.26.7"
+        Copilot-Integration-Id: "vscode-chat"
+        User-Agent: "GitHubCopilotChat/0.26.7"
+
+litellm_settings:
+  drop_params: True
+  success_callback: ["langfuse"]
+  langfuse_default_tags: ["cache_hit", "cache_key", "proxy_base_url", "user_api_key_alias", "user_api_key_user_id", "user_api_key_user_email", "user_api_key_team_alias"]
+general_settings:
+  master_key: sk-awa
+  store_model_in_db: true  # Enable request/response data viewing in LiteLLM UI
+  store_prompts_in_spend_logs: true  # Store prompts for debugging and analysis

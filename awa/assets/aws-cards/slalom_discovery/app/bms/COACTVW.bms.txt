@@ -1,0 +1,57 @@
+This file is a BMS (Basic Mapping Support) map definition for a CICS (Customer Information Control System) application. It defines the screen layout for an account viewing interface in a card demo application. Here are the key aspects of this file:
+
+Header Information:
+
+It includes copyright and license information (Apache License 2.0).
+
+The map is titled "BMS MAP FOR ACCOUNT VIEWING".
+
+Map Definition:
+
+The map name is COACTVW, defined using DFHMSD macro.
+
+It's set up for COBOL language, with input/output mode and automatic storage.
+
+Screen Layout:
+
+The screen size is defined as 24 rows by 80 columns, which is standard for traditional mainframe terminals.
+
+Fields Defined:
+
+Transaction name (TRNNAME)
+
+Current date (CURDATE) and time (CURTIME)
+
+Program name (PGMNAME)
+
+Title fields (TITLE01 and TITLE02)
+
+Account number input field (ACCTSID)
+
+Account status display (ACSTTUS)
+
+Account opening date (ADTOPEN)
+
+Account expiry date (AEXPDT)
+
+Credit limit (ACRDLIM)
+
+Cash credit limit (ACSHLIM)
+
+Field Attributes:
+
+Various fields use different colors (e.g., BLUE, YELLOW, GREEN, TURQUOISE) for visual distinction.
+
+Some fields are protected (display only), while others are unprotected (can be modified by the user).
+
+The account number field (ACCTSID) is set as the initial cursor position (IC) and must be filled (MUSTFILL).
+
+Numeric fields like credit limits use specific picture clauses for formatting (e.g., '+ZZZ,ZZZ,ZZZ.99').
+
+Layout Structure:
+
+The screen is organized with labels and corresponding data fields.
+
+It includes headers for transaction details, a main "View Account" title, and various account-related information.
+
+This BMS map would be used in conjunction with a COBOL program to create an interactive screen for viewing and possibly updating account information in a mainframe-based card management system. It provides a structured way to display and collect data in a text-based user interface typical of mainframe applications.

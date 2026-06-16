@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Awa.Client", "Awa.Client\Awa.Client.csproj", "{8E3B7D4C-7F5A-4B2D-8C9E-1A2B3C4D5E6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Awa.Client.Tests", "Awa.Client.Tests\Awa.Client.Tests.csproj", "{73B8E718-2F09-4F37-A5E2-0DBD9E6B17B8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8E3B7D4C-7F5A-4B2D-8C9E-1A2B3C4D5E6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E3B7D4C-7F5A-4B2D-8C9E-1A2B3C4D5E6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E3B7D4C-7F5A-4B2D-8C9E-1A2B3C4D5E6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E3B7D4C-7F5A-4B2D-8C9E-1A2B3C4D5E6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73B8E718-2F09-4F37-A5E2-0DBD9E6B17B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73B8E718-2F09-4F37-A5E2-0DBD9E6B17B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73B8E718-2F09-4F37-A5E2-0DBD9E6B17B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73B8E718-2F09-4F37-A5E2-0DBD9E6B17B8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,35 @@
+{
+  "properties": {
+    "template": {
+      "default": null,
+      "title": "Template",
+      "type": "string"
+    },
+    "template_input": {
+      "$ref": "./InputParams.json",
+      "default": null,
+      "title": "Template Input"
+    },
+    "variables": {
+      "additionalProperties": true,
+      "default": null,
+      "title": "Variables",
+      "type": "object"
+    },
+    "inputs": {
+      "default": null,
+      "items": {
+        "$ref": "./InputParams.json"
+      },
+      "title": "Inputs",
+      "type": "array"
+    },
+    "output_path": {
+      "default": null,
+      "title": "Output Path",
+      "type": "string"
+    }
+  },
+  "title": "BuildPromptParams",
+  "type": "object"
+}

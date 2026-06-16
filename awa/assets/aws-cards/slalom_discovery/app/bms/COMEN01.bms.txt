@@ -1,0 +1,79 @@
+This file defines a Basic Mapping Support (BMS) macro for a CICS application, specifically for a main menu screen. Let's break down its key components:
+
+Header:
+
+Contains copyright and license information for the CardDemo application.
+
+Main Screen Definition (COMEN01):
+
+Uses DFHMSD macro to set global attributes for the screen.
+
+Specifies LANG=COBOL, indicating it's designed to work with a COBOL program.
+
+Sets MODE=INOUT for both input and output operations.
+
+Screen Layout (COMEN1A):
+
+Defined using DFHMDI macro.
+
+Sets the screen size to 24 lines by 80 columns.
+
+Header Fields:
+
+Transaction name (TRNNAME) at (1,7)
+
+Date (CURDATE) at (1,71)
+
+Program name (PGMNAME) at (2,7)
+
+Time (CURTIME) at (2,71)
+
+Two title fields (TITLE01 and TITLE02) at (1,21) and (2,21)
+
+Main Content:
+
+"Main Menu" title at position (4,35)
+
+12 option fields (OPTN001 to OPTN012) from line 6 to 17
+
+Each option field is 40 characters long
+
+Positioned at column 20
+
+Field Attributes:
+
+Uses various colors (BLUE, YELLOW, NEUTRAL)
+
+Most fields are set as protected (ASKIP) for display only
+
+The main menu title is set to bright (BRT) attribute
+
+Field Types:
+
+Most fields are for display purposes only
+
+The option fields (OPTN001 to OPTN012) are likely populated by the COBOL program to show menu choices
+
+This BMS macro defines a main menu screen for the CardDemo application. Here's how it would typically be used:
+
+The screen displays a header with transaction name, program name, date, and time.
+
+The main part of the screen shows a "Main Menu" title.
+
+Below the title, there are 12 slots for menu options.
+
+The associated COBOL program would:
+
+Populate the header information (transaction name, program name, date, time)
+
+Fill in the TITLE01 and TITLE02 fields with appropriate text
+
+Populate the 12 option fields (OPTN001 to OPTN012) with the actual menu choices
+
+Handle user input (likely through a separate input field not defined in this macro)
+
+Process the selected option and navigate to the appropriate screen or function
+
+This screen serves as the central navigation point for the CardDemo application, allowing users to choose from various functions or sub-menus. The design is flexible, allowing for up to 12 different options, which can be customized or dynamically populated based on the user's role or the system's current state.
+
+The use of color (BLUE for most fields, YELLOW for titles) and the centered layout contribute to a clear and organized user interface typical of mainframe applications.

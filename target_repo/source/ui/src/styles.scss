@@ -1,0 +1,62 @@
+/* Global styles — approximate the eShopOnWeb theme so layout feels familiar. */
+
+/* Brand colors from the hosted eShopOnWeb UI */
+:root {
+  --eshop-teal: #00a69c;
+  --eshop-teal-dark: #008881;
+  --eshop-green: #83d01b;
+  --eshop-green-dark: #6ca816;
+  --eshop-footer: #1a1a1a;
+  --eshop-footer-text: #666;
+  --eshop-muted: #e5e5e5;
+  --eshop-text: #2d2d2d;
+  --eshop-bg: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family:
+    'Helvetica Neue',
+    Helvetica,
+    Arial,
+    sans-serif;
+  color: var(--eshop-text);
+  background: var(--eshop-bg);
+}
+
+a {
+  color: var(--eshop-teal);
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+button,
+.btn {
+  font: inherit;
+  cursor: pointer;
+  border: 0;
+  padding: 0.65rem 1.25rem;
+  background: var(--eshop-green);
+  color: #fff;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  &:hover {
+    background: var(--eshop-green-dark);
+  }
+}
+
+.container {
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}

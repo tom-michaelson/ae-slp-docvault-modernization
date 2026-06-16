@@ -1,0 +1,101 @@
+# Dockerfile for AWA FastAPI Service
+FROM python:3.12-slim
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PIP_NO_CACHE_DIR=1
+ENV AWA_API_PORT=8001
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    bzip2 \
+    libxcb1 \
+    gcc \
+    g++ \
+    make \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install uv
+RUN pip install uv
+
+# Set working directory
+WORKDIR /app
+
+# Copy dependency files
+COPY pyproject.toml uv.lock ./
+
+# Install Python dependencies
+RUN uv sync --frozen
+
+# Copy application code
+COPY awa/ ./awa/
+
+# Copy and make entry point scripts executable
+COPY scripts/docker-entrypoint-api.sh ./
+COPY scripts/docker-entrypoint-worker.sh ./
+RUN chmod +x docker-entrypoint-api.sh docker-entrypoint-worker.sh
+
+# Create cache directory
+RUN mkdir -p .cache/llm .cache/pycache .cache/uv
+
+# Install Node and run npm install
+ENV NODE_OPTIONS="--max-old-space-size=8192"
+RUN pip install nodeenv
+
+# Install Node.js using nodeenv without -p flag (standalone installation)
+RUN nodeenv /usr/local/nodeenv
+ENV PATH="/usr/local/nodeenv/bin:${PATH}"
+RUN node --version
+RUN npm --version
+RUN npm install -g npm@11.2.0
+
+# Install pnpm and other global packages as root
+RUN npm install -g pnpm
+
+# Set up pnpm with the global bin directory and add it to PATH
+ENV PNPM_HOME="/usr/local/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+ENV SHELL="/bin/bash"
+RUN mkdir -p "$PNPM_HOME"
+
+# Instead of using pnpm for global installs, just use npm which is already working
+# NOTE: Using npm here since pnpm doesn't seem to respect NODE_OPTIONS
+RUN npm install -g @anthropic-ai/claude-code
+RUN npm install -g @openai/codex
+
+# Set the cache directory for uv
+ENV UV_CACHE_DIR="/app/.cache/uv"
+
+# Create non-root user
+RUN useradd --create-home --shell /bin/bash awa && \
+    chown -R awa:awa /app /usr/local/nodeenv "$PNPM_HOME"
+
+# Copy goose config with correct ownership. This also creates the /home/awa/.config/goose path
+COPY --chown=awa:awa ./goose.config.example.yaml /home/awa/.config/goose/config.yaml
+
+# Switch to non-root user for goose installation and final environment
+USER awa
+
+# Install agent: Goose
+RUN curl -fsSL -o /tmp/download_cli.sh https://github.com/block/goose/releases/download/stable/download_cli.sh && \
+    chmod +x /tmp/download_cli.sh && \
+    CONFIGURE=false /tmp/download_cli.sh && \
+    rm /tmp/download_cli.sh
+
+# Set environment variables for the awa user
+ENV PATH="/home/awa/.local/bin:${PATH}" \
+    OPENAI_API_KEY="not-a-real-key" \
+    DBUS_SESSION_BUS_ADDRESS=""
+
+# Expose port
+EXPOSE $AWA_API_PORT
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:$AWA_API_PORT/health || exit 1
+
+# Default command - run only the API server using the entry point script
+CMD ["./docker-entrypoint-api.sh"]

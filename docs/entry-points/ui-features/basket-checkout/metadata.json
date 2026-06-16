@@ -1,0 +1,16 @@
+{
+  "key": "basket-checkout",
+  "name": "Checkout Review",
+  "type": "ui-feature",
+  "elementType": "ui-page",
+  "uri": "/basket/checkout",
+  "location": "src/Web/Pages/Basket/Checkout.cshtml",
+  "codeBehind": "src/Web/Pages/Basket/Checkout.cshtml.cs",
+  "domain": "catalog",
+  "notes": [
+    "Auth: [Authorize] on CheckoutModel — unauthenticated requests are redirected to the login page by ASP.NET Core middleware before the handler runs.",
+    "Shipping address is hardcoded in OnPost as new Address(\"123 Main St.\", \"Kent\", \"OH\", \"United States\", \"44240\") — there is no address-entry UI; the Spring Boot rebuild must introduce one.",
+    "OnPost executes three sequential mutations in a try block: SetQuantities → CreateOrderAsync → DeleteBasketAsync; any EmptyBasketOnCheckoutException thrown by CreateOrderAsync causes a redirect to /basket without creating the order.",
+    "CatalogItem prices are NOT re-read during checkout — order line item prices come from BasketItem.UnitPrice (the price at the time the item was added to the basket)."
+  ]
+}

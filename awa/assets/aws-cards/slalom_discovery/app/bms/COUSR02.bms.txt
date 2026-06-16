@@ -1,0 +1,103 @@
+This file defines a Basic Mapping Support (BMS) macro for a CICS application, specifically for an account view screen. Let's break down its key components:
+
+Header:
+
+Contains copyright and license information for the CardDemo application.
+
+Main Screen Definition (COACC01):
+
+Uses DFHMSD macro to set global attributes for the screen.
+
+Specifies LANG=COBOL, indicating it's designed to work with a COBOL program.
+
+Sets MODE=INOUT for both input and output operations.
+
+Includes CTRL=(ALARM,FREEKB) for keyboard control and alarm capabilities.
+
+Screen Layout (COACC1A):
+
+Defined using DFHMDI macro.
+
+Sets the screen size to 24 lines by 80 columns.
+
+Header Fields:
+
+Transaction name (TRNNAME) at (1,7)
+
+Date (CURDATE) at (1,71)
+
+Program name (PGMNAME) at (2,7)
+
+Time (CURTIME) at (2,71)
+
+Two title fields (TITLE01 and TITLE02) at (1,21) and (2,21)
+
+Main Content:
+
+"View Account" title at (4,30)
+
+Input field for Account ID (ACTIDIN) at (6,21)
+
+Display fields for account details:
+
+Account ID (ACTID) at (10,22)
+
+Name (NAME) at (10,58)
+
+Address Line 1 (ADDR1) at (12,22)
+
+Address Line 2 (ADDR2) at (14,22)
+
+City (CITY) at (16,22)
+
+State (STATE) at (16,58)
+
+Zip Code (ZIP) at (18,22)
+
+Field Attributes:
+
+Uses various colors (BLUE, YELLOW, TURQUOISE, GREEN, NEUTRAL)
+
+Input field (ACTIDIN) is set as unprotected (UNPROT) and highlighted with underline
+
+Display fields are protected (ASKIP) for display only
+
+Additional Elements:
+
+Separating lines using dashes to structure the information visually
+
+This BMS macro defines a screen for viewing details of a specific account. Here's how it would typically be used:
+
+The screen displays header information and the "View Account" title.
+
+Users can enter an Account ID in the input field at the top of the screen.
+
+Once a valid Account ID is entered, the screen would display detailed information about that account, including:
+
+The account ID
+
+Name associated with the account
+
+Address (split into two lines)
+
+City
+
+State
+
+Zip code
+
+The associated COBOL program would:
+
+Handle user input for the Account ID
+
+Retrieve the corresponding account details from the database
+
+Populate the display fields with the retrieved information
+
+Handle any error conditions (e.g., invalid Account ID)
+
+Possibly provide navigation options to return to an account list or perform other actions
+
+This screen serves as a detailed view for individual accounts in the CardDemo application. It allows users (likely customer service representatives or system administrators) to quickly access and review specific account details.
+
+The layout is designed for clarity, with labeled fields and visual separation of different information sections. The use of color coding (BLUE for labels, TURQUOISE for some data fields) helps to distinguish between different types of information on the screen.

@@ -1,0 +1,33 @@
+{
+  "properties": {
+    "status": {
+      "default": "",
+      "title": "Status",
+      "type": "string"
+    },
+    "reason": {
+      "default": "",
+      "title": "Reason",
+      "type": "string"
+    },
+    "output": {
+      "default": "",
+      "title": "Output",
+      "type": "string"
+    },
+    "exception": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Exception"
+    }
+  },
+  "title": "TaskResponseModel",
+  "type": "object"
+}

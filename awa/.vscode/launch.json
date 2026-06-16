@@ -1,0 +1,68 @@
+{
+  "configurations": [
+    {
+      "name": "awa worker",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "awa.main",
+      "args": ["worker"],
+      "console": "integratedTerminal",
+      "subProcess": true,
+      "env": {
+        "PYDEVD_DISABLE_FILE_VALIDATION": "1"
+      },
+      "preLaunchTask": "Generate BAML Client"
+    },
+    {
+      "name": "awa start",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "awa.main",
+      "args": ["start"],
+      "console": "integratedTerminal",
+      "subProcess": true,
+      "env": {
+        "PYDEVD_DISABLE_FILE_VALIDATION": "1"
+      },
+      "preLaunchTask": "Generate BAML Client"
+    },
+    {
+      "name": "awa mcp",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "awa.main",
+      "args": ["mcp"],
+      "console": "integratedTerminal",
+      "subProcess": true,
+      "env": {
+        "PYDEVD_DISABLE_FILE_VALIDATION": "1"
+      },
+      "preLaunchTask": "Generate BAML Client"
+    },
+    {
+      "name": "Python Debugger: Current File",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "awa api",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "awa.main",
+      "args": ["api"],
+      "console": "integratedTerminal",
+      "env": {
+        "PYDEVD_DISABLE_FILE_VALIDATION": "1"
+      },
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "command": "./ui/node_modules/.bin/astro dev",
+      "name": "UI Development Server",
+      "request": "launch",
+      "type": "node-terminal"
+    }
+  ]
+}

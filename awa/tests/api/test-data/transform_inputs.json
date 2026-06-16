@@ -1,0 +1,30 @@
+[
+  {
+    "description": "Simple text summarization task",
+    "input": "{\"task\": \"Summarize this text in one sentence\", \"inputs\": [{\"id\": \"doc1\", \"content\": \"The quick brown fox jumps over the lazy dog. This is a simple test document.\"}], \"role\": \"Assistant\"}"
+  },
+  {
+    "description": "Translation task",
+    "input": "{\"task\": \"Translate to Spanish\", \"inputs\": [{\"id\": \"text1\", \"content\": \"Hello, how are you today?\"}], \"role\": \"Translator\"}"
+  },
+  {
+    "description": "Code generation task",
+    "input": "{\"task\": \"Generate a Python function that adds two numbers\", \"inputs\": [{\"id\": \"spec1\", \"content\": \"Function should take two parameters and return their sum\"}], \"role\": \"Developer\"}"
+  },
+  {
+    "description": "Multiple input documents",
+    "input": "{\"task\": \"Compare these two documents\", \"inputs\": [{\"id\": \"doc1\", \"content\": \"Document A content\"}, {\"id\": \"doc2\", \"content\": \"Document B content\"}], \"role\": \"Analyst\"}"
+  },
+  {
+    "description": "Creative writing task",
+    "input": "{\"task\": \"Write a haiku about technology\", \"inputs\": [{\"id\": \"theme1\", \"content\": \"Artificial Intelligence and automation\"}], \"role\": \"Poet\"}"
+  },
+  {
+    "description": "Empty inputs array",
+    "input": "{\"task\": \"Generate content without input\", \"inputs\": [], \"role\": \"Creator\"}"
+  },
+  {
+    "description": "Large content input",
+    "input": "{\"task\": \"Analyze this content\", \"inputs\": [{\"id\": \"large1\", \"content\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\"}], \"role\": \"Analyst\"}"
+  }
+]

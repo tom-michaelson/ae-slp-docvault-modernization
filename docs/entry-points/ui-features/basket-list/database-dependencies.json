@@ -1,0 +1,54 @@
+[
+  {
+    "type": "table",
+    "name": "Baskets",
+    "key": "baskets",
+    "operations": ["select", "insert", "update"],
+    "columns": ["Id", "BuyerId"],
+    "locations": [
+      "src/ApplicationCore/Specifications/BasketWithItemsSpecification.cs",
+      "src/ApplicationCore/Entities/BasketAggregate/Basket.cs",
+      "src/ApplicationCore/Services/BasketService.cs",
+      "src/Web/Services/BasketViewModelService.cs",
+      "src/Infrastructure/Data/Migrations/20201202111507_InitialModel.cs"
+    ],
+    "notes": [
+      "Looked up by BuyerId (cookie GUID or authenticated username) via BasketWithItemsSpecification; every select eagerly loads the BasketItems navigation collection via .Include(b => b.Items).",
+      "Row inserted lazily on first visit or first add-to-basket — whichever triggers GetOrCreateBasketForUser or AddItemToBasket first. Updated by AddItemToBasket and SetQuantities after entity mutations."
+    ]
+  },
+  {
+    "type": "table",
+    "name": "BasketItems",
+    "key": "basket-items",
+    "operations": ["select", "insert", "update", "delete"],
+    "columns": ["Id", "BasketId", "CatalogItemId", "Quantity", "UnitPrice"],
+    "locations": [
+      "src/ApplicationCore/Entities/BasketAggregate/BasketItem.cs",
+      "src/ApplicationCore/Specifications/BasketWithItemsSpecification.cs",
+      "src/ApplicationCore/Services/BasketService.cs",
+      "src/Infrastructure/Data/Migrations/20201202111507_InitialModel.cs"
+    ],
+    "notes": [
+      "Always read via the .Include(b => b.Items) eager load on the Baskets query — never queried as a standalone table by this feature.",
+      "Rows inserted by basket.AddItem() in AddItemToBasket; quantity updated by item.SetQuantity() in SetQuantities; rows with Quantity=0 deleted by basket.RemoveEmptyItems() before the UpdateAsync call in SetQuantities."
+    ]
+  },
+  {
+    "type": "table",
+    "name": "CatalogItems",
+    "key": "catalog-items",
+    "operations": ["select"],
+    "columns": ["Id", "Name", "PictureUri", "Price"],
+    "locations": [
+      "src/ApplicationCore/Specifications/CatalogItemsSpecification.cs",
+      "src/ApplicationCore/Entities/CatalogItem.cs",
+      "src/Web/Services/BasketViewModelService.cs",
+      "src/Infrastructure/Data/Migrations/20201202111507_InitialModel.cs"
+    ],
+    "notes": [
+      "GetByIdAsync by single Id in OnPost — used exclusively to resolve CatalogItem.Price server-side; the price submitted by the client form is discarded.",
+      "ListAsync with CatalogItemsSpecification (WHERE Id IN [...]) in GetBasketItems — fetches Name and PictureUri for rendering the basket row display; called on every OnGet, OnPost, and OnPostUpdate that reloads the basket view."
+    ]
+  }
+]

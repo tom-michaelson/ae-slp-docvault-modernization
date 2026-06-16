@@ -1,0 +1,28 @@
+# Sample Document for Testing
+
+This is a sample document that will be used to test the vector database ingestion workflow.
+
+## Key Features
+
+The document contains:
+- Multiple sections
+- Different types of content
+- Various formatting elements
+
+## Testing Purpose
+
+This document serves as test data to verify:
+1. File parsing functionality
+2. Text chunking capabilities
+3. Embedding generation
+4. Vector database storage
+
+## Expected Results
+
+When processed, this document should:
+- Be parsed into markdown format
+- Be chunked into smaller text segments
+- Generate TF-IDF embeddings
+- Be stored in the vector database
+
+This provides a comprehensive test of the entire workflow pipeline.

@@ -1,0 +1,770 @@
+{
+  "$defs": {
+    "AnthropicLlmProvider": {
+      "description": "Configuration for Anthropic LLM provider.",
+      "properties": {
+        "base_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional base URL for Anthropic API. If not specified, uses the default Anthropic API endpoint.",
+          "title": "Base Url"
+        }
+      },
+      "title": "AnthropicLlmProvider",
+      "type": "object"
+    },
+    "AzureOpenAiLlmProvider": {
+      "description": "Configuration for Azure OpenAI LLM provider.",
+      "properties": {
+        "api_version": {
+          "description": "The API version to use for the Azure OpenAI resource.",
+          "title": "Api Version",
+          "type": "string"
+        },
+        "domain": {
+          "default": "openai.azure.com",
+          "description": "Azure domain for the service. Use 'openai.azure.com' for Azure OpenAI Service or 'cognitiveservices.azure.com' for Cognitive Services multi-service.",
+          "title": "Domain",
+          "type": "string"
+        },
+        "resource_name": {
+          "description": "The name of the Azure OpenAI resource.",
+          "title": "Resource Name",
+          "type": "string"
+        },
+        "use_entra_auth": {
+          "default": false,
+          "description": "Use Entra ID (DefaultAzureCredential) authentication instead of API key.",
+          "title": "Use Entra Auth",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "resource_name",
+        "api_version"
+      ],
+      "title": "AzureOpenAiLlmProvider",
+      "type": "object"
+    },
+    "ComponentLogLevels": {
+      "description": "Component-specific log level configuration.",
+      "properties": {
+        "activity": {
+          "default": "INFO",
+          "description": "Activity log level",
+          "title": "Activity",
+          "type": "string"
+        },
+        "api": {
+          "default": "INFO",
+          "description": "API service log level",
+          "title": "Api",
+          "type": "string"
+        },
+        "auth": {
+          "default": "INFO",
+          "description": "Auth log level",
+          "title": "Auth",
+          "type": "string"
+        },
+        "cli": {
+          "default": "INFO",
+          "description": "CLI log level",
+          "title": "Cli",
+          "type": "string"
+        },
+        "client": {
+          "default": "INFO",
+          "description": "Client log level",
+          "title": "Client",
+          "type": "string"
+        },
+        "engine": {
+          "default": "INFO",
+          "description": "Engine log level",
+          "title": "Engine",
+          "type": "string"
+        },
+        "http": {
+          "default": "INFO",
+          "description": "HTTP log level",
+          "title": "Http",
+          "type": "string"
+        },
+        "script": {
+          "default": "INFO",
+          "description": "Script log level",
+          "title": "Script",
+          "type": "string"
+        },
+        "server": {
+          "default": "INFO",
+          "description": "Server service log level",
+          "title": "Server",
+          "type": "string"
+        },
+        "socketio": {
+          "default": "INFO",
+          "description": "Socket.IO log level",
+          "title": "Socketio",
+          "type": "string"
+        },
+        "ui": {
+          "default": "INFO",
+          "description": "UI service log level",
+          "title": "Ui",
+          "type": "string"
+        },
+        "uvicorn": {
+          "default": "INFO",
+          "description": "Uvicorn/FastAPI log level",
+          "title": "Uvicorn",
+          "type": "string"
+        },
+        "worker": {
+          "default": "INFO",
+          "description": "Worker service log level",
+          "title": "Worker",
+          "type": "string"
+        },
+        "workflow": {
+          "default": "INFO",
+          "description": "Workflow log level",
+          "title": "Workflow",
+          "type": "string"
+        }
+      },
+      "title": "ComponentLogLevels",
+      "type": "object"
+    },
+    "GithubCopilotLlmProvider": {
+      "description": "Configuration for GitHub Copilot LLM provider.",
+      "properties": {
+        "base_url": {
+          "default": "https://api.githubcopilot.com",
+          "description": "The base URL for the GitHub Copilot API.",
+          "title": "Base Url",
+          "type": "string"
+        }
+      },
+      "title": "GithubCopilotLlmProvider",
+      "type": "object"
+    },
+    "GoogleVertexLlmProvider": {
+      "description": "Configuration for Google Vertex AI LLM provider.",
+      "properties": {
+        "credentials_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Path to service account credentials JSON file. If not specified, will use default GCP authentication.",
+          "title": "Credentials Path"
+        },
+        "location": {
+          "default": "us-central1",
+          "description": "The GCP region/location for Vertex AI (e.g., us-central1).",
+          "title": "Location",
+          "type": "string"
+        },
+        "project_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The GCP project ID. If not specified, will use default from GCP authentication.",
+          "title": "Project Id"
+        }
+      },
+      "title": "GoogleVertexLlmProvider",
+      "type": "object"
+    },
+    "JiraConfig": {
+      "properties": {
+        "api_user": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The API user (email address) to use for Jira API authentication. Must be the owner of the API key in JIRA_API_KEY environment variable.",
+          "title": "Api User"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "https://slalom.atlassian.net",
+          "description": "The URL of the Jira instance.",
+          "title": "Url"
+        }
+      },
+      "title": "JiraConfig",
+      "type": "object"
+    },
+    "LLMConfig": {
+      "description": "Configuration for LLM settings.",
+      "properties": {
+        "behavior": {
+          "$ref": "#/$defs/LlmBehaviorConfig",
+          "description": "LLM call behavior configurations"
+        },
+        "default_model": {
+          "description": "Default model name to use for LLM calls. Must match name in the `models` configuration.",
+          "title": "Default Model",
+          "type": "string"
+        },
+        "embedding_models": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/ModelConfig"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Embedding models configuration",
+          "title": "Embedding Models"
+        },
+        "models": {
+          "description": "LLM models configuration",
+          "items": {
+            "$ref": "#/$defs/ModelConfig"
+          },
+          "title": "Models",
+          "type": "array"
+        },
+        "providers": {
+          "$ref": "#/$defs/LlmProvidersConfig",
+          "description": "LLM providers configuration"
+        }
+      },
+      "required": [
+        "default_model",
+        "models"
+      ],
+      "title": "LLMConfig",
+      "type": "object"
+    },
+    "LiteLlmProvider": {
+      "description": "Configuration for LiteLLM proxy LLM provider.",
+      "properties": {
+        "base_url": {
+          "description": "The base URL for the LiteLLM proxy API.",
+          "title": "Base Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "base_url"
+      ],
+      "title": "LiteLlmProvider",
+      "type": "object"
+    },
+    "LlmBehaviorConfig": {
+      "properties": {
+        "auto_retry_parse": {
+          "$ref": "#/$defs/RetryOnParseErrorConfig",
+          "description": "Auto retry configuration"
+        },
+        "use_cache": {
+          "default": true,
+          "description": "Whether to use the cache globally. If cache is used and a cached value is found, the LLM call will not be made. Can be overridden from `llm.models[*].use_cache`",
+          "title": "Use Cache",
+          "type": "boolean"
+        }
+      },
+      "title": "LlmBehaviorConfig",
+      "type": "object"
+    },
+    "LlmProviderEnum": {
+      "description": "Supported LLM providers.",
+      "enum": [
+        "OpenAI",
+        "AzureOpenAI",
+        "AwsBedrock",
+        "GoogleVertex",
+        "LiteLLM",
+        "GithubCopilot",
+        "Anthropic"
+      ],
+      "title": "LlmProviderEnum",
+      "type": "string"
+    },
+    "LlmProvidersConfig": {
+      "description": "Configuration for LLM providers.",
+      "properties": {
+        "anthropic": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AnthropicLlmProvider"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Configuration for Anthropic"
+        },
+        "azure_openai": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AzureOpenAiLlmProvider"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Configuration for Azure OpenAI"
+        },
+        "github_copilot": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/GithubCopilotLlmProvider"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Configuration for GitHub Copilot"
+        },
+        "google_vertex": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/GoogleVertexLlmProvider"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Configuration for Google Vertex AI"
+        },
+        "lite_llm": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/LiteLlmProvider"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Configuration for LiteLLM proxy"
+        },
+        "openai": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/OpenAiLlmProvider"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Configuration for OpenAI"
+        }
+      },
+      "title": "LlmProvidersConfig",
+      "type": "object"
+    },
+    "LogConfig": {
+      "description": "Logging configuration for AWA.",
+      "properties": {
+        "log_level": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/ComponentLogLevels"
+            }
+          ],
+          "default": "INFO",
+          "description": "Log level configuration - either a single level or component-specific levels",
+          "title": "Log Level"
+        }
+      },
+      "title": "LogConfig",
+      "type": "object"
+    },
+    "ModelConfig": {
+      "description": "Configuration for an individual LLM model.",
+      "properties": {
+        "api_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Azure OpenAI API version (for azureopenai provider)",
+          "title": "Api Version"
+        },
+        "domain": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Azure domain for the service (for azureopenai provider). Use 'openai.azure.com' for Azure OpenAI Service or 'cognitiveservices.azure.com' for Cognitive Services multi-service. If not specified, falls backto provider-level domain.",
+          "title": "Domain"
+        },
+        "is_gpt5_model": {
+          "default": false,
+          "description": "Whether this is a GPT-5 model. Enables GPT-5 specific parameters and features.",
+          "title": "Is Gpt5 Model",
+          "type": "boolean"
+        },
+        "max_completion_tokens": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Max completion tokens for Chat Completions API (GPT-5 reasoning models)",
+          "title": "Max Completion Tokens"
+        },
+        "max_output_tokens": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Max output tokens for Responses API (GPT-5 models)",
+          "title": "Max Output Tokens"
+        },
+        "max_tokens": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Max tokens, passed through to the LLM call (legacy parameter)",
+          "title": "Max Tokens"
+        },
+        "model": {
+          "description": "LLM model name. Must match format expected by the specific `provider`",
+          "title": "Model",
+          "type": "string"
+        },
+        "name": {
+          "description": "User-defined model name. Used to refer to this model when executing LLM calls, or from `default_model`",
+          "title": "Name",
+          "type": "string"
+        },
+        "provider": {
+          "$ref": "#/$defs/LlmProviderEnum",
+          "description": "LLM provider"
+        },
+        "reasoning_effort": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Reasoning effort. For GPT-5: 'minimal', 'low', 'medium', 'high'. For GPT-4: integer or string.",
+          "title": "Reasoning Effort"
+        },
+        "resource_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Azure OpenAI resource name (for azureopenai provider)",
+          "title": "Resource Name"
+        },
+        "temperature": {
+          "default": 0.0,
+          "description": "Temperature, passed through to the LLM call",
+          "title": "Temperature",
+          "type": "number"
+        },
+        "use_cache": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Whether to use the cache. If cache is used and a cached value is found, the LLM call will not be made.",
+          "title": "Use Cache"
+        },
+        "use_responses_api": {
+          "default": false,
+          "description": "Whether to use the Responses API endpoint instead of Chat Completions API.",
+          "title": "Use Responses Api",
+          "type": "boolean"
+        },
+        "verbosity": {
+          "anyOf": [
+            {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "GPT-5 verbosity level. Controls output length and detail. Only applies to GPT-5 models.",
+          "title": "Verbosity"
+        }
+      },
+      "required": [
+        "name",
+        "provider",
+        "model"
+      ],
+      "title": "ModelConfig",
+      "type": "object"
+    },
+    "OpenAiLlmProvider": {
+      "description": "Configuration for OpenAI-compatible LLM provider.",
+      "properties": {
+        "base_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional base URL for the OpenAI-compatible API endpoint.",
+          "title": "Base Url"
+        }
+      },
+      "title": "OpenAiLlmProvider",
+      "type": "object"
+    },
+    "RetryOnParseErrorConfig": {
+      "description": "Settings for retrying LLM calls when a BAML parsing error occurs.",
+      "properties": {
+        "enabled": {
+          "default": true,
+          "description": "Whether to enable auto retry on parse error. If true, the LLM call will be retried up to `max_attempts` times.",
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "max_attempts": {
+          "default": 3,
+          "description": "Maximum number of attempts to retry the LLM call.",
+          "title": "Max Attempts",
+          "type": "integer"
+        },
+        "temperature_increment": {
+          "default": 0.1,
+          "description": "Temperature increment to use for each retry.",
+          "title": "Temperature Increment",
+          "type": "number"
+        }
+      },
+      "title": "RetryOnParseErrorConfig",
+      "type": "object"
+    },
+    "S3VectorConfig": {
+      "description": "Configuration for S3 Vector Store.",
+      "properties": {
+        "data_type": {
+          "const": "float32",
+          "default": "float32",
+          "description": "Vector data type",
+          "title": "Data Type",
+          "type": "string"
+        },
+        "distance_metric": {
+          "default": "cosine",
+          "description": "Distance metric for similarity search",
+          "enum": [
+            "euclidean",
+            "cosine"
+          ],
+          "title": "Distance Metric",
+          "type": "string"
+        },
+        "embedding_source": {
+          "default": "azure_openai",
+          "description": "Source of embeddings (uses existing LLM config)",
+          "enum": [
+            "openai",
+            "azure_openai",
+            "tfidf"
+          ],
+          "title": "Embedding Source",
+          "type": "string"
+        },
+        "enabled": {
+          "default": false,
+          "description": "Enable S3 Vector Store",
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "index_name": {
+          "default": "awa-vectors",
+          "description": "Default vector index name",
+          "title": "Index Name",
+          "type": "string"
+        },
+        "metadata_keys": {
+          "description": "Non-filterable metadata keys",
+          "items": {
+            "type": "string"
+          },
+          "title": "Metadata Keys",
+          "type": "array"
+        },
+        "region_name": {
+          "default": "us-west-2",
+          "description": "AWS region name",
+          "title": "Region Name",
+          "type": "string"
+        },
+        "vector_bucket_arn": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "S3 Vector bucket ARN",
+          "title": "Vector Bucket Arn"
+        },
+        "vector_bucket_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "S3 Vector bucket name",
+          "title": "Vector Bucket Name"
+        }
+      },
+      "title": "S3VectorConfig",
+      "type": "object"
+    }
+  },
+  "description": "Main application configuration.",
+  "properties": {
+    "jira": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/JiraConfig"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Jira configuration"
+    },
+    "llm": {
+      "$ref": "#/$defs/LLMConfig",
+      "description": "LLM configuration"
+    },
+    "logging": {
+      "$ref": "#/$defs/LogConfig",
+      "description": "Logging configuration"
+    },
+    "recipes": {
+      "default": true,
+      "description": "Enable recipe workflows and activities registration. When true, recipe workflows will be discovered and registered with the worker.",
+      "title": "Recipes",
+      "type": "boolean"
+    },
+    "s3_vector": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/S3VectorConfig"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "S3 Vector Store configuration"
+    }
+  },
+  "required": [
+    "llm"
+  ],
+  "title": "AppConfig",
+  "type": "object"
+}

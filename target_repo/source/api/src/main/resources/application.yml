@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: modernization-target
+  datasource:
+    url: jdbc:h2:mem:modernization;DB_CLOSE_DELAY=-1;MODE=LEGACY
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    defer-datasource-initialization: true
+    show-sql: false
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+  cache:
+    type: caffeine
+
+server:
+  port: 8080
+
+catalog:
+  base-url: http://localhost:8080

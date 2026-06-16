@@ -1,0 +1,49 @@
+***********************************************************************
+*    Deferred Interest Calculator
+***********************************************************************
+* This COBOL program implements a Deferred Interest Calculator. It's designed to calculate the financial outcome of a
+* deferred interest promotion on a purchase. Here's a breakdown of its key components and calculations:
+*
+* Structure:
+* The program is named DEFERRED-INTEREST-CALC.
+* It's divided into main sections: WORKING-STORAGE SECTION for variable declarations and
+* PROCEDURE DIVISION for the program logic.
+*
+* Key Variables:
+*   PCH-AMT: Purchase amount
+*   PROMO-PERIOD-MONTHS: Promotional period duration (default 12 months)
+*   POST-PROMO-APR: Annual Percentage Rate after the promotion (default 18%)
+*   AMOUNT-PAID: Total amount paid during the promotional period
+*   REMAINING-BALANCE: Unpaid balance after the promotional period
+*   RET-INTEREST: Retroactive interest charged if not paid in full
+*   TOTAL-DUE: Total amount due after the promotion
+*
+* Main Procedures:
+*   GET-USER-INPUT: Collects user input for purchase amount, promotional period, APR, and amount paid.
+*   CALCULATE-BALANCE: Performs the main calculations.
+*   DISPLAY-RESULTS: Outputs the results.
+*
+* Calculations:
+*   a. Remaining Balance: REMAINING-BALANCE = PCH-AMT - AMOUNT-PAID
+*   b. Retroactive Interest (if balance not paid in full): RET-INTEREST = PCH-AMT * (POST-PROMO-APR / 100)
+*       This calculates the interest on the entire purchase amount for one year.
+*   c. Total Due (if balance not paid in full): TOTAL-DUE = REMAINING-BALANCE + RET-INTEREST
+*
+* Key Logic:
+*   If the remaining balance is greater than zero after the promotional period:
+*   It calculates retroactive interest on the full purchase amount.
+*   The total due is the sum of the remaining balance and the retroactive interest.
+*   If the balance is paid in full (remaining balance <= 0):
+*   No interest is charged.
+*
+*   The total due is set to the remaining balance (which may be negative if overpaid).
+*
+* Output:
+*   The program displays the purchase amount, amount paid, remaining balance, and if applicable, the deferred
+*   interest charged and the total amount due.
+*
+* This calculator demonstrates how deferred interest promotions work: if the full purchase amount isn't paid by the
+* end of the promotional period, interest is charged retroactively on the entire original purchase amount, not just
+* the remaining balance. This can result in a significant additional cost if the balance isn't paid in full during
+* the promotional period.
+******************************************************************

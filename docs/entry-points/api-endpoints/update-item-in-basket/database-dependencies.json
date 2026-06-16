@@ -1,0 +1,34 @@
+[
+  {
+    "type": "table",
+    "name": "Baskets",
+    "key": "baskets",
+    "operations": ["select"],
+    "columns": ["Id", "BuyerId"],
+    "locations": [
+      "src/ApplicationCore/Services/BasketService.cs",
+      "src/ApplicationCore/Specifications/BasketWithItemsSpecification.cs",
+      "src/ApplicationCore/Entities/BasketAggregate/Basket.cs"
+    ],
+    "notes": [
+      "Selected by Baskets.Id (integer PK) via BasketWithItemsSpecification — also eagerly loads the BasketItems collection.",
+      "Not written — Basket itself is not mutated, only its child BasketItems collection."
+    ]
+  },
+  {
+    "type": "table",
+    "name": "BasketItems",
+    "key": "basket-items",
+    "operations": ["select", "update", "delete"],
+    "columns": ["Id", "CatalogItemId", "UnitPrice", "Quantity", "BasketId"],
+    "locations": [
+      "src/ApplicationCore/Entities/BasketAggregate/Basket.cs",
+      "src/ApplicationCore/Entities/BasketAggregate/BasketItem.cs",
+      "src/ApplicationCore/Services/BasketService.cs"
+    ],
+    "notes": [
+      "Selected as part of the Baskets eager load (BasketWithItemsSpecification.Include(b => b.Items)).",
+      "UPDATE for each item whose Id appears in the quantities map and quantity > 0; DELETE for items set to quantity=0 (via Basket.RemoveEmptyItems before UpdateAsync)."
+    ]
+  }
+]

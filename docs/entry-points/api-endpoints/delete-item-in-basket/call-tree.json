@@ -1,0 +1,32 @@
+{
+  "legacyWebHandler": {
+    "method": "Microsoft.eShopWeb.Web.Pages.Basket.CheckoutModel.OnPost",
+    "file": "src/Web/Pages/Basket/Checkout.cshtml.cs",
+    "line": 44,
+    "notes": "Requires [Authorize]. Called as the THIRD step after SetQuantities and CreateOrderAsync. If an EmptyBasketOnCheckoutException is thrown by CreateOrderAsync, the handler redirects to /Basket/Index and DeleteBasketAsync is NOT called."
+  },
+  "entryPoint": {
+    "method": "Microsoft.eShopWeb.ApplicationCore.Services.BasketService.DeleteBasketAsync",
+    "file": "src/ApplicationCore/Services/BasketService.cs",
+    "line": 40,
+    "signature": "Task DeleteBasketAsync(int basketId)"
+  },
+  "calls": [
+    {
+      "method": "IRepository<Basket>.GetByIdAsync(basketId)",
+      "db": {"table": "Baskets", "op": "select"},
+      "notes": "No Specification — fetches by integer PK only. Does NOT eagerly load BasketItems; EF Core cascade handles deletion."
+    },
+    {
+      "notes": "Guard.Against.Null(basket) — throws ArgumentNullException if basket is null. In legacy this becomes HTTP 500. REST target should return 404.",
+      "earlyReturn": "throws ArgumentNullException"
+    },
+    {
+      "method": "IRepository<Basket>.DeleteAsync(basket)",
+      "db": [
+        {"table": "Baskets", "op": "delete"},
+        {"table": "BasketItems", "op": "delete", "notes": "Cascade delete — all BasketItems rows for this basket are removed by EF Core's cascade-delete configuration."}
+      ]
+    }
+  ]
+}

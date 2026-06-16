@@ -1,0 +1,28 @@
+---
+export const prerender = false;
+import Layout from "../../layouts/Layout.astro";
+import RunDetailsPageIsland from "../../islands/RunDetailsPageIsland.tsx";
+import { getSession } from "auth-astro/server";
+import { getEffectiveSession } from "../../utils/auth";
+
+const actualSession = await getSession(Astro.request);
+const session = getEffectiveSession(actualSession);
+const authMode = import.meta.env.PUBLIC_AUTH_MODE || "none";
+const docsOnly = import.meta.env.PUBLIC_DOCS_ONLY === "true";
+
+// Block access to /runs for Cognito mode when docs-only is enabled
+if (authMode === "cognito" && docsOnly) {
+  return Astro.redirect("/docs");
+}
+
+// Require session for all modes
+if (!session) {
+  return Astro.redirect("/");
+}
+
+const { run_id } = Astro.params;
+---
+
+<Layout userName={session.user?.name ?? undefined}>
+  <RunDetailsPageIsland runId={run_id} client:only="react" />
+</Layout>

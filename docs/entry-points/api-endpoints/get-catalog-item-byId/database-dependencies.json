@@ -1,0 +1,17 @@
+[
+  {
+    "type": "table",
+    "name": "CatalogItems",
+    "key": "catalog-items",
+    "operations": ["select"],
+    "columns": ["Id", "Name", "Description", "Price", "PictureUri", "CatalogTypeId", "CatalogBrandId"],
+    "locations": [
+      "src/ApplicationCore/Entities/CatalogItem.cs",
+      "src/Infrastructure/Data/Migrations/20201202111507_InitialModel.cs"
+    ],
+    "notes": [
+      "Single row fetched by primary key via IRepository<CatalogItem>.GetByIdAsync — no specification class involved.",
+      "All seven entity properties are read to populate the CatalogItemDto in the response."
+    ]
+  }
+]

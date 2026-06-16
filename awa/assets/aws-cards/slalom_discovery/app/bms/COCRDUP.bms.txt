@@ -1,0 +1,91 @@
+This file defines a Basic Mapping Support (BMS) macro for a CICS application, specifically for updating credit card details. Let's break down its key components:
+
+Header:
+
+Contains copyright and license information for the CardDemo application.
+
+Main Screen Definition (COCRDUP):
+
+Uses DFHMSD macro to set global attributes for the screen.
+
+Specifies LANG=COBOL, indicating it's designed to work with a COBOL program.
+
+Sets MODE=INOUT for both input and output operations.
+
+Screen Layout (CCRDUPA):
+
+Defined using DFHMDI macro.
+
+Sets the screen size to 24 lines by 80 columns.
+
+Specifies attributes like color, highlighting, and field validation.
+
+Header Fields:
+
+Transaction name (TRNNAME)
+
+Date (CURDATE)
+
+Program name (PGMNAME)
+
+Time (CURTIME)
+
+Two title fields (TITLE01 and TITLE02)
+
+Main Content:
+
+"Update Credit Card Details" title at position (4,30)
+
+Account Number field (ACCTSID) at (7,45)
+
+Card Number field (CARDSID) at (8,45)
+
+Name on card field (CRDNAME) at (11,25)
+
+Card Active status field (CRDSTCD) at (13,25)
+
+Expiry Date fields (EXPMON and EXPYEAR) at (15,25) and (15,30)
+
+Field Attributes:
+
+Uses various colors (BLUE, YELLOW, TURQUOISE, NEUTRAL)
+
+Input fields (CARDSID, CRDNAME, CRDSTCD, EXPMON, EXPYEAR) are set as unprotected (UNPROT) and highlighted with underline
+
+ACCTSID is protected (PROT), likely for display only
+
+Most other fields are protected (ASKIP) for display only
+
+Field Types:
+
+ACCTSID and CARDSID are likely numeric fields for account and card identification
+
+CRDNAME is a 50-character field for the cardholder's name
+
+CRDSTCD is a single-character field, probably for Y/N input
+
+EXPMON and EXPYEAR are for expiry date input, with right justification
+
+This BMS macro defines a screen for updating credit card information. Here's how it would typically be used:
+
+The screen displays existing card details (account number, card number, name, active status, expiry date).
+
+Users can modify fields like the name on the card, active status, and expiry date.
+
+The account number is displayed but not editable (protected field).
+
+The card number field is unprotected, but its use would depend on the associated COBOL program's logic.
+
+The COBOL program associated with this screen would handle:
+
+Populating the initial field values
+
+Processing user inputs
+
+Validating changes (e.g., ensuring valid date formats, Y/N for active status)
+
+Updating the card information in the backend system
+
+Handling any error conditions and displaying appropriate messages
+
+This screen is designed for administrative or customer service use, allowing for the update of key credit card details in the CardDemo system.

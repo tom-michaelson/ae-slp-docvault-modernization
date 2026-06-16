@@ -1,0 +1,24 @@
+{
+  "properties": {
+    "params_by_key": {
+      "additionalProperties": {
+        "$ref": "./TransformParams.json"
+      },
+      "title": "Params By Key",
+      "type": "object"
+    },
+    "timeout_seconds": {
+      "default": 1200,
+      "title": "Timeout Seconds",
+      "type": "integer"
+    },
+    "max_concurrency": {
+      "default": null,
+      "description": "Maximum number of concurrent executions. If None or < 0, defaults to 10. If 0, unlimited.",
+      "title": "Max Concurrency",
+      "type": "integer"
+    }
+  },
+  "title": "TransformBatchParams",
+  "type": "object"
+}

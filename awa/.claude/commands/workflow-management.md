@@ -1,0 +1,175 @@
+# Workflow completion and story creation guidance
+
+# Workflow Management Guide
+
+## Task Completion and Finisher Patterns
+
+### Purpose
+Identify workflows and activities that need documentation, automated tests, or proper docstrings to ensure code quality and completeness.
+
+### Process
+
+Your job is to identify workflows and activities that meet one of the following criteria. If you find any workflows or activities that meet one or more of the above criteria, create a to-do list to address the issues. **IMPORTANT**: Before acting, ask me to review your to-do list.
+
+Refer to documentation generation patterns and testing guidelines for more information on how to generate documentation and docstrings for workflows and activities.
+
+### Criteria
+
+- **Case One**: Missing doc strings
+- **Case Two**: Inaccurate doc strings (compare the current branch to the main branch to determine which workflows and activities have been updated, to limit the surface area of your search)
+- **Case Three**: Missing documentation in the `docs/reference/workflow` or `docs/reference/activity` directories. When adding docs, use documentation generation patterns.
+- **Case Four**: Missing automated tests
+
+### Locating Workflows and Activities
+
+Workflows and activities can be found in the following directories:
+
+- `awa/workflows`
+- `awa/core/workflows`
+- `awa/activities`
+- `awa/core/activities`
+
+**NOTE**:
+
+- Workflow and activity files can be nested in subdirectories, so you may need to search multiple directories.
+- Each workflow you identify should be marked with a `@workflow.defn` decorator. Identify it in your to-do list by name.
+- Each activity you identify should be marked with a `@activity.defn` decorator. Identify it in your to-do list by name.
+- DO NOT identify subclasses as individual workflows or activities, unless they are marked with the decorators. Only formally marked workflows and activities need to be documented.
+
+## User Story Creation Process
+
+This guide outlines the process for creating user stories and preparing them for Jira. User stories are first written in a standard Markdown format and then converted to Jira's wiki markup.
+
+### 1. Create the User Story File
+
+- Create a new Markdown file in the `story/` directory.
+- Use the naming convention `awa-XXX.md`, where `XXX` is the story number.
+
+### User Story Template
+
+Use the following template for your user story. See `story/awa-124.md` for a complete example.
+
+```markdown
+# AWA-XXX: [Story Title]
+
+## User Story
+
+**As a** [persona]
+**I want** [to perform some action]
+**So that** [I can achieve some goal]
+
+## Background
+
+[Provide context and background for the story.]
+
+## Acceptance Criteria
+
+- [ ] **AC1**: [First acceptance criterion]
+  - [ ] [Sub-criterion]
+- [ ] **AC2**: [Second acceptance criterion]
+
+## Technical Implementation Notes
+
+[Add any technical notes or suggestions for implementation.]
+
+## Definition of Done
+
+- [ ] All acceptance criteria are met.
+- [ ] Code is reviewed and approved.
+- [ ] Documentation is updated.
+
+## Out of Scope
+
+[List anything that is not part of this story.]
+
+## Dependencies
+
+[List any dependencies on other stories or teams.]
+```
+
+### 2. Convert to Jira-Ready Format
+
+After creating the user story, create a Jira-ready version in `story/ready-for-jira/`.
+
+- Name the file `awa-XXX-jira.md`.
+- Convert the Markdown syntax to Jira wiki markup.
+
+### Conversion Rules:
+
+| Markdown           | Jira Wiki Markup                 | Notes                                                              |
+| ------------------ | -------------------------------- | ------------------------------------------------------------------ |
+| `# Title`          | `h1. Title`                      |                                                                    |
+| `## Subtitle`      | `h2. Subtitle`                   |                                                                    |
+| `### Sub-subtitle` | `h3. Sub-subtitle`               |                                                                    |
+| `**Bold**`         | `*Bold*`                         | For user story "As a", "I want", "So that" sections.               |
+| `` `code` ``       | `{{code}}`                       |                                                                    |
+| `- Item`           | `* Item`                         | For single-level lists (e.g., Acceptance Criteria).                |
+| `  - Sub-item`     | `** Sub-item`                    | For nested lists.                                                  |
+| `- [ ] Item`       | `* Item`                         | Checkboxes are converted to standard list items.                   |
+| \`\`\`json ... \`\`\`   | `{code:json} ... {code}`         |                                                                    |
+| Paragraphs         | Paragraphs                       | Do not convert paragraphs or simple text blocks into bullet points. |
+
+### Example Jira Conversion
+
+```markdown
+h1. AWA-124: Workflow Registration System
+
+h2. User Story
+
+*As a* developer or system administrator
+*I want* a centralized workflow and activity registration system
+*So that* the UI can dynamically discover and display all available workflows and activities across all AWA workers without manual configuration
+
+h2. Background
+
+Temporal does not provide a native way to query all possible workflow types available in the system across all workers.
+
+h2. Acceptance Criteria
+
+h3. Core System (Python)
+
+* *AC1*: Augment {{temporal_discovery.py}} to generate a JSON registry and send it to the core API
+** JSON should include worker name, task queue, workflow/activity names, and input/output schemas
+** Registry should be sent via API call to core worker at startup: {{POST /api/v1/workers/register}}
+```
+
+## Workflow Management Best Practices
+
+### Pre-Implementation Checklist
+
+- [ ] User story is properly formatted and approved
+- [ ] Acceptance criteria are clear and testable
+- [ ] Technical approach is documented
+- [ ] Dependencies are identified
+
+### During Implementation
+
+- [ ] Follow AWA coding standards and patterns
+- [ ] Add proper docstrings to all new components
+- [ ] Create unit and integration tests
+- [ ] Update documentation as needed
+
+### Post-Implementation (Finisher Tasks)
+
+- [ ] Verify all acceptance criteria are met
+- [ ] Run full test suite and ensure all tests pass
+- [ ] Update documentation and generate reference docs
+- [ ] Create PR with clear description and link to user story
+- [ ] Address code review feedback
+- [ ] Verify deployment and functionality in staging environment
+
+### Documentation Tasks
+
+When finishing a feature or workflow:
+
+1. **Check Docstrings**: Ensure all workflows and activities have proper docstrings
+2. **Generate Reference Docs**: Use documentation generation patterns to create SDK-style docs
+3. **Update User Guides**: Update relevant user-facing documentation
+4. **Test Documentation**: Verify examples and code snippets work correctly
+
+### Quality Assurance
+
+- **Code Coverage**: Ensure adequate test coverage for new components
+- **Integration Testing**: Test interactions with existing workflows
+- **Performance**: Monitor impact on system performance
+- **Security**: Review for potential security implications

@@ -1,0 +1,27 @@
+{
+  "recommendations": [
+    // Python development
+    "ms-python.python",
+    "ms-python.debugpy",
+    // Ruff linting and formatting
+    "charliermarsh.ruff",
+    // Code quality and productivity
+    "ms-vscode.vscode-eslint",
+    "esbenp.prettier-vscode",
+    // BAML
+    "boundary.baml-extension",
+    // Run on save
+    "emeraldwalk.runonsave",
+    // Testing
+    "hbenl.vscode-test-explorer",
+    // Astro
+    "astro-build.astro-vscode",
+    // Vue (for Vitepress)
+    "vue.volar"
+  ],
+  "unwantedRecommendations": [
+    // Disable conflicting linters since we're using Ruff
+    "ms-python.pylint",
+    "ms-python.mypy-type-checker"
+  ]
+}

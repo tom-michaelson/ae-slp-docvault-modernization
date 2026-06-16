@@ -1,0 +1,30 @@
+{
+  "description": "Output model for document chunking activity.",
+  "properties": {
+    "chunks": {
+      "description": "List of chunks with their metadata",
+      "items": {
+        "$ref": "./ChunkResult.json"
+      },
+      "title": "Chunks",
+      "type": "array"
+    },
+    "total_chunks": {
+      "description": "Total number of chunks created",
+      "title": "Total Chunks",
+      "type": "integer"
+    },
+    "chunker_used": {
+      "description": "The chunker type that was used",
+      "title": "Chunker Used",
+      "type": "string"
+    }
+  },
+  "required": [
+    "chunks",
+    "total_chunks",
+    "chunker_used"
+  ],
+  "title": "ChunkDocumentOutput",
+  "type": "object"
+}

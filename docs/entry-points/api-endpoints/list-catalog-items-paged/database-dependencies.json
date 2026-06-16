@@ -1,0 +1,19 @@
+[
+  {
+    "type": "table",
+    "name": "CatalogItems",
+    "key": "catalog-items",
+    "operations": ["select", "count"],
+    "columns": ["Id", "Name", "Description", "Price", "PictureUri", "CatalogTypeId", "CatalogBrandId"],
+    "locations": [
+      "src/ApplicationCore/Specifications/CatalogFilterSpecification.cs",
+      "src/ApplicationCore/Specifications/CatalogFilterPaginatedSpecification.cs",
+      "src/ApplicationCore/Entities/CatalogItem.cs",
+      "src/Infrastructure/Data/Migrations/20201202111507_InitialModel.cs"
+    ],
+    "notes": [
+      "Counted once (no pagination) via CatalogFilterSpecification to calculate pageCount, then fetched once via CatalogFilterPaginatedSpecification with Skip/Take for the actual page data.",
+      "Filtered by optional CatalogBrandId and CatalogTypeId; when pageSize=0 the Take is set to int.MaxValue so all matching rows are returned."
+    ]
+  }
+]

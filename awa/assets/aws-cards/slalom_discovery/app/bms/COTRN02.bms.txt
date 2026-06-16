@@ -1,0 +1,91 @@
+This file defines a Basic Mapping Support (BMS) macro for a CICS application, specifically for a transaction add screen. Let's break down its key components:
+
+Header:
+
+Contains copyright and license information for the CardDemo application.
+
+Main Screen Definition (COTRN02):
+
+Uses DFHMSD macro to set global attributes for the screen.
+
+Specifies LANG=COBOL, indicating it's designed to work with a COBOL program.
+
+Sets MODE=INOUT for both input and output operations.
+
+Includes CTRL=(ALARM,FREEKB) for keyboard control and alarm capabilities.
+
+Screen Layout (COTRN2A):
+
+Defined using DFHMDI macro.
+
+Sets the screen size to 24 lines by 80 columns.
+
+Header Fields:
+
+Transaction name (TRNNAME) at (1,7)
+
+Date (CURDATE) at (1,71)
+
+Program name (PGMNAME) at (2,7)
+
+Time (CURTIME) at (2,71)
+
+Two title fields (TITLE01 and TITLE02) at (1,21) and (2,21)
+
+Main Content:
+
+"Add Transaction" title at (4,30)
+
+Input fields for transaction details:
+
+Account Number (ACTIDIN) at (6,21)
+
+Card Number (CARDNIN) at (6,55)
+
+Transaction Type Code (TTYPCD) at (10,15)
+
+Transaction Category Code (TCATCD) at (10,36)
+
+Field Attributes:
+
+Uses various colors (BLUE, YELLOW, TURQUOISE, GREEN, NEUTRAL)
+
+Input fields (ACTIDIN, CARDNIN, TTYPCD, TCATCD) are set as unprotected (UNPROT) and highlighted with underline
+
+Most other fields are protected (ASKIP) for display only
+
+Additional Elements:
+
+Separating line using dashes to structure the information visually
+
+This BMS macro defines a screen for adding a new transaction. Here's how it would typically be used:
+
+The screen displays header information and the "Add Transaction" title.
+
+Users can enter the following information:
+
+Either an Account Number or a Card Number (or possibly both)
+
+Transaction Type Code
+
+Transaction Category Code
+
+The layout suggests that the user can enter either an account number or a card number, with "or" displayed between these fields.
+
+The associated COBOL program would:
+
+Handle user input for all fields
+
+Validate the entered information (e.g., check if the account or card number exists, validate the type and category codes)
+
+Process the addition of the new transaction to the system
+
+Handle any error conditions or invalid inputs
+
+Possibly provide navigation options to confirm the addition or cancel the process
+
+This screen serves as an interface for manually adding transactions to the CardDemo application. It might be used by system administrators, customer service representatives, or in scenarios where transactions need to be entered manually into the system.
+
+The layout is designed for clarity, with labeled fields and visual separation. The use of color coding (BLUE for labels, GREEN for input fields) helps to distinguish between different types of information and guide the user's attention to the input areas.
+
+It's worth noting that this screen appears to be for entering basic transaction details. Additional screens or fields might be necessary for entering other transaction information such as amount, date, or merchant details, unless these are handled automatically or in a subsequent step.

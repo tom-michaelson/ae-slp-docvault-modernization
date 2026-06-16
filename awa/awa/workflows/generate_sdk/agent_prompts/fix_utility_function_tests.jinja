@@ -1,0 +1,36 @@
+You need to fix the tests for the {{ utility_function_name }} utility function in the {{ language_name }} SDK.
+
+<working_directory>
+{{ sdk_working_dir }}
+</working_directory>
+
+<test_command>
+{{ test_command }}
+</test_command>
+
+<utility_function_file>
+{{ utility_function_file }}
+</utility_function_file>
+
+Please follow these steps:
+1. Run the specific tests for the {{ utility_function_name }} function
+2. If tests fail, analyze the error messages
+3. Fix any issues in the test implementation
+4. Re-run the tests to verify they pass
+5. Continue until all tests for this utility function pass
+
+IMPORTANT:
+- Focus ONLY on tests related to {{ utility_function_name }}
+- DO NOT run or fix tests for other utility functions
+- Fix test implementation issues, not the utility function itself (unless there's a clear bug)
+- Ensure tests follow the {{ language_name }} testing conventions
+
+<conventions description="Conventions for {{language_name}} code in the SDK.">
+{{ conventions }}
+</conventions>
+
+<translation_guide description="Translation guide for {{language_name}}, when translating from Python.">
+{{ translation_guide }}
+</translation_guide>
+
+Your goal is to make the tests for {{ utility_function_name }} pass completely.

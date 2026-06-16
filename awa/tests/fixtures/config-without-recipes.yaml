@@ -1,0 +1,8 @@
+llm:
+  default_model: test-model
+  models:
+    - name: test-model
+      provider: openai
+      model: gpt-4
+
+recipes: false

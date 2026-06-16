@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgenticWorkflowApp.Console", "AgenticWorkflowApp.Console\AgenticWorkflowApp.Console.csproj", "{2BE46330-0E1F-4D4F-AC35-1ECECFDEA551}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgenticWorkflowApp.Console.Tests", "AgenticWorkflowApp.Console.Tests\AgenticWorkflowApp.Console.Tests.csproj", "{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7793E03B-7639-4479-9096-D34EBD61BAF0}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		README.md = README.md
+		makefile = makefile
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2BE46330-0E1F-4D4F-AC35-1ECECFDEA551}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BE46330-0E1F-4D4F-AC35-1ECECFDEA551}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BE46330-0E1F-4D4F-AC35-1ECECFDEA551}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BE46330-0E1F-4D4F-AC35-1ECECFDEA551}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

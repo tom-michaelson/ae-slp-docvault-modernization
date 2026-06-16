@@ -1,0 +1,44 @@
+{
+  "entryPoint": {
+    "method": "Microsoft.eShopWeb.PublicApi.CatalogItemEndpoints.CatalogItemListPagedEndpoint.HandleAsync",
+    "file": "src/PublicApi/CatalogItemEndpoints/CatalogItemListPagedEndpoint.cs",
+    "line": 40,
+    "signature": "Task<IResult> HandleAsync(ListPagedCatalogItemRequest request, IRepository<CatalogItem> itemRepository)"
+  },
+  "calls": [
+    {
+      "method": "Task.Delay(1000)",
+      "notes": "Deliberate artificial delay — leaf, do NOT port to Java target."
+    },
+    {
+      "method": "new CatalogFilterSpecification(request.CatalogBrandId, request.CatalogTypeId)",
+      "file": "src/ApplicationCore/Specifications/CatalogFilterSpecification.cs",
+      "line": 8,
+      "notes": "WHERE CatalogBrandId = brandId (if provided) AND CatalogTypeId = typeId (if provided). Used only for the COUNT query."
+    },
+    {
+      "method": "IRepository<CatalogItem>.CountAsync(filterSpec)",
+      "db": {"table": "CatalogItems", "op": "count"},
+      "notes": "Counts all matching rows (no pagination) for pageCount calculation."
+    },
+    {
+      "method": "new CatalogFilterPaginatedSpecification(skip, take, request.CatalogBrandId, request.CatalogTypeId)",
+      "file": "src/ApplicationCore/Specifications/CatalogFilterPaginatedSpecification.cs",
+      "line": 8,
+      "notes": "skip = pageIndex * pageSize. When take == 0, rewritten to int.MaxValue (returns all items)."
+    },
+    {
+      "method": "IRepository<CatalogItem>.ListAsync(pagedSpec)",
+      "db": {"table": "CatalogItems", "op": "select"},
+      "notes": "Materialises the current page of CatalogItem rows."
+    },
+    {
+      "method": "IMapper.Map<CatalogItemDto>(item)",
+      "notes": "AutoMapper leaf — maps CatalogItem entity to CatalogItemDto (Id, Name, Description, Price, PictureUri, CatalogTypeId, CatalogBrandId). Java port should use MapStruct or manual mapping."
+    },
+    {
+      "method": "IUriComposer.ComposePicUri(item.PictureUri)",
+      "notes": "Leaf — rewrites each item's relative PictureUri to an absolute URL. Called per item after AutoMapper mapping."
+    }
+  ]
+}

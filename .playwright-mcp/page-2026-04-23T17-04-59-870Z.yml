@@ -1,0 +1,103 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - article [ref=e5]:
+      - link "eShop On Web" [ref=e7] [cursor=pointer]:
+        - /url: /
+        - img "eShop On Web" [ref=e8]
+      - link "Login" [ref=e13] [cursor=pointer]:
+        - /url: /Identity/Account/Login
+      - link "0" [ref=e15] [cursor=pointer]:
+        - /url: /Basket
+        - img [ref=e17]
+        - generic [ref=e18]: "0"
+  - img [ref=e21]
+  - generic [ref=e24]:
+    - generic [ref=e25]:
+      - text: brand
+      - combobox "brand" [ref=e26] [cursor=pointer]:
+        - option "All" [selected]
+        - option ".NET"
+        - option "Azure"
+        - option "Other"
+        - option "SQL Server"
+        - option "Visual Studio"
+    - generic [ref=e27]:
+      - text: type
+      - combobox "type" [ref=e28] [cursor=pointer]:
+        - option "All" [selected]
+        - option "Mug"
+        - option "Sheet"
+        - option "T-Shirt"
+        - option "USB Memory Stick"
+    - button "Submit" [ref=e29] [cursor=pointer]
+  - generic [ref=e30]:
+    - article [ref=e33]:
+      - navigation:
+        - generic [ref=e34]:
+          - link "Previous":
+            - /url: /?pageId=-1
+        - generic [ref=e35]: Showing 10 of 12 products - Page 1 - 2
+        - link "Next" [ref=e37] [cursor=pointer]:
+          - /url: /?pageId=1
+    - generic [ref=e38]:
+      - generic [ref=e40]:
+        - img [ref=e41]
+        - button "[ ADD TO BASKET ]" [ref=e42] [cursor=pointer]
+        - generic [ref=e43]: .NET Bot Black Sweatshirt
+        - generic [ref=e44]: $ 19.50
+      - generic [ref=e46]:
+        - img [ref=e47]
+        - button "[ ADD TO BASKET ]" [ref=e48] [cursor=pointer]
+        - generic [ref=e49]: .NET Black & White Mug
+        - generic [ref=e50]: $ 8.50
+      - generic [ref=e52]:
+        - img [ref=e53]
+        - button "[ ADD TO BASKET ]" [ref=e54] [cursor=pointer]
+        - generic [ref=e55]: Prism White T-Shirt
+        - generic [ref=e56]: $ 12.00
+      - generic [ref=e58]:
+        - img [ref=e59]
+        - button "[ ADD TO BASKET ]" [ref=e60] [cursor=pointer]
+        - generic [ref=e61]: .NET Foundation Sweatshirt
+        - generic [ref=e62]: $ 12.00
+      - generic [ref=e64]:
+        - img [ref=e65]
+        - button "[ ADD TO BASKET ]" [ref=e66] [cursor=pointer]
+        - generic [ref=e67]: Roslyn Red Sheet
+        - generic [ref=e68]: $ 8.50
+      - generic [ref=e70]:
+        - img [ref=e71]
+        - button "[ ADD TO BASKET ]" [ref=e72] [cursor=pointer]
+        - generic [ref=e73]: .NET Blue Sweatshirt
+        - generic [ref=e74]: $ 12.00
+      - generic [ref=e76]:
+        - img [ref=e77]
+        - button "[ ADD TO BASKET ]" [ref=e78] [cursor=pointer]
+        - generic [ref=e79]: Roslyn Red T-Shirt
+        - generic [ref=e80]: $ 12.00
+      - generic [ref=e82]:
+        - img [ref=e83]
+        - button "[ ADD TO BASKET ]" [ref=e84] [cursor=pointer]
+        - generic [ref=e85]: Kudu Purple Sweatshirt
+        - generic [ref=e86]: $ 8.50
+      - generic [ref=e88]:
+        - img [ref=e89]
+        - button "[ ADD TO BASKET ]" [ref=e90] [cursor=pointer]
+        - generic [ref=e91]: Cup<T> White Mug
+        - generic [ref=e92]: $ 12.00
+      - generic [ref=e94]:
+        - img [ref=e95]
+        - button "[ ADD TO BASKET ]" [ref=e96] [cursor=pointer]
+        - generic [ref=e97]: .NET Foundation Sheet
+        - generic [ref=e98]: $ 12.00
+    - article [ref=e101]:
+      - navigation:
+        - generic [ref=e102]:
+          - link "Previous":
+            - /url: /?pageId=-1
+        - generic [ref=e103]: Showing 10 of 12 products - Page 1 - 2
+        - link "Next" [ref=e105] [cursor=pointer]:
+          - /url: /?pageId=1
+  - contentinfo [ref=e106]:
+    - article [ref=e108]:
+      - generic [ref=e111]: e-ShopOnWeb. All rights reserved

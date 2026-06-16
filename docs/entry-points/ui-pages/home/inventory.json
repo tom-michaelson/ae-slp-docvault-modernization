@@ -1,0 +1,153 @@
+[
+  {
+    "key": "home",
+    "name": "Catalog Homepage",
+    "elementType": "ui-page",
+    "location": "src/Web/Pages/Index.cshtml",
+    "uri": "/",
+    "domain": "catalog",
+    "notes": [
+      "Razor Page. PageModel: IndexModel.",
+      "Auth: public.",
+      "Loads data via ICatalogViewModelService.GetCatalogItems(pageId, ITEMS_PER_PAGE, BrandFilterApplied, TypesFilterApplied).",
+      "Query params: BrandFilterApplied, TypesFilterApplied, pageId."
+    ],
+    "javaEquivalent": "Angular 19 page component at /; Angular CatalogService fetches data via HttpClient from Spring @RestController @GetMapping(\"/api/catalog\"); ICatalogViewModelService becomes Spring @Service bean"
+  },
+  {
+    "key": "home-filter-form",
+    "name": "Brand and Type Filter Form",
+    "elementType": "ui-form",
+    "location": "src/Web/Pages/Index.cshtml:13-21",
+    "parentKey": "home",
+    "domain": "catalog",
+    "notes": [
+      "GET form. Submits to same page route (/).",
+      "Fields: BrandFilterApplied (select, integer ID from CatalogIndexViewModel.Brands), TypesFilterApplied (select, integer ID from CatalogIndexViewModel.Types).",
+      "Brand and type lists preloaded by OnGet via ICatalogViewModelService.",
+      "No server-side validation — all values are integer IDs from preloaded lists."
+    ],
+    "javaEquivalent": "Angular reactive form (FormGroup); on submit calls Angular CatalogService GET /api/catalog?brandId=&typeId= via HttpClient; Spring @RestController @GetMapping returns filtered catalog items"
+  },
+  {
+    "key": "home-catalog-grid",
+    "name": "Catalog Product Grid",
+    "elementType": "ui-panel",
+    "location": "src/Web/Pages/Index.cshtml:24-45",
+    "parentKey": "home",
+    "domain": "catalog",
+    "notes": [
+      "Renders one product tile per CatalogItem via _product.cshtml partial in a @foreach loop.",
+      "Conditional: shown only when CatalogModel.CatalogItems is non-empty.",
+      "Empty-state message: 'THERE ARE NO RESULTS THAT MATCH YOUR SEARCH'.",
+      "Paginated — items per page bounded by Constants.ITEMS_PER_PAGE.",
+      "_pagination partial rendered both above (line 27) and below (line 37) the product tile grid."
+    ],
+    "javaEquivalent": "Angular 19 component with @for over catalogItems array from Angular service response; empty-state block via @if; each tile rendered by child ProductComponent receiving item as @Input()"
+  },
+  {
+    "key": "home-pagination",
+    "name": "Pagination Controls",
+    "elementType": "ui-panel",
+    "location": "src/Web/Pages/Shared/_pagination.cshtml",
+    "parentKey": "home-catalog-grid",
+    "domain": "catalog",
+    "notes": [
+      "Partial view rendered from Index.cshtml:27 (above grid) and Index.cshtml:37 (below grid).",
+      "Displays: Previous link, summary text 'Showing {ItemsPerPage} of {TotalItems} products - Page {ActualPage+1} - {TotalPages}', Next link.",
+      "Model: PaginationInfoViewModel (ItemsPerPage, TotalItems, ActualPage, TotalPages, Previous, Next).",
+      "Previous and Next links pass updated pageId via asp-all-route-data; all other current query params (filters) are preserved."
+    ],
+    "javaEquivalent": "Angular 19 PaginationComponent receiving PaginationInfoViewModel as @Input(); Previous/Next trigger page change; Spring @RestController returns Spring Data Page<T> with totalElements and totalPages metadata"
+  },
+  {
+    "key": "home-product",
+    "name": "Product Tile",
+    "elementType": "ui-panel",
+    "location": "src/Web/Pages/Shared/_product.cshtml",
+    "parentKey": "home-catalog-grid",
+    "domain": "catalog",
+    "notes": [
+      "Partial view rendered from Index.cshtml:33 once per CatalogItem in the @foreach loop.",
+      "Displays: product image (PictureUri), product name (Name), price (Price formatted as N2).",
+      "Model: CatalogItemViewModel (Id, Name, PictureUri, Price).",
+      "Entire tile is wrapped in a single POST form targeting /Basket/Index."
+    ],
+    "javaEquivalent": "Angular 19 ProductComponent receiving CatalogItemViewModel as @Input(); displays image, name, price and contains the Add to Basket form"
+  },
+  {
+    "key": "home-product-basket-form",
+    "name": "Add to Basket Form",
+    "elementType": "ui-form",
+    "location": "src/Web/Pages/Shared/_product.cshtml:3-16",
+    "parentKey": "home-product",
+    "domain": "catalog",
+    "notes": [
+      "POST form. Submits to /Basket/Index (Basket Index page OnPost handler).",
+      "Fields posted: id (hidden, CatalogItemViewModel.Id), name (hidden), pictureUri (hidden), price (hidden).",
+      "No client-side or server-side validation.",
+      "On success: /Basket/Index OnPost handler controls redirect target."
+    ],
+    "javaEquivalent": "Angular reactive form; on submit calls Angular BasketService HTTP POST to Spring @RestController @PostMapping(\"/api/basket\"); basket item DTO carries id, name, pictureUri, price in request body"
+  },
+  {
+    "key": "home-filter-apply",
+    "name": "Apply Filters Button",
+    "elementType": "ui-action",
+    "location": "src/Web/Pages/Index.cshtml:20",
+    "parentKey": "home-filter-form",
+    "domain": "catalog",
+    "actionType": "filter",
+    "notes": [
+      "Image-type submit input (arrow-right.svg icon).",
+      "Submits GET form with BrandFilterApplied and TypesFilterApplied as query params.",
+      "Reloads the page with filtered catalog results; pageId resets to default (0)."
+    ],
+    "javaEquivalent": "Angular (ngSubmit) on filter form calls Angular CatalogService GET /api/catalog?brandId=&typeId=; component re-renders catalogItems from response"
+  },
+  {
+    "key": "home-previous-page",
+    "name": "Previous Page Link",
+    "elementType": "ui-action",
+    "location": "src/Web/Pages/Shared/_pagination.cshtml:17",
+    "parentKey": "home-pagination",
+    "domain": "catalog",
+    "actionType": "navigation",
+    "notes": [
+      "Navigates to same route with pageId set to ActualPage - 1.",
+      "Preserves existing BrandFilterApplied and TypesFilterApplied query params via asp-all-route-data.",
+      "Model.Previous CSS class is applied to the anchor — used to visually disable the link when on the first page."
+    ],
+    "javaEquivalent": "Angular (click) calls Angular CatalogService GET /api/catalog?page={currentPage-1}&brandId=&typeId=; Angular Router updates URL with queryParamsHandling: 'merge'"
+  },
+  {
+    "key": "home-next-page",
+    "name": "Next Page Link",
+    "elementType": "ui-action",
+    "location": "src/Web/Pages/Shared/_pagination.cshtml:32",
+    "parentKey": "home-pagination",
+    "domain": "catalog",
+    "actionType": "navigation",
+    "notes": [
+      "Navigates to same route with pageId set to ActualPage + 1.",
+      "Preserves existing BrandFilterApplied and TypesFilterApplied query params via asp-all-route-data.",
+      "Model.Next CSS class is applied to the anchor — used to visually disable the link when on the last page."
+    ],
+    "javaEquivalent": "Angular (click) calls Angular CatalogService GET /api/catalog?page={currentPage+1}&brandId=&typeId=; Angular Router updates URL with queryParamsHandling: 'merge'"
+  },
+  {
+    "key": "home-add-to-basket",
+    "name": "Add to Basket Button",
+    "elementType": "ui-action",
+    "location": "src/Web/Pages/Shared/_product.cshtml:5",
+    "parentKey": "home-product-basket-form",
+    "domain": "catalog",
+    "actionType": "form-post",
+    "notes": [
+      "Submit input with value '[ ADD TO BASKET ]'.",
+      "POSTs id, name, pictureUri, and price hidden fields to /Basket/Index OnPost handler.",
+      "One button instance per product tile; each is scoped to its own form."
+    ],
+    "javaEquivalent": "Angular (ngSubmit) calls Angular BasketService HTTP POST to Spring @RestController @PostMapping(\"/api/basket\"); on success Angular Router navigates to /basket"
+  }
+]

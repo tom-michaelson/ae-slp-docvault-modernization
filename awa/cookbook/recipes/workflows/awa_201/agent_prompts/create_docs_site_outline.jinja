@@ -1,0 +1,56 @@
+You are an AI assistant tasked with creating a comprehensive outline for a technical application documentation site.
+
+Your goal is to produce a structured outline that will guide the creation of the documentation. The outline should be detailed enough for a technical writer to understand the scope and content of each documentation page.
+
+**Input:**
+
+You will be provided with the following information:
+
+1.  `application_summary`: A brief overview of the application.
+2.  `tech_stack`: A description of the tech stack used in the application.
+3.  `directory_descriptions`: Available in the `{{directory_descriptions_path}}` directory. You should read the files in this directory to understand the main directories in the codebase.
+4.  `file_descriptions`: Available in the `{{file_descriptions_path}}` directory. You should read the files in this directory to understand key files within the application.
+5.  `source_files_list`: A list of all source files in the application. You have the capability to read any of these files if you need more detailed information to inform your outline.
+
+**Output Requirements:**
+
+Your generated outline should include the following for each proposed documentation page:
+
+*   **Section/Page Title:** A clear and concise title for the documentation page (e.g., "API Authentication", "User Management", "Installation Guide").
+*   **Page Summary:** A brief (1-2 sentence) summary of what this page will cover.
+*   **Suggested Header Titles:** A list of H2 or H3 level headers that should be included on this page to structure its content (e.g., "OAuth 2.0 Flow", "API Key Generation", "Troubleshooting Login Issues").
+*   **Relevant Source Files:** A list of specific source code files (from `source_files_list`) that are most relevant to the content of this page. This will help writers quickly find the code related to the documentation they are writing.
+*   **Suggested Inter-links:** A list of other documentation pages (by their titles) that this page should link to, and a brief reason for each link (e.g., "Links to: 'API Rate Limiting' - as it's a related concept for API usage").
+
+**Process:**
+
+1.  Start by reading the directory descriptions from the `{{directory_descriptions_path}}` directory and the file descriptions from the `{{file_descriptions_path}}` directory to understand the codebase structure.
+2.  Analyze the provided `application_summary`, along with the directory and file descriptions you've read, to understand the application's architecture, features, and key components.
+3.  Identify logical sections for the documentation site (e.g., "Getting Started", "Core Features", "API Reference", "Deployment", "Troubleshooting").
+4.  For each section, define individual documentation pages.
+5.  For each page, determine the content outline by suggesting header titles.
+6.  Leverage the `source_files_list` (and your ability to read files) to identify the most relevant source files that correspond to the content of each page. Prioritize files that implement the features or concepts being documented.
+7.  Think about how the documentation pages would relate to each other and suggest relevant links between them to create a cohesive and navigable documentation site.
+
+<application_summary>
+{{application_summary}}
+</application_summary>
+
+<tech_stack>
+{{tech_stack}}
+</tech_stack>
+
+Note: The directory descriptions are available in the `{{directory_descriptions_path}}` directory.
+Note: The file descriptions are available in the `{{file_descriptions_path}}` directory.
+
+<source_files_list>
+{{source_files_list}}
+</source_files_list>
+
+IMPORTANT: First write your outline to a file called "outline.json" in your working directory adhering to the following schema:
+
+<output_schema>
+{{output_schema}}
+</output_schema>
+
+Then return ONLY a brief summary of the outline in markdown format.

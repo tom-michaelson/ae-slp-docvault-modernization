@@ -1,0 +1,39 @@
+{
+  "description": "Parameters for the isolated agent child workflow.",
+  "properties": {
+    "source_directory": {
+      "description": "Source directory path (can be Git repo or regular directory)",
+      "title": "Source Directory",
+      "type": "string"
+    },
+    "source_branch": {
+      "default": null,
+      "description": "Source branch name (only used for Git repositories in ACT mode)",
+      "title": "Source Branch",
+      "type": "string"
+    },
+    "agent_config": {
+      "$ref": "./AgentConfiguration.json",
+      "description": "Agent configuration for execution"
+    },
+    "agent_execution_timeout_minutes": {
+      "default": 10,
+      "description": "Timeout in minutes for agent execution. Defaults to 10 minutes.",
+      "exclusiveMinimum": 0,
+      "title": "Agent Execution Timeout Minutes",
+      "type": "integer"
+    },
+    "output_directory": {
+      "default": "awa-agent-output",
+      "description": "Directory name for agent outputs in analyze mode. Defaults to 'awa-agent-output'.",
+      "title": "Output Directory",
+      "type": "string"
+    }
+  },
+  "required": [
+    "source_directory",
+    "agent_config"
+  ],
+  "title": "IsolatedAgentParams",
+  "type": "object"
+}

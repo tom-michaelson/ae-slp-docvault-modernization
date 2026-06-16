@@ -1,0 +1,731 @@
+[
+  {
+    "description": "Missing required 'worker_name' field",
+    "payload": {
+      "worker_version": "1.0.0",
+      "task_queue": "default-task-queue",
+      "generated_at": "2025-08-08T17:36:19.255586+00:00",
+      "workflows": [
+        {
+          "name": "awa-hello-world",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "title": "Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "title": "HelloWorldInput"
+          }
+        },
+        {
+          "name": "awa-hello-world",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "title": "Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "title": "HelloWorldInput"
+          }
+        }
+      ],
+      "activities": [
+        {
+          "name": "test-activity",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string",
+                "description": "Activity input data"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          }
+        },
+        {
+          "name": "test-activity",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string",
+                "description": "Activity input data"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          }
+        }
+      ]
+    },
+    "expected_error": "422 - Validation Error"
+  },
+  {
+    "description": "Missing required 'worker_version' field",
+    "payload": {
+      "worker_name": "test-worker",
+      "task_queue": "default-task-queue",
+      "generated_at": "2025-08-08T17:36:19.255586+00:00",
+      "workflows": [
+        {
+          "name": "awa-hello-world",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "title": "Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "title": "HelloWorldInput"
+          }
+        },
+        {
+          "name": "awa-hello-world",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "title": "Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "title": "HelloWorldInput"
+          }
+        }
+      ],
+      "activities": [
+        {
+          "name": "test-activity",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string",
+                "description": "Activity input data"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          }
+        },
+        {
+          "name": "test-activity",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string",
+                "description": "Activity input data"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          }
+        }
+      ]
+    },
+    "expected_error": "422 - Validation Error"
+  },
+  {
+    "description": "Missing required 'task_queue' field",
+    "payload": {
+      "worker_name": "test-worker",
+      "worker_version": "1.0.0",
+      "generated_at": "2025-08-08T17:36:19.255586+00:00",
+      "workflows": [
+        {
+          "name": "awa-hello-world",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "title": "Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "title": "HelloWorldInput"
+          }
+        },
+        {
+          "name": "awa-hello-world",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "title": "Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "title": "HelloWorldInput"
+          }
+        }
+      ],
+      "activities": [
+        {
+          "name": "test-activity",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string",
+                "description": "Activity input data"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          }
+        },
+        {
+          "name": "test-activity",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string",
+                "description": "Activity input data"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          }
+        }
+      ]
+    },
+    "expected_error": "422 - Validation Error"
+  },
+  {
+    "description": "Wrong type for 'worker_name' field",
+    "payload": {
+      "worker_name": 12345,
+      "worker_version": "1.0.0",
+      "task_queue": "default-task-queue",
+      "generated_at": "2025-08-08T17:36:19.255586+00:00",
+      "workflows": [
+        {
+          "name": "awa-hello-world",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "title": "Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "title": "HelloWorldInput"
+          }
+        },
+        {
+          "name": "awa-hello-world",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "title": "Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "title": "HelloWorldInput"
+          }
+        }
+      ],
+      "activities": [
+        {
+          "name": "test-activity",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string",
+                "description": "Activity input data"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          }
+        },
+        {
+          "name": "test-activity",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string",
+                "description": "Activity input data"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          }
+        }
+      ]
+    },
+    "expected_error": "422 - Validation Error"
+  },
+  {
+    "description": "Wrong type for 'worker_version' field",
+    "payload": {
+      "worker_name": "test-worker",
+      "worker_version": 12345,
+      "task_queue": "default-task-queue",
+      "generated_at": "2025-08-08T17:36:19.255586+00:00",
+      "workflows": [
+        {
+          "name": "awa-hello-world",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "title": "Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "title": "HelloWorldInput"
+          }
+        },
+        {
+          "name": "awa-hello-world",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "title": "Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "title": "HelloWorldInput"
+          }
+        }
+      ],
+      "activities": [
+        {
+          "name": "test-activity",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string",
+                "description": "Activity input data"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          }
+        },
+        {
+          "name": "test-activity",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string",
+                "description": "Activity input data"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          }
+        }
+      ]
+    },
+    "expected_error": "422 - Validation Error"
+  },
+  {
+    "description": "Wrong type for 'task_queue' field",
+    "payload": {
+      "worker_name": "test-worker",
+      "worker_version": "1.0.0",
+      "task_queue": 12345,
+      "generated_at": "2025-08-08T17:36:19.255586+00:00",
+      "workflows": [
+        {
+          "name": "awa-hello-world",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "title": "Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "title": "HelloWorldInput"
+          }
+        },
+        {
+          "name": "awa-hello-world",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "title": "Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "title": "HelloWorldInput"
+          }
+        }
+      ],
+      "activities": [
+        {
+          "name": "test-activity",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string",
+                "description": "Activity input data"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          }
+        },
+        {
+          "name": "test-activity",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string",
+                "description": "Activity input data"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          }
+        }
+      ]
+    },
+    "expected_error": "422 - Validation Error"
+  },
+  {
+    "description": "Wrong type for 'generated_at' field",
+    "payload": {
+      "worker_name": "test-worker",
+      "worker_version": "1.0.0",
+      "task_queue": "default-task-queue",
+      "generated_at": 12345,
+      "workflows": [
+        {
+          "name": "awa-hello-world",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "title": "Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "title": "HelloWorldInput"
+          }
+        },
+        {
+          "name": "awa-hello-world",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "title": "Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "title": "HelloWorldInput"
+          }
+        }
+      ],
+      "activities": [
+        {
+          "name": "test-activity",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string",
+                "description": "Activity input data"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          }
+        },
+        {
+          "name": "test-activity",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string",
+                "description": "Activity input data"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          }
+        }
+      ]
+    },
+    "expected_error": "422 - Validation Error"
+  },
+  {
+    "description": "Wrong type for 'workflows' field",
+    "payload": {
+      "worker_name": "test-worker",
+      "worker_version": "1.0.0",
+      "task_queue": "default-task-queue",
+      "generated_at": "2025-08-08T17:36:19.255586+00:00",
+      "workflows": "not_an_array",
+      "activities": [
+        {
+          "name": "test-activity",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string",
+                "description": "Activity input data"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          }
+        },
+        {
+          "name": "test-activity",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string",
+                "description": "Activity input data"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          }
+        }
+      ]
+    },
+    "expected_error": "422 - Validation Error"
+  },
+  {
+    "description": "Wrong type for 'activities' field",
+    "payload": {
+      "worker_name": "test-worker",
+      "worker_version": "1.0.0",
+      "task_queue": "default-task-queue",
+      "generated_at": "2025-08-08T17:36:19.255586+00:00",
+      "workflows": [
+        {
+          "name": "awa-hello-world",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "title": "Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "title": "HelloWorldInput"
+          }
+        },
+        {
+          "name": "awa-hello-world",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "title": "Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "title": "HelloWorldInput"
+          }
+        }
+      ],
+      "activities": "not_an_array"
+    },
+    "expected_error": "422 - Validation Error"
+  },
+  {
+    "description": "Empty 'worker_name' field (minLength=1)",
+    "payload": {
+      "worker_name": "",
+      "worker_version": "1.0.0",
+      "task_queue": "default-task-queue",
+      "generated_at": "2025-08-08T17:36:19.255586+00:00",
+      "workflows": [
+        {
+          "name": "awa-hello-world",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "title": "Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "title": "HelloWorldInput"
+          }
+        },
+        {
+          "name": "awa-hello-world",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "title": "Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "title": "HelloWorldInput"
+          }
+        }
+      ],
+      "activities": [
+        {
+          "name": "test-activity",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string",
+                "description": "Activity input data"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          }
+        },
+        {
+          "name": "test-activity",
+          "task_queue": "awa_default",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "input": {
+                "type": "string",
+                "description": "Activity input data"
+              }
+            },
+            "required": [
+              "input"
+            ]
+          }
+        }
+      ]
+    },
+    "expected_error": "422 - Validation Error"
+  }
+]

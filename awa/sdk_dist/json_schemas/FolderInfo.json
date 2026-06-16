@@ -1,0 +1,30 @@
+{
+  "description": "Information about a directory and its contents.",
+  "properties": {
+    "path": {
+      "title": "Path",
+      "type": "string"
+    },
+    "files": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Files",
+      "type": "array"
+    },
+    "subdirectories": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Subdirectories",
+      "type": "array"
+    }
+  },
+  "required": [
+    "path",
+    "files",
+    "subdirectories"
+  ],
+  "title": "FolderInfo",
+  "type": "object"
+}

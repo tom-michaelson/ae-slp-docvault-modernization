@@ -1,0 +1,9 @@
+recipes: true
+llm:
+  default_model: gpt-4.1
+  models:
+    - name: gpt-4.1
+      provider: OpenAI
+      model: gpt-4.1
+      temperature: 0.1
+      max_tokens: 32000

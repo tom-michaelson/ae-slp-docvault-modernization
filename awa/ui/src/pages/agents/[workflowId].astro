@@ -1,0 +1,28 @@
+---
+export const prerender = false;
+import Layout from "../../layouts/Layout.astro";
+import AgentDetailsPageIsland from "../../islands/AgentDetailsPageIsland.tsx";
+import { getSession } from "auth-astro/server";
+import { getEffectiveSession } from "../../utils/auth";
+
+const actualSession = await getSession(Astro.request);
+const session = getEffectiveSession(actualSession);
+const authMode = import.meta.env.PUBLIC_AUTH_MODE || "none";
+const docsOnly = import.meta.env.PUBLIC_DOCS_ONLY === "true";
+
+// Block access to /agents for Cognito mode when docs-only is enabled
+if (authMode === "cognito" && docsOnly) {
+  return Astro.redirect("/docs");
+}
+
+// Require session for all modes
+if (!session) {
+  return Astro.redirect("/");
+}
+
+const { workflowId } = Astro.params;
+---
+
+<Layout userName={session.user?.name ?? undefined}>
+  <AgentDetailsPageIsland workflowId={workflowId} client:only="react" />
+</Layout>

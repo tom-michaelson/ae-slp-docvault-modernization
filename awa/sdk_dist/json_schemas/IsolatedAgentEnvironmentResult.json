@@ -1,0 +1,33 @@
+{
+  "description": "Result of isolated agent environment operations.",
+  "properties": {
+    "success": {
+      "description": "Whether the operation was successful",
+      "title": "Success",
+      "type": "boolean"
+    },
+    "message": {
+      "description": "Result message or error description",
+      "title": "Message",
+      "type": "string"
+    },
+    "environment_info": {
+      "anyOf": [
+        {
+          "$ref": "./IsolatedAgentEnvironmentInfo.json"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Environment information if operation was successful"
+    }
+  },
+  "required": [
+    "success",
+    "message"
+  ],
+  "title": "IsolatedAgentEnvironmentResult",
+  "type": "object"
+}

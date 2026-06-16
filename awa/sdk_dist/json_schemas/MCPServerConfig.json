@@ -1,0 +1,23 @@
+{
+  "description": "Configuration for MCP (Model Context Protocol) servers.",
+  "properties": {
+    "transport": {
+      "$ref": "./MCPServerTransport.json"
+    },
+    "server_params": {
+      "additionalProperties": true,
+      "title": "Server Params",
+      "type": "object"
+    },
+    "enabled": {
+      "default": true,
+      "title": "Enabled",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "transport"
+  ],
+  "title": "MCPServerConfig",
+  "type": "object"
+}

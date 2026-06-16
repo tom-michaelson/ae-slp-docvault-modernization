@@ -1,0 +1,61 @@
+This file is a Basic Mapping Support (BMS) macro definition for a CICS application screen related to credit card management. Let's break it down:
+
+Header :
+
+Contains copyright and licensing information for the "CardDemo" application.
+
+Screen Definition (COCRDLI) :
+
+Defines the screen using the DFHMSD macro.
+
+Sets attributes like LANG=COBOL (for use with COBOL programs), MODE=INOUT (input/output), and TYPE=&SYSPARM (dynamic type).
+
+Screen Layout (CCRDLIA) :
+
+Defined using the DFHMDI macro.
+
+Sets screen size to 24 lines by 80 columns.
+
+Specifies attributes like color, highlighting, and field validation.
+
+Header Fields :
+
+Transaction name (TRNNAME)
+
+Title fields (TITLE01 and TITLE02)
+
+Date (CURDATE)
+
+Program name (PGMNAME)
+
+Time (CURTIME)
+
+Main Content :
+
+Title "List Credit Cards" at (4,31)
+
+Page number field (PAGENO) at (4,76)
+
+Account number input field (ACCTSID) at (6,44)
+
+Credit card number input field (CARDSID) at (7,44)
+
+Column headers for "Select", "Account Number", "Card Number", and "Active" at (9,10), (9,21), (9,45), and (9,66), respectively.
+
+Underlines for column headers at (10,10), (10,20), (10,43), and (10,65).
+
+Field Attributes :
+
+Uses various colors like BLUE, YELLOW, GREEN, and TURQUOISE.
+
+Input fields (ACCTSID, CARDSID) are unprotected (UNPROT) and highlighted with underline.
+
+Most other fields are protected (ASKIP or PROT) for display only.
+
+This BMS macro defines a screen for listing and selecting credit cards associated with an account. The user can input an account number and credit card number, which would likely be processed by the associated COBOL program to retrieve and display the relevant card information.
+
+The screen layout includes column headers and underlines to organize the card data, as well as a page number field, suggesting that multiple pages of card data may be displayed.
+
+The COBOL program would populate the card data fields, handle user input for account and card numbers, and process any selections or actions based on the user's interaction with the screen.
+
+Overall, this BMS macro provides the user interface structure for a credit card listing and selection screen within the CardDemo application, while the COBOL program would provide the underlying logic and data processing.

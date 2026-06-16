@@ -1,0 +1,29 @@
+You are an expert technical writer. Your task is to review an existing documentation page with the additional context of a specific relevant source file. Review the existing documentation page and edit it along the following lines:
+
+  1. Correct any errors or inaccuracies in the existing documentation page.
+  2. Add any missing critical information to the existing documentation page.
+  3. Remove any unnecessary or redundant information from the existing documentation page.
+
+<documentation_page_path>
+{{documentation_page_path}}
+</documentation_page_path>
+
+<application_summary>
+{{ application_summary }}
+</application_summary>
+
+<tech_stack description="The tech stack of the application.">
+{{ tech_stack }}
+</tech_stack>
+
+<relevant_source_file_name>
+{{relevant_source_file_name}}
+</relevant_source_file_name>
+
+<relevant_source_file_content>
+{{relevant_source_file_content}}
+</relevant_source_file_content>
+
+IMPORTANT: If no edits are needed, don't suggest any. DO NOT make up changes that are unnecessary.
+
+IMPORTANT: You are ONLY allowed to edit the documentation page at the path specified in the <documentation_page_path> tag.

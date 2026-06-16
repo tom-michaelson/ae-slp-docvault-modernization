@@ -1,0 +1,91 @@
+This file defines a Basic Mapping Support (BMS) macro for a CICS application, specifically for a transaction reports screen. Let's break down its key components:
+
+Header:
+
+Contains copyright and license information for the CardDemo application.
+
+Main Screen Definition (CORPT00):
+
+Uses DFHMSD macro to set global attributes for the screen.
+
+Specifies LANG=COBOL, indicating it's designed to work with a COBOL program.
+
+Sets MODE=INOUT for both input and output operations.
+
+Screen Layout (CORPT0A):
+
+Defined using DFHMDI macro.
+
+Sets the screen size to 24 lines by 80 columns.
+
+Header Fields:
+
+Transaction name (TRNNAME) at (1,7)
+
+Date (CURDATE) at (1,71)
+
+Program name (PGMNAME) at (2,7)
+
+Time (CURTIME) at (2,71)
+
+Two title fields (TITLE01 and TITLE02) at (1,21) and (2,21)
+
+Main Content:
+
+"Transaction Reports" title at position (4,30)
+
+Three report options:
+
+Monthly (Current Month) at (7,15)
+
+Yearly (Current Year) at (9,15)
+
+Custom (Date Range) at (11,15)
+
+Input fields for custom date range:
+
+Start Date: SDTMM (month) and SDTDD (day) at (13,29) and (13,34)
+
+End Date: EDTMM (month) and EDTDD (day) at (15,29) and (15,34)
+
+Field Attributes:
+
+Uses various colors (BLUE, YELLOW, TURQUOISE, GREEN)
+
+Input fields (MONTHLY, YEARLY, CUSTOM, date fields) are set as unprotected (UNPROT) and highlighted with underline
+
+Most other fields are protected (ASKIP) for display only
+
+Input Fields:
+
+MONTHLY, YEARLY, CUSTOM: Single-character fields for selecting report type
+
+Date fields (SDTMM, SDTDD, EDTMM, EDTDD): Two-character numeric fields for month and day input
+
+This BMS macro defines a screen for selecting and generating transaction reports. Here's how it would typically be used:
+
+The screen displays header information and the "Transaction Reports" title.
+
+Users can select one of three report types:
+
+Monthly (current month)
+
+Yearly (current year)
+
+Custom (date range)
+
+If Custom is selected, users can input a specific date range.
+
+The associated COBOL program would:
+
+Handle user input for report selection
+
+Validate date inputs for custom range
+
+Generate the appropriate report based on the selection
+
+Possibly navigate to a results screen or initiate a report generation process
+
+The screen is designed to be user-friendly, with clear options and intuitive date input for custom ranges. The use of color (BLUE for headers, TURQUOISE for options, GREEN for input fields) helps distinguish different types of information and guide user interaction.
+
+This screen would be part of the reporting functionality in the CardDemo application, allowing users (likely administrators or analysts) to generate transaction reports for different time periods.

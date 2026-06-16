@@ -1,0 +1,46 @@
+{
+  "description": "Input model for document chunking activity.",
+  "properties": {
+    "content": {
+      "description": "The text content to be chunked",
+      "title": "Content",
+      "type": "string"
+    },
+    "chunker_type": {
+      "$ref": "./ChunkerType.json",
+      "default": "recursive",
+      "description": "The type of chunker to use"
+    },
+    "max_chunk_size": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Maximum size of each chunk (in tokens)",
+      "title": "Max Chunk Size"
+    },
+    "chunk_overlap": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Number of tokens to overlap between chunks",
+      "title": "Chunk Overlap"
+    }
+  },
+  "required": [
+    "content"
+  ],
+  "title": "ChunkDocumentInput",
+  "type": "object"
+}

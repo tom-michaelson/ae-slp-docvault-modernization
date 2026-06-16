@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment files (local overrides)
+.env.local
+
+# Uploads (keep the directory, ignore contents)
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Build output
+frontend/build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files (keep .vscode for shared settings)
+.idea/
+*.swp
+*.tmp
+
+# Logs
+*.log
+npm-debug.log*
+
+# Speckit
+.specify/
+specs/
+.github/
+.vscode/
+
+# Misc
+broken-project-docvault.md

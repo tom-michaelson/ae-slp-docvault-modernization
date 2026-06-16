@@ -1,0 +1,41 @@
+[*.cs]
+# Suppress "ClassNeverInstantiated.Global" inspection globally in the project
+dotnet_diagnostic.ClassNeverInstantiated_global.severity = none
+
+# Suppress CA2254: Template should be a static expression (for logging)
+dotnet_diagnostic.CA2254.severity = none
+
+# Suppress additional logging-related warnings
+dotnet_diagnostic.CA1848.severity = none  # Use the LoggerMessage delegates
+dotnet_diagnostic.CA1031.severity = none  # Do not catch general exception types
+dotnet_diagnostic.SYSLIB1006.severity = none  # Multiple logging methods cannot use the same event id
+dotnet_diagnostic.SYSLIB1015.severity = none  # Argument is not referenced from the logging message
+
+
+##### Configuration specific for Temporal workflows #####
+
+# IDE0320: Make anonymous function static
+dotnet_diagnostic.IDE0320.severity = none
+
+[*Workflow.cs]
+
+# We use getters for queries, they cannot be properties
+dotnet_diagnostic.CA1024.severity = none
+
+# Don't force workflows to have static methods
+dotnet_diagnostic.CA1822.severity = none
+
+# Do not need ConfigureAwait for workflows
+dotnet_diagnostic.CA2007.severity = none
+
+# Do not need task scheduler for workflows
+dotnet_diagnostic.CA2008.severity = none
+
+# Workflow randomness is intentionally deterministic
+dotnet_diagnostic.CA5394.severity = none
+
+# Allow async methods to not have await in them
+dotnet_diagnostic.CS1998.severity = none
+
+# Don't avoid, but rather encourage things using TaskScheduler.Current in workflows
+dotnet_diagnostic.VSTHRD105.severity = none

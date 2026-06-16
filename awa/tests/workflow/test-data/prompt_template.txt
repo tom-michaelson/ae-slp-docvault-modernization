@@ -1,0 +1,10 @@
+Welcome to {{ service_name }}!
+
+Your task is to {{ task_description }}.
+
+Available inputs:
+{% for input in inputs %}
+- {{ input }}
+{% endfor %}
+
+Please proceed with the {{ action_type }}.

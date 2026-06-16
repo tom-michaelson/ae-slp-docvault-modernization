@@ -1,0 +1,75 @@
+# docker-compose.yml
+services:
+  litellm:
+    extends:
+      file: docker-compose.litellm.yml
+      service: litellm
+    environment:
+      LANGFUSE_HOST: http://langfuse-web:3000
+    networks:
+      - awa-network
+
+  litellm-postgres:
+    extends:
+      file: docker-compose.litellm.yml
+      service: litellm-postgres
+    networks:
+      - awa-network
+
+  langfuse-worker:
+    extends:
+      file: docker-compose.langfuse.yml
+      service: langfuse-worker
+    networks:
+      - awa-network
+
+  langfuse-web:
+    extends:
+      file: docker-compose.langfuse.yml
+      service: langfuse-web
+    networks:
+      - awa-network
+
+  clickhouse:
+    extends:
+      file: docker-compose.langfuse.yml
+      service: clickhouse
+    networks:
+      - awa-network
+
+  minio:
+    extends:
+      file: docker-compose.langfuse.yml
+      service: minio
+    networks:
+      - awa-network
+
+  redis:
+    extends:
+      file: docker-compose.langfuse.yml
+      service: redis
+    networks:
+      - awa-network
+
+  postgres:
+    extends:
+      file: docker-compose.langfuse.yml
+      service: postgres
+    networks:
+      - awa-network
+
+volumes:
+  litellm_postgres_data:
+    driver: local
+  langfuse_postgres_data:
+    driver: local
+  langfuse_clickhouse_data:
+    driver: local
+  langfuse_clickhouse_logs:
+    driver: local
+  langfuse_minio_data:
+    driver: local
+
+networks:
+  awa-network:
+    driver: bridge

@@ -1,0 +1,18 @@
+bin/
+obj/
+.vscode/
+.idea/
+node_modules/
+*.zip
+
+# COBOL
+*.PS
+*.PS.INIT
+
+# Git
+.git/
+
+# Images
+*.png
+*.jpg
+*.jpeg

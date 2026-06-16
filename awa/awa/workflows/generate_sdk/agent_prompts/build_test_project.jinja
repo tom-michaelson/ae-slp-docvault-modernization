@@ -1,0 +1,34 @@
+You need to ensure the {{ language_name }} SDK test project builds successfully.
+
+<working_directory>
+{{ sdk_working_dir }}
+</working_directory>
+
+<build_command>
+{{ build_command }}
+</build_command>
+
+Please follow these steps:
+1. Run the build command to see if the test project builds
+2. If the build fails, analyze the error messages
+3. For each problematic test that prevents building:
+   - Comment out the failing test code
+   - Add a comment: "// TODO Agent: Uncomment and fix test"
+4. Continue iteratively until the test project builds successfully
+
+IMPORTANT:
+- Only comment out code that prevents the project from building
+- DO NOT fix the tests themselves at this stage
+- DO NOT execute the tests, only ensure the project builds
+- Focus on compilation/build errors only
+- Preserve the original test structure when commenting
+
+<conventions description="Conventions for {{language_name}} code in the SDK.">
+{{ conventions }}
+</conventions>
+
+<translation_guide description="Translation guide for {{language_name}}, when translating from Python.">
+{{ translation_guide }}
+</translation_guide>
+
+Your goal is to make the project build successfully by temporarily disabling problematic tests.

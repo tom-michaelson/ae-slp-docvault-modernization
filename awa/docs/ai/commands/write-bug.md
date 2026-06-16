@@ -1,0 +1,196 @@
+# Write Bug Command
+
+## Configuration
+
+```yaml
+cursor:
+  description: "Generate comprehensive bug reports with standardized format and context"
+  globs: "**/*.py, **/*.ts, **/*.md"
+  include_in_index: true
+
+copilot:
+  description: "Generate comprehensive bug reports with standardized format and context"
+  applyTo: '**/*.py, **/*.ts, **/*.md'
+  include_in_index: true
+
+claude:
+  command_name: "write-bug"
+  description: "Generate comprehensive bug reports with standardized format and context"
+  include_in_index: true
+
+opencode:
+  command_name: "write-bug"
+  description: "Generate comprehensive bug reports with standardized format and context"
+  include_in_index: true
+```
+
+## Overview
+
+The Write Bug command helps you create comprehensive, standardized bug reports for JIRA. It analyzes errors and issues to generate well-structured reports that include all necessary information for developers to understand and fix the problem.
+
+## How to Use
+
+### Command Syntax
+
+```bash
+# In Claude
+/write-bug
+```
+
+### What Information You'll Need
+
+When using this command, be prepared to provide:
+
+- **Error Message**: The exact error message or unexpected behavior you encountered
+- **Context**: What you were trying to do when the error occurred
+- **Environment**: Where the issue happened (development, production, etc.)
+- **Steps to Reproduce**: How to recreate the issue
+
+### Interactive Process
+
+1. **Initial Request**: Run the command and describe your issue
+2. **Clarification**: The assistant may ask for additional details about:
+   - Specific error messages or logs
+   - Step-by-step reproduction instructions
+   - Environment configuration
+   - Expected vs actual behavior
+3. **Report Generation**: A complete bug report will be generated in JIRA-ready format
+
+## Output Format
+
+The generated bug report follows a standardized template that's ready for JIRA:
+
+### Report Structure
+
+```
+# {Region} - {Feature/API Name} - {Short Summary}
+```
+
+**Example**: `API - Workflow Execution - Endpoint returns 500 for invalid payload instead of 400`
+
+### Key Sections
+
+1. **Description**
+   - Clear explanation of the issue
+   - Error messages and stack traces
+   - Impact on functionality
+   - Concrete examples
+
+2. **Steps to Reproduce**
+   - Step-by-step instructions
+   - Specific commands or API calls
+   - Required setup or prerequisites
+   - Environment configuration
+
+3. **Expected Result**
+   - What should happen instead
+   - Correct behavior or response
+   - Expected status codes or outputs
+
+4. **Additional Context**
+   - Environment (Development/Production/Testing)
+   - Version information
+   - Configuration details
+   - Related files and issues
+   - Priority assessment
+
+5. **AI Recommended Solutions**
+   - Root cause analysis
+   - Recommended fixes
+   - Implementation notes
+   - Testing recommendations
+
+## Region Categories
+
+Use these categories to classify where the bug occurs:
+
+- **API** - REST API endpoints, request/response handling
+- **Workflow** - Temporal workflows and orchestration
+- **Activity** - Individual activity implementations
+- **CLI** - Command-line interface functionality
+- **UI** - Web interface components and interactions
+- **Engine** - Temporal engine and orchestration
+- **Configuration** - Application settings and environment
+- **Authentication** - Login, permissions, security
+- **Documentation** - Docs, examples, or guides
+- **Testing** - Test frameworks, coverage, or execution
+- **Infrastructure** - Deployment, containers, or environments
+
+## Common Feature Names
+
+### API Features
+- Workflow Execution
+- Run Management
+- Status Endpoints
+- Authentication/Authorization
+- File Upload/Download
+- Data Processing
+
+### Workflow Features
+- Build Prompt
+- Execute Agent
+- File Transform
+- Error Handling
+- Retry Logic
+- State Management
+
+### Activity Features
+- Agent Modes (Claude, Codex, Goose)
+- File Operations
+- Diff Generation
+- Text Processing
+
+## Example Bug Report
+
+Here's an example of what the final output looks like:
+
+**Title: API - Workflow Execution - Returns 500 for invalid JSON input instead of 400/422**
+
+**Description**
+
+When submitting an invalid JSON payload to the workflow execution endpoint, the API returns a 500 Internal Server Error instead of a proper 400 Bad Request with validation details. This prevents clients from understanding what went wrong with their request and makes debugging difficult.
+
+**Steps to Reproduce**
+
+1. Start the AWA API server locally
+2. Send POST request to `/api/v1/workflows`
+3. Include malformed JSON payload: `{"invalid": "json"`
+4. Observe the response returns 500 status code
+
+**Expected Result**
+
+- Should return 400 Bad Request status code
+- Should include validation error details in response body
+- Should not trigger internal server error logging
+
+**Additional Context**
+
+- **Environment**: Local development
+- **Version**: Current main branch
+- **Configuration**: Default local configuration
+- **Related Files**: `/awa/core/api/routes/shared/workflows.py`, `/awa/core/utils/json_utils.py`
+- **Priority**: Medium - affects API usability and debugging
+
+**AI Recommended Solutions**
+
+*Root Cause Analysis*
+
+The FastAPI route handler lacks proper exception handling for JSON parsing errors. When parsing fails, the exception propagates without being transformed into an appropriate HTTP response.
+
+*Recommended Fix*
+
+Add exception handling to catch parsing errors and return appropriate HTTP status codes (400/422) with clear error messages.
+
+*Implementation Notes*
+
+- Follow existing error handling patterns in the codebase
+- Ensure error messages are client-friendly and actionable
+- Add corresponding unit tests for the new error handling
+
+## Tips for Effective Bug Reports
+
+- **Be Specific**: Include exact error messages and stack traces
+- **Provide Context**: Explain what you were trying to accomplish
+- **Include Examples**: Show the actual vs expected behavior
+- **Environment Details**: Always note where the issue occurred
+- **Reproducibility**: Clear steps that anyone can follow

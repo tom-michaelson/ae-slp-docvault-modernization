@@ -1,0 +1,53 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "github/gpt-4.1",
+  "provider": {
+    "copilot": {
+      "models": {
+        "gpt-4.1": {
+          "id": "gpt-4.1",
+          "name": "GPT-4.1",
+          "tool_call": true,
+          "temperature": true
+        },
+        "gpt-4o": {
+          "id": "gpt-4o",
+          "name": "GPT-4o",
+          "tool_call": true,
+          "temperature": true
+        },
+        "gpt-4o-mini": {
+          "id": "gpt-4o-mini",
+          "name": "GPT-4o Mini",
+          "tool_call": true,
+          "temperature": true
+        },
+        "claude-3-5-sonnet": {
+          "id": "claude-3-5-sonnet",
+          "name": "Claude 3.5 Sonnet",
+          "tool_call": true,
+          "temperature": true
+        }
+      }
+    }
+  },
+  "mcp": {
+    "python-lsp": {
+      "type": "local",
+      "command": ["pylsp"],
+      "enabled": true,
+      "environment": {
+        "PYTHONPATH": "."
+      }
+    }
+  },
+  "theme": "opencode",
+  "autoupdate": true,
+  "log_level": "INFO",
+  "layout": "auto",
+  "share": "disabled",
+  "instructions": [
+    ".github/copilot-instructions.md",
+    ".github/instructions/*.md"
+  ]
+}

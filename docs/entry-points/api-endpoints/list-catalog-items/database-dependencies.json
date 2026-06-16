@@ -1,0 +1,35 @@
+[
+  {
+    "type": "table",
+    "name": "Catalog",
+    "key": "catalog",
+    "operations": ["select", "count"],
+    "columns": ["Id", "Name", "Price", "PictureUri", "CatalogBrandId", "CatalogTypeId"],
+    "locations": [
+      "src/ApplicationCore/Specifications/CatalogFilterPaginatedSpecification.cs",
+      "src/ApplicationCore/Specifications/CatalogFilterSpecification.cs"
+    ],
+    "notes": [
+      "Filtered by optional CatalogBrandId and CatalogTypeId.",
+      "Paginated via Skip(itemsPerPage * pageIndex).Take(itemsPerPage)."
+    ]
+  },
+  {
+    "type": "table",
+    "name": "CatalogBrands",
+    "key": "catalog-brands",
+    "operations": ["select"],
+    "columns": ["Id", "Brand"],
+    "locations": ["src/Web/Services/CatalogViewModelService.cs:80"],
+    "notes": ["Full list read to populate the brand dropdown."]
+  },
+  {
+    "type": "table",
+    "name": "CatalogTypes",
+    "key": "catalog-types",
+    "operations": ["select"],
+    "columns": ["Id", "Type"],
+    "locations": ["src/Web/Services/CatalogViewModelService.cs:96"],
+    "notes": ["Full list read to populate the type dropdown."]
+  }
+]

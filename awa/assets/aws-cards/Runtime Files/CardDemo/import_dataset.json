@@ -1,0 +1,196 @@
+{
+    "dataSets": [
+        {
+            "dataSet": {
+                "storageType": "Database",
+                "datasetName": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+                "relativePath": "DATA",
+                "datasetOrg": {
+                    "vsam": {
+                        "format": "KS",
+                        "encoding": "A",
+                        "primaryKey": {
+                            "length": 11,
+                            "offset": 0
+                        }
+                    }
+                },
+                "recordLength": {
+                    "min": 300,
+                    "max": 300
+                }
+            },
+            "externalLocation": {
+                "s3Location": "s3://<s3-bucket-name>/carddemo/catalog/data/AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS.DAT"
+            }
+        },
+        {
+            "dataSet": {
+                "storageType": "Database",
+                "datasetName": "AWS.M2.CARDDEMO.CARDDATA.VSAM.AIX.PATH",
+                "relativePath": "DATA",
+                "datasetOrg": {
+                    "vsam": {
+                        "format": "KS",
+                        "encoding": "A",
+                        "primaryKey": {
+                            "length": 11,
+                            "offset": 16
+                        }
+                    }
+                },
+                "recordLength": {
+                    "min": 150,
+                    "max": 150
+                }
+            },
+            "externalLocation": {
+                "s3Location": "s3://<s3-bucket-name>/carddemo/catalog/data/AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS.DAT"
+            }
+        },
+        {
+            "dataSet": {
+                "storageType": "Database",
+                "datasetName": "AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS",
+                "relativePath": "DATA",
+                "datasetOrg": {
+                    "vsam": {
+                        "format": "KS",
+                        "encoding": "A",
+                        "primaryKey": {
+                            "length": 16,
+                            "offset": 0
+                        }
+                    }
+                },
+                "recordLength": {
+                    "min": 150,
+                    "max": 150
+                }
+            },
+            "externalLocation": {
+                "s3Location": "s3://<s3-bucket-name>/carddemo/catalog/data/AWS.M2.CARDDEMO.CARDDATA.VSAM.KSDS.DAT"
+            }
+        },
+        {
+            "dataSet": {
+                "storageType": "Database",
+                "datasetName": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+                "relativePath": "DATA",
+                "datasetOrg": {
+                    "vsam": {
+                        "format": "KS",
+                        "encoding": "A",
+                        "primaryKey": {
+                            "length": 16,
+                            "offset": 0
+                        }
+                    }
+                },
+                "recordLength": {
+                    "min": 50,
+                    "max": 50
+                }
+            },
+            "externalLocation": {
+                "s3Location": "s3://<s3-bucket-name>/carddemo/catalog/data/AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS.DAT"
+            }
+        },
+        {
+            "dataSet": {
+                "storageType": "Database",
+                "datasetName": "AWS.M2.CARDDEMO.CUSTDATA.VSAM.KSDS",
+                "relativePath": "DATA",
+                "datasetOrg": {
+                    "vsam": {
+                        "format": "KS",
+                        "encoding": "A",
+                        "primaryKey": {
+                            "length": 9,
+                            "offset": 0
+                        }
+                    }
+                },
+                "recordLength": {
+                    "min": 500,
+                    "max": 500
+                }
+            },
+            "externalLocation": {
+                "s3Location": "s3://<s3-bucket-name>/carddemo/catalog/data/AWS.M2.CARDDEMO.CUSTDATA.VSAM.KSDS.DAT"
+            }
+        },
+        {
+            "dataSet": {
+                "storageType": "Database",
+                "datasetName": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+                "relativePath": "DATA",
+                "datasetOrg": {
+                    "vsam": {
+                        "format": "KS",
+                        "encoding": "A",
+                        "primaryKey": {
+                            "length": 11,
+                            "offset": 25
+                        }
+                    }
+                },
+                "recordLength": {
+                    "min": 50,
+                    "max": 50
+                }
+            },
+            "externalLocation": {
+                "s3Location": "s3://<s3-bucket-name>/carddemo/catalog/data/AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS.DAT"
+            }
+        },
+        {
+            "dataSet": {
+                "storageType": "Database",
+                "datasetName": "AWS.M2.CARDDEMO.TRANSACT.VSAM.KSDS",
+                "relativePath": "DATA",
+                "datasetOrg": {
+                    "vsam": {
+                        "format": "KS",
+                        "encoding": "A",
+                        "primaryKey": {
+                            "length": 16,
+                            "offset": 0
+                        }
+                    }
+                },
+                "recordLength": {
+                    "min": 350,
+                    "max": 350
+                }
+            },
+            "externalLocation": {
+                "s3Location": "s3://<s3-bucket-name>/carddemo/catalog/data/AWS.M2.CARDDEMO.TRANSACT.VSAM.KSDS.DAT"
+            }
+        },
+        {
+            "dataSet": {
+                "storageType": "Database",
+                "datasetName": "AWS.M2.CARDDEMO.USRSEC.VSAM.KSDS",
+                "relativePath": "DATA",
+                "datasetOrg": {
+                    "vsam": {
+                        "format": "KS",
+                        "encoding": "A",
+                        "primaryKey": {
+                            "length": 8,
+                            "offset": 0
+                        }
+                    }
+                },
+                "recordLength": {
+                    "min": 80,
+                    "max": 80
+                }
+            },
+            "externalLocation": {
+                "s3Location": "s3://<s3-bucket-name>/carddemo/catalog/data/AWS.M2.CARDDEMO.USRSEC.VSAM.KSDS.DAT"
+            }
+        }
+    ]
+}

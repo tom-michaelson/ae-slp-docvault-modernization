@@ -1,0 +1,28 @@
+---
+export const prerender = false;
+import Layout from "../../layouts/Layout.astro";
+import TaskDetailsPageIsland from "../../islands/TaskDetailsPageIsland";
+import { getSession } from "auth-astro/server";
+import { getEffectiveSession } from "../../utils/auth";
+
+const actualSession = await getSession(Astro.request);
+const session = getEffectiveSession(actualSession);
+const authMode = import.meta.env.PUBLIC_AUTH_MODE || "none";
+const docsOnly = import.meta.env.PUBLIC_DOCS_ONLY === "true";
+
+// Block access to /runs for Cognito mode when docs-only is enabled
+if (authMode === "cognito" && docsOnly) {
+  return Astro.redirect("/docs");
+}
+
+const { taskId } = Astro.params;
+
+// Require session for all modes and taskId for details
+if (!session || !taskId) {
+  return Astro.redirect("/");
+}
+---
+
+<Layout userName={session.user?.name ?? undefined}>
+  <TaskDetailsPageIsland taskId={taskId} client:only="react" />
+</Layout>

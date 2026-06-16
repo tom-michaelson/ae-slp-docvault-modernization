@@ -1,0 +1,26 @@
+[
+  {
+    "description": "Simple name input",
+    "input": "{\"name\": \"Alice\"}"
+  },
+  {
+    "description": "Name with spaces",
+    "input": "{\"name\": \"John Doe\"}"
+  },
+  {
+    "description": "Name with special characters",
+    "input": "{\"name\": \"José María\"}"
+  },
+  {
+    "description": "Name with unicode characters",
+    "input": "{\"name\": \"李小明\"}"
+  },
+  {
+    "description": "Empty name (should be handled gracefully)",
+    "input": "{\"name\": \"\"}"
+  },
+  {
+    "description": "Long name",
+    "input": "{\"name\": \"Bartholomew Maximillian Alexander Constantine\"}"
+  }
+]

@@ -1,0 +1,286 @@
+---
+applyTo: "**/*_workflow.py, **/*_activity.py"
+---
+
+# Documentation Generation Guide
+
+This guide provides patterns for generating comprehensive SDK-style reference documentation for AWA workflows and activities, including multi-language usage examples.
+
+## AWA Activity Documentation Generation
+
+### Process
+
+1. **Ensure Docstrings Exist**:
+   - Before generating documentation, inspect the target file.
+   - Add docstrings to all classes, functions, and methods where they are missing, ensuring they accurately describe the component's purpose, arguments, and return value.
+
+2. **Identify the Target Activities**:
+   - You will be provided with the path to a single Python file which may contain one or more activities.
+
+3. **Analyze the Activities**:
+   - Read the file and identify **all** functions/classes decorated with `@activity.defn`.
+   - **Important**: Each discovered activity must be treated as a separate documentation target.
+   - For each activity, parse its signature and docstring to extract:
+     - **Description**: The main purpose of the component from the docstring.
+     - **Component Name, Parameters, and Types**: This information is needed to generate accurate client invocation examples.
+
+4. **Generate the Markdown File(s)**:
+   - For **each activity** discovered in the source file, generate a separate markdown file in `docs/reference/activity/`.
+   - The filename should be the literal name of the activity (taken from the `@activity.defn` decorator) in kebab-case, without the "awa-" prefix (e.g., `read-file.md`).
+   - The title of the markdown file should be the literal name of the activity (taken from the `@activity.defn` decorator).
+   - The content must include the component's description, followed by "Parameters" and "Returns" sections, and finally a "Usage" section. The "Usage" section must contain code examples for invoking the activity from various client languages, using tabs for each language.
+   - **Required Languages**: Python, TypeScript, .NET, Java, Go, and PHP.
+   - Each example should show how to instantiate a client, prepare the input, and execute the activity.
+
+5. **Update VitePress Configuration**:
+   - Open `docs/.vitepress/config.mts`.
+   - Locate the `sidebar` configuration for the `Reference` section.
+   - Add a new entry for **each page** you just created under the `Activities` subsection. Ensure they are added in alphabetical order.
+
+### Activity Documentation Template
+
+```markdown
+# `activity_name`
+
+Brief description of what the activity does.
+
+Detailed description of the activity's purpose, behavior, and any important considerations.
+
+## Parameters
+
+| Name      | Type  | Description                                   |
+| :-------- | :---- | :-------------------------------------------- |
+| `param1`  | `str` | Description of parameter 1.                  |
+| `param2`  | `int` | Description of parameter 2.                  |
+
+## Returns
+
+| Type   | Description                            |
+| :----- | :------------------------------------- |
+| `str`  | Description of return value.           |
+
+## Usage
+
+::: code-group
+
+```python [Python]
+from temporalio import workflow
+from datetime import timedelta
+
+@workflow.defn
+class MyWorkflow:
+    @workflow.run
+    async def run(self, param1: str, param2: int) -> str:
+        return await workflow.execute_activity(
+            "activity_name",
+            args=[param1, param2],
+            task_queue="awa_default",
+            start_to_close_timeout=timedelta(seconds=60)
+        )
+```
+
+```typescript [TypeScript]
+import { proxyActivities } from "@temporalio/workflow";
+import type * as activities from "./activities";
+
+const { activity_name } = proxyActivities<typeof activities>({
+  startToCloseTimeout: "1 minute",
+  taskQueue: "awa_default",
+});
+
+export async function myWorkflow(param1: string, param2: number): Promise<string> {
+  return await activity_name(param1, param2);
+}
+```
+
+```csharp [C#]
+using Temporalio.Workflows;
+
+[Workflow]
+public class MyWorkflow
+{
+    [WorkflowRun]
+    public async Task<string> RunAsync(string param1, int param2)
+    {
+        return await Workflow.ExecuteActivityAsync<string>(
+            "activity_name",
+            new object[] { param1, param2 },
+            new() {
+                TaskQueue = "awa_default",
+                StartToCloseTimeout = TimeSpan.FromSeconds(60)
+            }
+        );
+    }
+}
+```
+
+```java [Java]
+import io.temporal.workflow.Workflow;
+import io.temporal.activity.ActivityOptions;
+import java.time.Duration;
+
+public class MyWorkflowImpl implements MyWorkflow {
+    private final MyActivities activities = Workflow.newActivityStub(MyActivities.class,
+        ActivityOptions.newBuilder()
+            .setTaskQueue("awa_default")
+            .setStartToCloseTimeout(Duration.ofSeconds(60))
+            .build());
+
+    @Override
+    public String run(String param1, int param2) {
+        return activities.activityName(param1, param2);
+    }
+}
+```
+
+```go [Go]
+import (
+	"time"
+	"go.temporal.io/sdk/workflow"
+)
+
+func MyWorkflow(ctx workflow.Context, param1 string, param2 int) (string, error) {
+	ao := workflow.ActivityOptions{
+		TaskQueue:           "awa_default",
+		StartToCloseTimeout: time.Second * 60,
+	}
+	ctx = workflow.WithActivityOptions(ctx, ao)
+
+	var result string
+	err := workflow.ExecuteActivity(ctx, "activity_name", param1, param2).Get(ctx, &result)
+	return result, err
+}
+```
+
+```php [PHP]
+use Temporal\Workflow;
+use Temporal\Activity\ActivityOptions;
+
+class MyWorkflow implements MyWorkflowInterface
+{
+    public function run(string $param1, int $param2): \Generator
+    {
+        return yield Workflow::executeActivity(
+            'activity_name',
+            [$param1, $param2],
+            ActivityOptions::new()
+                ->withTaskQueue('awa_default')
+                ->withStartToCloseTimeout(60)
+        );
+    }
+}
+```
+
+:::
+```
+
+## AWA Workflow Documentation Generation
+
+### Process
+
+1. **Ensure Docstrings Exist**:
+   - Before generating documentation, inspect the target file.
+   - Add docstrings to all classes, functions, and methods where they are missing, ensuring they accurately describe the component's purpose, arguments, and return value.
+   - DO NOT add docstrings to both a workflow's run function (@workflow.run) -- instead, add top-level docstrings to the workflow class (@workflow.defn).
+
+2. **Identify the Target Workflow**:
+   - You will be provided with the path to a single Python file containing a workflow class.
+
+3. **Analyze the Workflow**:
+   - Read the file and identify the main workflow class.
+   - For the workflow, parse its signature and docstring to extract:
+     - **Description**: The main purpose of the component from the docstring.
+     - **Component Name, Parameters, and Types**: This information is needed to generate accurate client invocation examples.
+
+4. **Generate the Markdown File**:
+   - Create a new markdown file in `docs/reference/workflow/`.
+   - The filename should be the literal name of the workflow (taken from the `@workflow.defn` decorator) in kebab-case, without the "awa-" prefix (e.g., `build-prompt.md`).
+   - The title of the markdown file should be the literal name of the workflow (taken from the `@workflow.defn` decorator).
+   - The content must include the component's description, followed by "Parameters" and "Returns" sections, and finally a "Usage" section. The "Usage" section must contain code examples for invoking the workflow as a **child workflow** from within a parent workflow, using tabs for each language.
+   - **Required Languages**: Python, TypeScript, .NET, Java, Go, and PHP.
+   - Each example should show how to prepare the input and execute the child workflow using the "execute and wait for completion" pattern.
+   - **Do not include workflow IDs** - these should be auto-generated to avoid collisions.
+
+5. **Update VitePress Configuration**:
+   - Open `docs/.vitepress/config.mts`.
+   - Locate the `sidebar` configuration for the `Reference` section.
+   - Add a new entry for the page you just created under the `Workflows` subsection. Ensure it is added in alphabetical order.
+
+### Workflow Documentation Template
+
+```markdown
+# `WorkflowName`
+
+Brief description of what the workflow does.
+
+Detailed description of the workflow's purpose, behavior, and any important considerations.
+
+## Parameters
+
+| Name      | Type  | Description                                                |
+| :-------- | :---- | :--------------------------------------------------------- |
+| `param1`  | `str` | Description of parameter 1.                               |
+| `param2`  | `int` | Description of parameter 2.                               |
+
+## Returns
+
+| Type  | Description                                             |
+| :---- | :------------------------------------------------------ |
+| `str` | Description of return value.                            |
+
+## Usage
+
+The following examples show how to start the workflow as a child workflow.
+
+::: code-group
+
+```python [Python]
+# Execute the child workflow and wait for completion
+result = await workflow.execute_child_workflow(
+    "WorkflowName",
+    param1,
+    param2
+)
+```
+
+```typescript [TypeScript]
+// Execute the child workflow and wait for completion
+const result = await executeChild(WorkflowName, {
+  args: [param1, param2],
+});
+```
+
+```csharp [.NET]
+// Execute the child workflow and wait for completion
+var result = await Workflow.ExecuteChildAsync<WorkflowName>(param1, param2);
+```
+
+```java [Java]
+// Execute the child workflow and wait for completion
+WorkflowName child = Workflow.newChildWorkflowStub(WorkflowName.class);
+String result = Async.function(child::run, param1, param2);
+```
+
+```go [Go]
+// Execute the child workflow and wait for completion
+var workflowName WorkflowName
+var result string
+err := workflow.ExecuteChildWorkflow(ctx, workflowName.Run, param1, param2).Get(ctx, &result)
+```
+
+```php [PHP]
+// Execute the child workflow and wait for completion
+$child = $this->workflowClient->newChildWorkflowStub(WorkflowName::class);
+$result = $this->workflowClient->run($child, $param1, $param2);
+```
+
+:::
+```
+
+## Documentation Standards
+
+- **Consistency**: Use the same format and structure for all documentation
+- **Completeness**: Include all parameters, return values, and usage examples
+- **Multi-language Support**: Provide examples in all required languages
+- **Navigation**: Always update VitePress config to include new documentation pages
+- **Docstrings**: Ensure all components have proper docstrings before generating documentation

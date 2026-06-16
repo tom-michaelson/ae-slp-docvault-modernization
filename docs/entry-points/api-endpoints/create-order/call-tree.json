@@ -1,0 +1,59 @@
+{
+  "legacyWebHandler": {
+    "method": "Microsoft.eShopWeb.Web.Pages.Basket.CheckoutModel.OnPost",
+    "file": "src/Web/Pages/Basket/Checkout.cshtml.cs",
+    "line": 44,
+    "notes": "Requires [Authorize]. Calls SetQuantities first to sync basket quantities, then CreateOrderAsync with a HARDCODED address new Address('123 Main St.', 'Kent', 'OH', 'United States', '44240'), then DeleteBasketAsync. Catches EmptyBasketOnCheckoutException and redirects to /Basket/Index. Redirects to /Basket/Checkout/Success on success."
+  },
+  "entryPoint": {
+    "method": "Microsoft.eShopWeb.ApplicationCore.Services.OrderService.CreateOrderAsync",
+    "file": "src/ApplicationCore/Services/OrderService.cs",
+    "line": 30,
+    "signature": "Task CreateOrderAsync(int basketId, Address shippingAddress)"
+  },
+  "calls": [
+    {
+      "method": "new BasketWithItemsSpecification(basketId)",
+      "file": "src/ApplicationCore/Specifications/BasketWithItemsSpecification.cs"
+    },
+    {
+      "method": "IRepository<Basket>.FirstOrDefaultAsync(BasketWithItemsSpecification)",
+      "db": {"table": "Baskets", "op": "select"},
+      "notes": "Spec filters by Baskets.Id and eagerly loads Items. Returns null if not found."
+    },
+    {
+      "notes": "Guard.Against.Null(basket) — throws ArgumentNullException if basket not found. REST target should return 404.",
+      "earlyReturn": "throws ArgumentNullException"
+    },
+    {
+      "notes": "Guard.Against.EmptyBasketOnCheckout(basket.Items) — throws EmptyBasketOnCheckoutException if basket.Items is empty. REST target should return 422.",
+      "earlyReturn": "throws EmptyBasketOnCheckoutException"
+    },
+    {
+      "method": "new CatalogItemsSpecification(catalogItemIds[])",
+      "file": "src/ApplicationCore/Specifications/CatalogItemsSpecification.cs"
+    },
+    {
+      "method": "IRepository<CatalogItem>.ListAsync(CatalogItemsSpecification)",
+      "db": {"table": "Catalog", "op": "select"},
+      "notes": "Fetches all CatalogItem rows for the basket's CatalogItemIds in a single batch query — used to snapshot Name and PictureUri into each OrderItem."
+    },
+    {
+      "method": "new CatalogItemOrdered(catalogItemId, catalogItem.Name, IUriComposer.ComposePicUri(catalogItem.PictureUri))",
+      "file": "src/ApplicationCore/Entities/OrderAggregate/CatalogItemOrdered.cs",
+      "notes": "Value object — snapshots catalog item name and absolute picture URI at order time. Guard.Against.OutOfRange(catalogItemId >= 1), Guard.Against.NullOrEmpty(productName), Guard.Against.NullOrEmpty(pictureUri)."
+    },
+    {
+      "method": "new Order(basket.BuyerId, shippingAddress, items)",
+      "file": "src/ApplicationCore/Entities/OrderAggregate/Order.cs",
+      "notes": "Order.OrderDate defaults to DateTimeOffset.Now. Guard.Against.NullOrEmpty(buyerId)."
+    },
+    {
+      "method": "IRepository<Order>.AddAsync(order)",
+      "db": [
+        {"table": "Orders", "op": "insert"},
+        {"table": "OrderItems", "op": "insert", "notes": "All OrderItem rows inserted as part of the Order aggregate via EF Core cascade."}
+      ]
+    }
+  ]
+}

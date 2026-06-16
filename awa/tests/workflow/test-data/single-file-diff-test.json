@@ -1,0 +1,211 @@
+{
+  "id": 12345,
+  "name": "Sample Object",
+  "active": true,
+  "tags": ["alpha", "beta", "release", "large", "test", "json", "object"],
+  "metadata": {
+    "created": "2024-06-01T12:34:56Z",
+    "updated": "2024-06-10T08:00:00Z",
+    "owner": {
+      "user_id": 789,
+      "username": "jdoe",
+      "roles": ["admin", "editor", "contributor", "viewer"]
+    },
+    "contributors": [
+      {"user_id": 790, "username": "asmith", "role": "editor"},
+      {"user_id": 791, "username": "bwayne", "role": "viewer"}
+    ],
+    "status": "verified",
+    "department": {
+      "name": "Engineering",
+      "location": "HQ",
+      "budget": 500000,
+      "projects": [
+        {"project_id": 101, "name": "Alpha", "active": true},
+        {"project_id": 102, "name": "Beta", "active": false}
+      ]
+    }
+  },
+  "settings": {
+    "theme": "dark",
+    "language": "en-US",
+    "notifications": {
+      "email": true,
+      "sms": false,
+      "push": {
+        "enabled": true,
+        "sound": "chime",
+        "priority": "high"
+      },
+      "reminders": {
+        "enabled": true,
+        "interval": "daily"
+      }
+    },
+    "privacy": {
+      "profile_visible": false,
+      "searchable": true,
+      "data_sharing": false
+    },
+    "access": {
+      "level": "full",
+      "expires": null
+    },
+    "features": {
+      "beta": true,
+      "experimental": false,
+      "modules": [
+        {"name": "analytics", "enabled": true},
+        {"name": "export", "enabled": false}
+      ]
+    }
+  },
+  "items": [
+    {
+      "item_id": 1,
+      "type": "document",
+      "attributes": {
+        "title": "Doc 1",
+        "pages": 10,
+        "authors": ["Alice", "Bob"],
+        "keywords": ["report", "2024", "confidential"],
+        "published": true,
+        "references": [
+          {"ref_id": "R1", "title": "Reference 1"},
+          {"ref_id": "R2", "title": "Reference 2"}
+        ]
+      }
+    },
+    {
+      "item_id": 2,
+      "type": "image",
+      "attributes": {
+        "resolution": "1920x1080",
+        "format": "png",
+        "tags": ["screenshot", "ui"],
+        "size_kb": 2048,
+        "metadata": {
+          "camera": "Canon EOS",
+          "date_taken": "2024-05-20"
+        }
+      }
+    },
+    {
+      "item_id": 3,
+      "type": "video",
+      "attributes": {
+        "duration": 360,
+        "format": "mp4",
+        "resolution": "1280x720",
+        "tags": ["demo", "presentation"],
+        "subtitles": [
+          {"lang": "en", "file": "sub_en.srt"},
+          {"lang": "es", "file": "sub_es.srt"}
+        ]
+      }
+    }
+  ],
+  "statistics": {
+    "views": 1024,
+    "likes": 256,
+    "shares": 32,
+    "downloads": 512,
+    "comments": 12,
+    "history": [
+      {"date": "2024-06-01", "event": "created", "user": "jdoe"},
+      {"date": "2024-06-05", "event": "updated", "user": "asmith"},
+      {"date": "2024-06-10", "event": "shared", "user": "bwayne"},
+      {"date": "2024-06-11", "event": "downloaded", "user": "jdoe"}
+    ],
+    "metrics": {
+      "engagement": 0.85,
+      "bounce_rate": 0.12,
+      "avg_time": 300
+    }
+  },
+  "permissions": {
+    "read": true,
+    "write": true,
+    "delete": false,
+    "share": true,
+    "roles": ["admin", "editor", "viewer"],
+    "restrictions": {
+      "ip_whitelist": ["192.168.1.1", "10.0.0.2"],
+      "country_blacklist": ["CN", "RU"]
+    }
+  },
+  "related": {
+    "parent_id": null,
+    "children": [23456, 34567],
+    "linked_items": [
+      {"item_id": 4, "type": "document"},
+      {"item_id": 5, "type": "image"}
+    ],
+    "external_links": [
+      {"url": "https://example.com", "description": "Example Site"},
+      {"url": "https://docs.example.com", "description": "Documentation"}
+    ]
+  },
+  "extra": {
+    "notes": "This is a large test JSON object with nested structures.",
+    "flags": ["test", "large", "nested"],
+    "version": 2,
+    "history": {
+      "created_by": "jdoe",
+      "created_at": "2024-06-01T12:34:56Z",
+      "modified_by": "asmith",
+      "modified_at": "2024-06-10T08:00:00Z"
+    }
+  },
+  "audit": {
+    "last_accessed": "2024-06-12T09:00:00Z",
+    "access_count": 42,
+    "logs": [
+      {"timestamp": "2024-06-12T09:00:00Z", "action": "view", "user": "jdoe"},
+      {"timestamp": "2024-06-12T09:05:00Z", "action": "edit", "user": "asmith"}
+    ]
+  },
+  "large_object": {
+    "simple_key": "simple_value",
+    "number_key": 987654321,
+    "boolean_key": false,
+    "array_key": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "nested_object": {
+      "level1": {
+        "level2": {
+          "level3": {
+            "value": "deep",
+            "list": [
+              {"id": 1, "data": "a"},
+              {"id": 2, "data": "b"},
+              {"id": 3, "data": "c"}
+            ]
+          },
+          "another_value": 42
+        },
+        "array": [
+          {"foo": "bar"},
+          {"baz": "qux"}
+        ]
+      },
+      "simple_array": ["x", "y", "z"]
+    },
+    "objects_array": [
+      {"name": "obj1", "val": 1},
+      {"name": "obj2", "val": 2},
+      {"name": "obj3", "val": 3}
+    ],
+    "deep_array": [
+      [1,2,3],
+      [4,5,6],
+      [7,8,9]
+    ],
+    "mixed": {
+      "str": "text",
+      "num": 123,
+      "bool": true,
+      "arr": [true, false, true],
+      "obj": {"a": 1, "b": 2}
+    }
+  }
+}

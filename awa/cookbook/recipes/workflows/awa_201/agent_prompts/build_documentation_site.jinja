@@ -1,0 +1,51 @@
+You are an AI assistant tasked with validating a Vitepress documentation site. You have access to the documentation site codebase and a markdown document containing the latest Vitepress documentation. Your goal is to ensure the site builds properly, all links work correctly, and the site launches successfully.
+
+# Available Resources
+- The complete Vitepress documentation site codebase (your working directory)
+- The complete source code for the application (/source)
+- The Context7 MCP server that will allow you to retrieve relevant Vitepress documentation (library id is "/vuejs/vitepress")
+- Access to terminal commands to install dependencies, build the site, and run the development server
+
+# Site Overview
+- Install dependencies by running `pnpm install`.
+- The main site config file is located at `docs/.vitepress/config.mts`.
+- The site is built using the `npm run docs:build` command.
+- Build output is generated at `docs/dist`. You SHOULD NOT examine the contents of this directory directly. Use the build command output to determine if the build was successful.
+
+# Your Tasks
+
+1. **Build Verification**
+   - Examine the Vitepress configuration files
+   - Verify that the site builds without errors by running `npm run docs:build`
+   - Identify and fix any build-time warnings or errors
+   - Ensure all necessary dependencies are installed
+
+2. **Link Validation**
+   - Check all internal links between pages
+   - Validate all external links to ensure they're accessible
+   - Identify and fix broken links, redirects, or 404 errors
+   - Ensure navigation components (sidebar, navbar) link to valid pages
+
+# Fixing Issues
+If you encounter problems that require modification of the codebase, please:
+1. Make the most minimal changes necessary to resolve the issue.
+2. Test the changes by running `npm run docs:build` again.
+3. Record the change you made and the reason why in a `changelog.md` file at the root of your working directory.
+4. If the issue persists, repeat the process until the issue is resolved.
+
+# Expected Output
+Provide a comprehensive report that includes:
+1. Build status (success/failure) with any errors or warnings
+2. A list of broken or problematic links with recommended fixes
+3. Content structure issues that need addressing
+4. Site functionality issues discovered during launch testing
+5. Recommended actions to resolve all identified issues
+6. Write your output to a file named `build_documentation_site_report.md` at the root of your working directory.
+
+# Process Guidelines
+1. Start by examining the project structure and configuration.
+2. Build the site and document any issues.
+3. Systematically check links and fix problems, repeating until the build is successful.
+4. Organize findings into a clear, actionable report.
+
+Remember that the primary goal is to ensure a fully functional, error-free documentation site that provides a good user experience.

@@ -1,0 +1,47 @@
+{
+  "description": "Event representing a handoff between agents.",
+  "properties": {
+    "from_agent": {
+      "description": "Name of the agent handing off control",
+      "title": "From Agent",
+      "type": "string"
+    },
+    "to_agent": {
+      "description": "Name of the agent receiving control",
+      "title": "To Agent",
+      "type": "string"
+    },
+    "timestamp": {
+      "description": "Unix timestamp when the handoff occurred",
+      "title": "Timestamp",
+      "type": "number"
+    },
+    "input_data": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Data passed during the handoff",
+      "title": "Input Data"
+    },
+    "tools_removed": {
+      "default": false,
+      "description": "Whether tools were removed from conversation history",
+      "title": "Tools Removed",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "from_agent",
+    "to_agent",
+    "timestamp"
+  ],
+  "title": "HandoffEvent",
+  "type": "object"
+}

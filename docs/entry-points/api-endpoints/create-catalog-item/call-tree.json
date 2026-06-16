@@ -1,0 +1,47 @@
+{
+  "entryPoint": {
+    "method": "Microsoft.eShopWeb.PublicApi.CatalogItemEndpoints.CreateCatalogItemEndpoint.HandleAsync",
+    "file": "src/PublicApi/CatalogItemEndpoints/CreateCatalogItemEndpoint.cs",
+    "line": 39,
+    "signature": "Task<IResult> HandleAsync(CreateCatalogItemRequest request, IRepository<CatalogItem> itemRepository)"
+  },
+  "calls": [
+    {
+      "method": "new CatalogItemNameSpecification(request.Name)",
+      "file": "src/ApplicationCore/Specifications/CatalogItemNameSpecification.cs",
+      "line": 8,
+      "notes": "WHERE Name = request.Name — case-sensitive exact match."
+    },
+    {
+      "method": "IRepository<CatalogItem>.CountAsync(catalogItemNameSpecification)",
+      "db": {"table": "CatalogItems", "op": "count"},
+      "notes": "If count > 0, throws DuplicateException — caught by ExceptionMiddleware → HTTP 409 Conflict. No insert occurs."
+    },
+    {
+      "method": "new CatalogItem(request.CatalogTypeId, request.CatalogBrandId, request.Description, request.Name, request.Price, request.PictureUri)",
+      "file": "src/ApplicationCore/Entities/CatalogItem.cs",
+      "line": 18,
+      "notes": "Entity constructor — sets all fields. PictureUri from the request is stored initially but immediately overwritten after insert."
+    },
+    {
+      "method": "IRepository<CatalogItem>.AddAsync(newItem)",
+      "db": {"table": "CatalogItems", "op": "insert"},
+      "notes": "Inserts the new row; returned newItem has Id populated by EF Core."
+    },
+    {
+      "method": "CatalogItem.UpdatePictureUri(\"eCatalog-item-default.png\")",
+      "file": "src/ApplicationCore/Entities/CatalogItem.cs",
+      "line": 56,
+      "notes": "Only called when newItem.Id != 0 (i.e., always after a successful insert). Sets PictureUri to 'images\\\\products\\\\eCatalog-item-default.png?{ticks}'. Image upload is disabled per security advisory."
+    },
+    {
+      "method": "IRepository<CatalogItem>.UpdateAsync(newItem)",
+      "db": {"table": "CatalogItems", "op": "update"},
+      "notes": "Persists the overwritten PictureUri. Only called when newItem.Id != 0."
+    },
+    {
+      "method": "IUriComposer.ComposePicUri(newItem.PictureUri)",
+      "notes": "Leaf — rewrites the stored PictureUri to an absolute URL for the response DTO."
+    }
+  ]
+}

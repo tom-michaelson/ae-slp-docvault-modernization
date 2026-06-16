@@ -1,0 +1,89 @@
+This file defines a Basic Mapping Support (BMS) macro for a CICS application, specifically for an account list screen. Let's break down its key components:
+
+Header:
+
+Contains copyright and license information for the CardDemo application.
+
+Main Screen Definition (COACC00):
+
+Uses DFHMSD macro to set global attributes for the screen.
+
+Specifies LANG=COBOL, indicating it's designed to work with a COBOL program.
+
+Sets MODE=INOUT for both input and output operations.
+
+Includes CTRL=(ALARM,FREEKB) for keyboard control and alarm capabilities.
+
+Screen Layout (COACC0A):
+
+Defined using DFHMDI macro.
+
+Sets the screen size to 24 lines by 80 columns.
+
+Header Fields:
+
+Transaction name (TRNNAME) at (1,7)
+
+Date (CURDATE) at (1,71)
+
+Program name (PGMNAME) at (2,7)
+
+Time (CURTIME) at (2,71)
+
+Two title fields (TITLE01 and TITLE02) at (1,21) and (2,21)
+
+Main Content:
+
+"List Accounts" title at (4,30)
+
+Page number display (PAGENUM) at (4,71)
+
+Search field for Account ID (ACTIDIN) at (6,21)
+
+Column headers for the account list:
+
+"Sel" (Selection) at (8,2)
+
+"Account ID" at (8,8)
+
+"Name" at (8,27)
+
+"Address" at (8,48)
+
+Field Attributes:
+
+Uses various colors (BLUE, YELLOW, TURQUOISE, GREEN, NEUTRAL)
+
+Search input field (ACTIDIN) is set as unprotected (UNPROT) and highlighted with underline
+
+Most other fields are protected (ASKIP) for display only
+
+Additional Elements:
+
+Underline characters to separate the column headers from the data rows
+
+This BMS macro defines a screen for listing and searching accounts. Here's how it would typically be used:
+
+The screen displays header information and the "List Accounts" title.
+
+Users can enter an Account ID in the search field to filter the list.
+
+The main part of the screen is set up to display a list of accounts with columns for selection, account ID, name, and address.
+
+The page number at the top right suggests that the list can span multiple pages.
+
+The associated COBOL program would:
+
+Handle user input for the account ID search
+
+Populate the account list based on the search criteria or display all accounts if no search is performed
+
+Manage pagination if the list spans multiple pages
+
+Process any selections made by the user (though the selection mechanism is not explicitly defined in this macro)
+
+Handle navigation to other screens or functions based on user actions
+
+This screen serves as a key part of the account management functionality in the CardDemo application. It allows users to view and potentially interact with a list of accounts, providing important information for customer service, account maintenance, or other administrative purposes.
+
+The layout is designed for clarity, with distinct columns and color-coding to help users quickly understand and navigate the account data. The search functionality adds a useful feature for finding specific accounts in what could be a large dataset.

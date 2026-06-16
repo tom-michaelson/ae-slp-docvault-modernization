@@ -1,0 +1,47 @@
+{
+  "name": "agentic-workflow-accelerator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs": "pnpm run docs:dev",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "docs:prod": "pnpm run docs:build && pnpm run docs:preview",
+    "ui:dev": "copyfiles .env ui && cd ui && pnpm install && pnpm run dev",
+    "ui:build": "copyfiles .env ui && cd ui && pnpm install && pnpm run build",
+    "ui:preview": "copyfiles .env ui && cd ui && pnpm install && pnpm run preview",
+    "ui:astro": "copyfiles .env ui && cd ui && pnpm install && pnpm run astro",
+    "ui": "pnpm run ui:dev"
+  },
+  "keywords": [],
+  "author": "Slalom, Inc.",
+  "packageManager": "pnpm@10.6.2",
+  "devDependencies": {
+    "@braintree/sanitize-url": "^7.1.1",
+    "@playwright/test": "^1.53.1",
+    "@types/node": "^24.0.3",
+    "copyfiles": "^2.4.1",
+    "cytoscape": "^3.32.0",
+    "cytoscape-cose-bilkent": "^4.1.0",
+    "dayjs": "^1.11.13",
+    "debug": "^4.4.1",
+    "mermaid": "^11.6.0",
+    "quicktype": "^23.2.6",
+    "vitepress": "^1.6.3",
+    "vitepress-plugin-lightbox": "^1.0.2",
+    "vitepress-plugin-llms": "^1.5.0",
+    "vitepress-plugin-mermaid": "^2.0.17"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@rollup/rollup-linux-arm64-gnu": "^4.44.2",
+    "ignore": "^7.0.5",
+    "medium-zoom": "^1.1.0",
+    "mime": "^4.0.7",
+    "react-markdown": "^10.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}

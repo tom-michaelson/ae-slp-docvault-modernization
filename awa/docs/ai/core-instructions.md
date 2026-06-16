@@ -1,0 +1,275 @@
+# Core Instruction
+
+## Configuration
+
+::: warning Base Rule Configuration
+**IMPORTANT**: Only ONE rule file should have `base_rule: true` in its configuration. Base rules generate core outputs like `CLAUDE.md` and `copilot-instructions.md`. Having multiple base rules will cause conflicts and overwrites. The current base rule is **Core Instructions**.
+:::
+
+```yaml
+cursor:
+  description: "Core AWA project patterns and development commands"
+  globs: "**/*"
+  alwaysApply: true
+
+copilot:
+  base_rule: true # This generates the global copilot-instructions.md file
+  title: "Core AWA Development Instructions"
+
+claude:
+  base_rule: true # This generates the global CLAUDE.md file
+  command_name: "core-instructions"
+  description: "Core AWA development guide for Claude"
+
+opencode:
+  base_rule: true # Generates AGENTS.md for OpenCode
+  description: "Core AWA development guide for OpenCode"
+```
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## What is AWA?
+
+AWA is an accelerator for building agentic workflows. The goal is to provide a toolbox Slalom teams can use to ramp up and deliver value quickly.
+
+It's meant to use either as the foundation of a client deliverable (building an agentic workflow _for_ a client project) or as a starting point for building agentic workflows to assist with a client project (building an agentic workflow to _accelerate_ a client project).
+
+## Critical Context (Read First)
+
+- **Tech Stack**: Python 3.12+, Temporal (orchestration), BAML (LLM interactions), FastAPI (API), Typer (CLI)
+- **Main File**: `awa/main.py:27` - CLI entry point
+- **Core Mechanic**: Durable agentic workflows using Temporal for orchestration
+- **Key Integration**: Multi-agent environments (Claude, Goose, Codex, OpenCode) in containerized isolation
+- **Platform Support**: Cross-platform (Windows, Linux, macOS) with Docker deployment
+- **DO NOT**: Directly invoke tools like `python`, `pip`, `pytest` - use `uv run`, `make`, or `pnpm run` commands
+
+## Essential Development Commands
+
+For comprehensive development workflow and commands, see the [Developer Workflow Guide](../contributing/developer-workflow.md).
+
+For complete command reference, run `make help` or see the Makefile help target.
+
+## Architecture Overview
+
+AWA is built around **durable agentic workflows** using Temporal for orchestration:
+
+### Key Components
+
+- **Workflows** (`awa/core/workflows/`): Define business logic with durable execution
+- **Activities** (`awa/core/activities/`): Perform external operations (file I/O, LLM calls, agent execution)
+- **BAML Functions** (`awa/core/baml_src/`): Structured LLM interactions with type safety
+- **Agent Modes** (`awa/core/activities/agent_modes/`): Containerized AI agents (Claude, Goose, Codex, OpenCode)
+- **API Routes** (`awa/core/api/routes/`): FastAPI endpoints with versioning
+- **CLI Commands** (`awa/core/cli/commands/`): Typer-based command interface
+
+### Core Architecture Pattern
+
+1. **CLI/API** receives requests
+2. **Temporal Workflows** orchestrate execution
+3. **Activities** perform atomic operations
+4. **BAML** handles LLM interactions
+5. **Agents** run in isolated environments
+
+### File Structure Rules
+
+- Workflows use `*_workflow.py` naming
+- Activities use `*_activity.py` or live in `activities/` directories
+- BAML files use `.baml` extension in `baml_src/` directories
+- Configuration files follow `config.*.yaml` pattern
+
+## Configuration & Environment
+
+**Main Config:** `config.yaml` (copy from `config.example.yaml`)
+**Key Environment Variables:**
+
+- LLM provider configurations (Azure OpenAI, Google Vertex, etc.)
+- Temporal connection settings
+- Jira integration settings (optional)
+
+**Development Setup Files:**
+
+- `pyproject.toml` - Python dependencies and tool configurations
+- `package.json` - Node.js dependencies for docs and UI
+- `ruff.toml` - Linting and formatting rules
+- `pytest.ini` - Test configuration
+- `Makefile` - Cross-platform development commands
+
+## BAML Integration Patterns
+
+**Always:**
+
+- Use `{{ ctx.output_format }}` in prompts for type safety
+- Generate client after BAML changes: `make baml`
+- Structure prompts with `{{ _.role("system") }}` and `{{ _.role("user") }}`
+- Use descriptive enums instead of numeric confidence scores
+
+**Never:**
+
+- Make arrays optional in BAML (use empty arrays)
+- Hardcode JSON schema in prompts
+- Use recursive types
+
+## Temporal Development Patterns
+
+**Workflow Naming:** `*Workflow` classes in `*_workflow.py` files
+**Activity Naming:** `*Activity` classes in `*_activity.py` files
+
+**Key Practices:**
+
+- Activities should be idempotent and handle failures gracefully
+- Use child workflows for complex orchestration
+- Leverage Temporal's durable execution for long-running processes
+- Activities perform external calls (APIs, file I/O, agent execution)
+
+## Workflow Exposure Patterns
+
+AWA workflows can be either **exposed** (public) or **internal** (private). This distinction controls where workflows appear and how they can be invoked.
+
+### When to Use `@exposed` Decorator
+
+Use the `@exposed` decorator when a workflow should be:
+
+- Available through the REST API (`/v1/workflows/list`)
+- Accessible via MCP server for AI assistants
+- Visible in the Web UI workflow dropdown
+- Invocable by external systems or users
+
+**Do NOT use `@exposed` for:**
+
+- Child workflows (called by other workflows)
+- Utility workflows (internal orchestration)
+- Test workflows (development/testing only)
+- SDK helper workflows (internal framework code)
+
+### Exposed Workflow Example
+
+```python
+from temporalio import workflow
+from awa.core.decorators.exposed import exposed
+
+@exposed("Generate a personalized poem based on user preferences")
+@workflow.defn
+class HelloPoemWorkflow:
+    """Creates poems using AI."""
+
+    @workflow.run
+    async def run(self, name: str, topic: str) -> str:
+        # Workflow implementation
+        ...
+```
+
+### Internal Workflow Example
+
+```python
+from temporalio import workflow
+
+@workflow.defn
+class ProcessDataChunkWorkflow:
+    """Internal child workflow for processing data chunks."""
+
+    @workflow.run
+    async def run(self, chunk_id: str) -> dict:
+        # Child workflow implementation - not exposed
+        ...
+```
+
+### Exposure Behavior
+
+**With `@exposed(description)`:**
+
+- Workflow appears in API `/v1/workflows/list` endpoint
+- Shows up in MCP server tool list
+- Visible in Web UI dropdown with description
+- Can be started via API, MCP, or UI
+
+**Without `@exposed` (internal-only):**
+
+- Workflow is registered with Temporal
+- Can be called by other workflows (child workflow pattern)
+- Hidden from API, MCP, and UI
+- Only accessible programmatically
+
+### Best Practices
+
+1. **User-facing workflows**: Always use `@exposed` with descriptive text
+2. **Child workflows**: Never use `@exposed` - keep internal
+3. **Utility workflows**: Keep internal unless they provide standalone value
+4. **Description quality**: Write clear, actionable descriptions for exposed workflows
+5. **Avoid over-exposure**: Only expose workflows that external users should invoke
+
+## Agent Integration
+
+AWA supports multiple AI agents running in isolated environments:
+
+- **Claude Agent**: Via Claude API
+- **Goose Agent**: Containerized Goose execution
+- **Codex Agent**: GitHub Codex integration
+- **OpenCode Agent**: OpenCode environment
+
+Agent execution flows through `awa/core/activities/agent_modes/` with proper isolation and error handling.
+
+## Testing Strategy
+
+**Unit Tests:** `tests/unit/` - Fast, isolated tests
+**Workflow Tests:** `tests/workflow/tests/` - Integration tests requiring Temporal
+**UI Tests:** `tests/ui/` - Playwright-based browser tests
+
+**Important:** Workflow tests require Temporal services running (`make start`)
+
+## Common Development Patterns
+
+**Adding a New Workflow:**
+
+1. Create `*_workflow.py` file in appropriate directory
+2. Define workflow class with `@workflow.defn` decorator
+3. Add corresponding activities as needed
+4. Register in workflow registry
+5. Add tests in `tests/workflow/tests/`
+
+**Adding a BAML Function:**
+
+1. Define schema classes and function in `.baml` file
+2. Run `make baml` to generate client
+3. Integrate in activities that need LLM calls
+4. Add tests with expected inputs/outputs
+
+**Configuration Changes:**
+
+- Update `config.example.yaml` with new settings
+- Add corresponding Pydantic models in `awa/core/models/config/`
+- Update documentation if user-facing
+
+## Error Handling & Observability
+
+- Temporal provides built-in retry and error handling
+- Langfuse integration for LLM call monitoring
+- Structured logging with Loguru
+- Health checks via API endpoints
+
+## Docker & Deployment
+
+AWA supports full Docker deployment with:
+
+- Multi-service orchestration via docker-compose
+- Separate containers for API, Worker, UI
+- Supporting services (PostgreSQL, Temporal, Langfuse, LiteLLM)
+- Cross-platform compatibility
+
+Use `make start-docker` for full Docker-based development environment.
+
+## Anti-Patterns to Avoid
+
+- **Don't** call Python tools directly - use `uv run` or make commands
+- **Don't** bypass Temporal's orchestration for durable operations
+- **Don't** hardcode configuration - use config.yaml and environment variables
+- **Don't** write activities that aren't idempotent
+- **Don't** skip BAML client generation after schema changes
+- **Don't** commit sensitive configuration (API keys, tokens)
+
+## AI Rules Self-Improvement
+
+When you identify patterns that should be standardized in AWA development:
+
+1. **Update Source Files**: Edit files in `docs/ai/` directory (never edit generated `.cursor/`, `.github/`, or `.claude/` files directly)
+2. **Regenerate**: Run `make ai-rules-generate` or `pnpm run ai-rules:generate` to update all AI tools
+3. **Common Triggers**: New code patterns used in 3+ files, repeated code review feedback, emerging best practices

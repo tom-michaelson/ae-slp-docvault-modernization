@@ -1,0 +1,23 @@
+{
+  "key": "add-item-to-basket",
+  "name": "Add item to basket",
+  "type": "api-endpoint",
+  "domain": "basket",
+  "legacyEntryPoint": "Microsoft.eShopWeb.ApplicationCore.Services.BasketService.AddItemToBasket",
+  "legacyLocation": "src/ApplicationCore/Services/BasketService.cs:23",
+  "legacyWebHandler": "Microsoft.eShopWeb.Web.Pages.Basket.IndexModel.OnPost",
+  "targetRestContract": {
+    "method": "POST",
+    "path": "/api/baskets/for-user/{buyerId}/items",
+    "requestModel": {
+      "catalogItemId": "int",
+      "quantity": "int (default 1)"
+    },
+    "responseModel": "BasketResponse"
+  },
+  "usedByUiFeatures": ["basket-view-page", "homepage-catalog-list"],
+  "notes": [
+    "The Web page looks up the current CatalogItem.Price before calling the service — the REST equivalent should do the price lookup server-side as well, never trust a client-supplied price.",
+    "Creates a basket lazily if one doesn't exist for the buyer."
+  ]
+}

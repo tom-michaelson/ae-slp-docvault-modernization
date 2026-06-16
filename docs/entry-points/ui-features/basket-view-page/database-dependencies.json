@@ -1,0 +1,45 @@
+[
+  {
+    "type": "table",
+    "name": "Baskets",
+    "key": "baskets",
+    "operations": ["select", "insert"],
+    "columns": ["Id", "BuyerId"],
+    "locations": [
+      "src/Infrastructure/Data/Migrations/20201202111507_InitialModel.cs",
+      "src/ApplicationCore/Specifications/BasketWithItemsSpecification.cs"
+    ],
+    "notes": [
+      "Looked up by BuyerId (username or anon GUID) via BasketWithItemsSpecification.",
+      "Row inserted lazily when a user without an existing basket visits /Basket or adds an item."
+    ]
+  },
+  {
+    "type": "table",
+    "name": "BasketItems",
+    "key": "basket-items",
+    "operations": ["select", "insert", "update", "delete"],
+    "columns": ["Id", "UnitPrice", "Quantity", "CatalogItemId", "BasketId"],
+    "locations": [
+      "src/Infrastructure/Data/Migrations/20201202111507_InitialModel.cs",
+      "src/Infrastructure/Data/Config/BasketItemConfiguration.cs",
+      "src/ApplicationCore/Entities/BasketAggregate/Basket.cs",
+      "src/ApplicationCore/Entities/BasketAggregate/BasketItem.cs"
+    ],
+    "notes": [
+      "Hydrated via BasketWithItemsSpecification when rendering.",
+      "Quantities updated in-place by SetQuantities; zeros deleted via Basket.RemoveEmptyItems()."
+    ]
+  },
+  {
+    "type": "table",
+    "name": "Catalog",
+    "key": "catalog",
+    "operations": ["select"],
+    "columns": ["Id", "Name", "Price", "PictureUri"],
+    "locations": ["src/ApplicationCore/Specifications/CatalogItemsSpecification.cs"],
+    "notes": [
+      "Used twice: (1) OnPost reads the current price when adding an item; (2) BasketViewModelService.GetBasketItems joins CatalogItems to expose name and picture URL."
+    ]
+  }
+]

@@ -1,0 +1,65 @@
+{
+  "entryPoint": {
+    "method": "Microsoft.eShopWeb.Web.Services.BasketViewModelService.GetOrCreateBasketForUser",
+    "file": "src/Web/Services/BasketViewModelService.cs",
+    "line": 28,
+    "signature": "Task<BasketViewModel> GetOrCreateBasketForUser(string userName)"
+  },
+  "calls": [
+    {
+      "method": "new BasketWithItemsSpecification(userName)",
+      "file": "src/ApplicationCore/Specifications/BasketWithItemsSpecification.cs"
+    },
+    {
+      "method": "IRepository<Basket>.FirstOrDefaultAsync",
+      "db": {"table": "Baskets", "op": "select", "notes": "eager-loads Items"}
+    },
+    {
+      "branch": "basket == null",
+      "calls": [
+        {
+          "method": "BasketViewModelService.CreateBasketForUser",
+          "file": "src/Web/Services/BasketViewModelService.cs",
+          "line": 41,
+          "calls": [
+            {
+              "method": "new Basket(userId)",
+              "file": "src/ApplicationCore/Entities/BasketAggregate/Basket.cs",
+              "line": 17
+            },
+            {
+              "method": "IRepository<Basket>.AddAsync",
+              "db": {"table": "Baskets", "op": "insert"}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "branch": "basket != null",
+      "calls": [
+        {
+          "method": "BasketViewModelService.Map",
+          "file": "src/Web/Services/BasketViewModelService.cs",
+          "line": 77,
+          "calls": [
+            {
+              "method": "BasketViewModelService.GetBasketItems",
+              "file": "src/Web/Services/BasketViewModelService.cs",
+              "line": 53,
+              "calls": [
+                {
+                  "method": "IRepository<CatalogItem>.ListAsync(CatalogItemsSpecification)",
+                  "db": {"table": "Catalog", "op": "select"}
+                },
+                {
+                  "method": "IUriComposer.ComposePicUri"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+This file defines a Basic Mapping Support (BMS) macro for a CICS application, specifically for a user deletion screen. Let's break down its key components:
+
+Header:
+
+Contains copyright and license information for the CardDemo application.
+
+Main Screen Definition (COUSR03):
+
+Uses DFHMSD macro to set global attributes for the screen.
+
+Specifies LANG=COBOL, indicating it's designed to work with a COBOL program.
+
+Sets MODE=INOUT for both input and output operations.
+
+Includes CTRL=(ALARM,FREEKB) for keyboard control and alarm capabilities.
+
+Screen Layout (COUSR3A):
+
+Defined using DFHMDI macro.
+
+Sets the screen size to 24 lines by 80 columns.
+
+Header Fields:
+
+Transaction name (TRNNAME) at (1,7)
+
+Date (CURDATE) at (1,71)
+
+Program name (PGMNAME) at (2,7)
+
+Time (CURTIME) at (2,71)
+
+Two title fields (TITLE01 and TITLE02) at (1,21) and (2,21)
+
+Main Content:
+
+"Delete User" title at (4,35)
+
+Input field for User ID (USRIDIN) at (6,21)
+
+Display fields for user details:
+
+First Name (FNAME) at (11,18)
+
+Last Name (LNAME) at (13,18)
+
+User Type (USRTYPE) at (15,17)
+
+Field Attributes:
+
+Uses various colors (BLUE, YELLOW, TURQUOISE, GREEN, NEUTRAL)
+
+Input field (USRIDIN) is set as unprotected (UNPROT) and highlighted with underline
+
+Display fields are protected (ASKIP) for display only
+
+User Type field has additional information "(A=Admin, U=User)" next to it
+
+Additional Elements:
+
+Separating lines using asterisks to structure the information visually
+
+Error message field (ERRMSG) at the bottom of the screen
+
+This BMS macro defines a screen for deleting a user from the system. Here's how it would typically be used:
+
+The screen displays header information and the "Delete User" title.
+
+Users can enter a User ID in the input field at the top of the screen.
+
+Once a valid User ID is entered, the screen would display information about that user, including:
+
+First Name
+
+Last Name
+
+User Type (Admin or User)
+
+The associated COBOL program would:
+
+Handle user input for the User ID
+
+Retrieve the corresponding user details from the database
+
+Populate the display fields with the retrieved information
+
+Process the user deletion if confirmed
+
+Handle any error conditions (e.g., invalid User ID, insufficient permissions)
+
+Display error messages in the ERRMSG field if needed
+
+This screen serves as an interface for removing users from the CardDemo application. It's likely used by system administrators or user management personnel. The design allows for a two-step deletion process:
+
+Enter the User ID to view the user's details
+
+Confirm the deletion (though the confirmation mechanism is not explicitly defined in this macro)
+
+The layout is designed for clarity, with labeled fields and visual separation of different information sections. The use of color coding (BLUE for labels, TURQUOISE for some data fields) helps to distinguish between different types of information on the screen.
+
+The presence of an error message field at the bottom suggests that the system provides feedback for various scenarios, such as unsuccessful deletion attempts or confirmation messages.

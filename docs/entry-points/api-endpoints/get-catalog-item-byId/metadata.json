@@ -1,0 +1,23 @@
+{
+  "key": "get-catalog-item-byId",
+  "name": "Get catalog item by ID",
+  "type": "api-endpoint",
+  "domain": "catalog",
+  "legacyEntryPoint": "Microsoft.eShopWeb.PublicApi.CatalogItemEndpoints.CatalogItemGetByIdEndpoint.HandleAsync",
+  "legacyLocation": "src/PublicApi/CatalogItemEndpoints/CatalogItemGetByIdEndpoint.cs:34",
+  "targetRestContract": {
+    "method": "GET",
+    "path": "/api/catalog-items/{catalogItemId}",
+    "queryParams": [
+      {"name": "catalogItemId", "type": "int", "optional": false, "notes": "path parameter"}
+    ],
+    "responseModel": "GetByIdCatalogItemResponse",
+    "auth": "none",
+    "notes": "MinimalApi endpoint already HTTP-exposed. Returns 404 Not Found when no CatalogItems row exists for the given ID. PictureUri is rewritten to an absolute URL before returning."
+  },
+  "usedByUiFeatures": [],
+  "notes": [
+    "No AutoMapper — the CatalogItemDto is manually constructed field-by-field inside HandleAsync (unlike CatalogItemListPagedEndpoint which uses IMapper).",
+    "BlazorAdmin CatalogItemService calls GET catalog-items/{id} when loading an item for edit or detail view — no web-side Razor Page calls this endpoint."
+  ]
+}

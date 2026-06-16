@@ -1,0 +1,94 @@
+{
+  "$defs": {
+    "AgentToolConfig": {
+      "description": "Configuration for using an agent as a tool.",
+      "properties": {
+        "target_agent": {
+          "$ref": "./OpenAIAgentConfig.json",
+          "description": "The agent to expose as a tool. Must be an OpenAIAgentConfig instance."
+        },
+        "tool_name_override": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override the tool name. If not provided, uses the agent's name.",
+          "title": "Tool Name Override"
+        },
+        "tool_description_override": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override the tool description. If not provided, uses the agent's description.",
+          "title": "Tool Description Override"
+        },
+        "is_enabled": {
+          "default": true,
+          "description": "Whether this agent tool is enabled.",
+          "title": "Is Enabled",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "target_agent"
+      ],
+      "title": "AgentToolConfig",
+      "type": "object"
+    }
+  },
+  "description": "Configuration for using an agent as a tool.",
+  "properties": {
+    "target_agent": {
+      "$ref": "./OpenAIAgentConfig.json",
+      "description": "The agent to expose as a tool. Must be an OpenAIAgentConfig instance."
+    },
+    "tool_name_override": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Override the tool name. If not provided, uses the agent's name.",
+      "title": "Tool Name Override"
+    },
+    "tool_description_override": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Override the tool description. If not provided, uses the agent's description.",
+      "title": "Tool Description Override"
+    },
+    "is_enabled": {
+      "default": true,
+      "description": "Whether this agent tool is enabled.",
+      "title": "Is Enabled",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "target_agent"
+  ],
+  "title": "AgentToolConfig",
+  "type": "object"
+}

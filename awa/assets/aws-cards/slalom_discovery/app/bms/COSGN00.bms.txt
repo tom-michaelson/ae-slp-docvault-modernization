@@ -1,0 +1,91 @@
+This file defines a Basic Mapping Support (BMS) macro for a CICS application, specifically for a login screen. Let's break down its key components:
+
+Header:
+
+Contains copyright and license information for the CardDemo application.
+
+Main Screen Definition (COSGN00):
+
+Uses DFHMSD macro to set global attributes for the screen.
+
+Specifies LANG=COBOL, indicating it's designed to work with a COBOL program.
+
+Sets MODE=INOUT for both input and output operations.
+
+Includes CTRL=(ALARM,FREEKB) for keyboard control and alarm capabilities.
+
+Screen Layout (COSGN0A):
+
+Defined using DFHMDI macro.
+
+Sets the screen size to 24 lines by 80 columns.
+
+Header Fields:
+
+Transaction name (TRNNAME) at (1,8)
+
+Date (CURDATE) at (1,71)
+
+Program name (PGMNAME) at (2,8)
+
+Time (CURTIME) at (2,71)
+
+Two title fields (TITLE01 and TITLE02) at (1,21) and (2,21)
+
+Application ID (APPLID) at (3,8)
+
+System ID (SYSID) at (3,71)
+
+Main Content:
+
+Informational message about the Credit Card Demo Application at (5,6)
+
+ASCII art representation of a banknote from lines 7 to 13
+
+Login prompt "Enter User ID :" at (15,21)
+
+User ID input field (USERID) at (15,37)
+
+Password prompt "Password :" at (17,21)
+
+Password input field (PSWD) at (17,37)
+
+Field Attributes:
+
+Uses various colors (BLUE, YELLOW, NEUTRAL)
+
+Input fields (USERID, PSWD) are set as unprotected (UNPROT) and highlighted with underline
+
+Password field (PSWD) is set to non-display (DRK) for security
+
+Most other fields are protected (ASKIP) for display only
+
+Additional Elements:
+
+Error message field (ERRMSG) at (22,1) for displaying login errors
+
+Function key information at the bottom of the screen (ENTER to process, F3 to exit)
+
+This BMS macro defines a login screen for the CardDemo application. Here's how it would typically be used:
+
+The screen displays header information and a decorative ASCII art representation of a banknote.
+
+Users are prompted to enter their User ID and Password.
+
+The password field is set to non-display for security (characters typed will not be visible).
+
+Users can submit their credentials using the ENTER key or exit using F3.
+
+Any error messages (e.g., invalid credentials) would be displayed in the ERRMSG field.
+
+The associated COBOL program would:
+
+Handle user input for User ID and Password
+
+Validate the credentials
+
+Process successful logins by navigating to the main application screen
+
+Display appropriate error messages for failed login attempts
+
+This login screen serves as the entry point to the CardDemo application, providing basic authentication functionality. The design includes both functional elements (login fields) and decorative elements (ASCII art) to create an engaging user interface typical of mainframe applications.

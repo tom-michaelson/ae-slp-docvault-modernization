@@ -1,0 +1,75 @@
+{
+  "properties": {
+    "mode": {
+      "$ref": "./AgentModeEnum.json",
+      "default": "unknown"
+    },
+    "provider": {
+      "$ref": "./AgentProviderEnum.json",
+      "default": "unknown",
+      "title": "Provider"
+    },
+    "prompt": {
+      "default": "",
+      "title": "Prompt",
+      "type": "string"
+    },
+    "build_prompt_params": {
+      "$ref": "./BuildPromptParams.json",
+      "default": null,
+      "title": "Build Prompt Params"
+    },
+    "command_file_path": {
+      "default": null,
+      "title": "Command File Path",
+      "type": "string"
+    },
+    "working_directory": {
+      "default": null,
+      "title": "Working Directory",
+      "type": "string"
+    },
+    "mcp": {
+      "$ref": "./McpServer.json",
+      "default": null,
+      "title": "Mcp"
+    },
+    "initialize": {
+      "default": true,
+      "title": "Initialize",
+      "type": "boolean"
+    },
+    "timeout_seconds": {
+      "default": null,
+      "title": "Timeout Seconds",
+      "type": "integer"
+    },
+    "output_schema": {
+      "default": null,
+      "title": "Output Schema",
+      "type": "string"
+    },
+    "session_id": {
+      "default": null,
+      "title": "Session Id",
+      "type": "string"
+    },
+    "stream_enabled": {
+      "default": false,
+      "title": "Stream Enabled",
+      "type": "boolean"
+    },
+    "stream_session_id": {
+      "default": null,
+      "title": "Stream Session Id",
+      "type": "string"
+    },
+    "parent_session_id": {
+      "default": null,
+      "title": "Parent Session Id",
+      "type": "string"
+    }
+  },
+  "title": "AgentConfiguration",
+  "type": "object"
+}

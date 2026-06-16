@@ -1,0 +1,42 @@
+{
+  "worker_name": "test-worker",
+  "worker_version": "1.0.0",
+  "task_queue": "default-task-queue",
+  "generated_at": "2025-08-08T17:36:19.254780+00:00",
+  "workflows": [
+    {
+      "name": "awa-hello-world",
+      "task_queue": "awa_default",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "HelloWorldInput"
+      }
+    },
+    {
+      "name": "awa-hello-world",
+      "task_queue": "awa_default",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "HelloWorldInput"
+      }
+    }
+  ]
+}

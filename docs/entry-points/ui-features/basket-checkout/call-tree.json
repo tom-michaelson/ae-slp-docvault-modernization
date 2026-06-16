@@ -1,0 +1,225 @@
+{
+  "handlers": [
+    {
+      "entryPoint": {
+        "method": "Microsoft.eShopWeb.Web.Pages.Basket.CheckoutModel.OnGet",
+        "file": "src/Web/Pages/Basket/Checkout.cshtml.cs",
+        "line": 39
+      },
+      "calls": [
+        {
+          "method": "CheckoutModel.SetBasketModelAsync",
+          "file": "src/Web/Pages/Basket/Checkout.cshtml.cs",
+          "line": 70,
+          "calls": [
+            {
+              "method": "SignInManager<ApplicationUser>.IsSignedIn",
+              "notes": "Leaf — determines which identity path to use. Always true in practice because [Authorize] enforces authentication before OnGet runs."
+            },
+            {
+              "method": "CheckoutModel.GetOrSetBasketCookieAndUserName",
+              "file": "src/Web/Pages/Basket/Checkout.cshtml.cs",
+              "line": 84,
+              "reads": ["Request.Cookies[Constants.BASKET_COOKIENAME]"],
+              "writes": ["Response.Cookies[Constants.BASKET_COOKIENAME]"],
+              "notes": "Only reached when IsSignedIn returns false (should not occur under [Authorize]). Reads or creates GUID cookie."
+            },
+            {
+              "method": "IBasketViewModelService.GetOrCreateBasketForUser",
+              "file": "src/Web/Services/BasketViewModelService.cs",
+              "line": 28,
+              "calls": [
+                {
+                  "method": "IRepository<Basket>.FirstOrDefaultAsync(BasketWithItemsSpecification(buyerId))",
+                  "file": "src/ApplicationCore/Specifications/BasketWithItemsSpecification.cs",
+                  "line": 15,
+                  "db": { "table": "Baskets", "op": "select" },
+                  "notes": "WHERE BuyerId = username; .Include(b => b.Items) eagerly loads BasketItems."
+                },
+                {
+                  "method": "BasketViewModelService.CreateBasketForUser",
+                  "file": "src/Web/Services/BasketViewModelService.cs",
+                  "line": 41,
+                  "notes": "Only when no basket row exists for this buyer.",
+                  "calls": [
+                    {
+                      "method": "IRepository<Basket>.AddAsync(basket)",
+                      "file": "src/Web/Services/BasketViewModelService.cs",
+                      "line": 44,
+                      "db": { "table": "Baskets", "op": "insert" }
+                    }
+                  ]
+                },
+                {
+                  "method": "BasketViewModelService.Map(basket)",
+                  "file": "src/Web/Services/BasketViewModelService.cs",
+                  "line": 77,
+                  "notes": "Only when basket already exists.",
+                  "calls": [
+                    {
+                      "method": "BasketViewModelService.GetBasketItems(basket.Items)",
+                      "file": "src/Web/Services/BasketViewModelService.cs",
+                      "line": 53,
+                      "calls": [
+                        {
+                          "method": "IRepository<CatalogItem>.ListAsync(CatalogItemsSpecification(ids))",
+                          "file": "src/ApplicationCore/Specifications/CatalogItemsSpecification.cs",
+                          "line": 10,
+                          "db": { "table": "CatalogItems", "op": "select" },
+                          "notes": "WHERE Id IN (basket item CatalogItemIds); fetches Name and PictureUri for display."
+                        },
+                        {
+                          "method": "IUriComposer.ComposePicUri",
+                          "notes": "Leaf — converts relative PictureUri path to absolute URL."
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "Microsoft.eShopWeb.Web.Pages.Basket.CheckoutModel.OnPost",
+        "file": "src/Web/Pages/Basket/Checkout.cshtml.cs",
+        "line": 44
+      },
+      "calls": [
+        {
+          "method": "CheckoutModel.SetBasketModelAsync",
+          "file": "src/Web/Pages/Basket/Checkout.cshtml.cs",
+          "line": 70,
+          "notes": "Same basket load as OnGet — re-fetches BasketModel to get the current server-side basket ID.",
+          "calls": [
+            {
+              "method": "IBasketViewModelService.GetOrCreateBasketForUser",
+              "file": "src/Web/Services/BasketViewModelService.cs",
+              "line": 28,
+              "calls": [
+                {
+                  "method": "IRepository<Basket>.FirstOrDefaultAsync(BasketWithItemsSpecification(buyerId))",
+                  "file": "src/ApplicationCore/Specifications/BasketWithItemsSpecification.cs",
+                  "line": 15,
+                  "db": { "table": "Baskets", "op": "select" }
+                },
+                {
+                  "method": "BasketViewModelService.Map(basket)",
+                  "file": "src/Web/Services/BasketViewModelService.cs",
+                  "line": 77,
+                  "calls": [
+                    {
+                      "method": "BasketViewModelService.GetBasketItems(basket.Items)",
+                      "file": "src/Web/Services/BasketViewModelService.cs",
+                      "line": 53,
+                      "calls": [
+                        {
+                          "method": "IRepository<CatalogItem>.ListAsync(CatalogItemsSpecification(ids))",
+                          "file": "src/ApplicationCore/Specifications/CatalogItemsSpecification.cs",
+                          "line": 10,
+                          "db": { "table": "CatalogItems", "op": "select" }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "method": "IBasketService.SetQuantities",
+          "file": "src/ApplicationCore/Services/BasketService.cs",
+          "line": 47,
+          "notes": "Applies posted hidden quantities to basket before order creation; items with Quantity=0 removed.",
+          "calls": [
+            {
+              "method": "IRepository<Basket>.FirstOrDefaultAsync(BasketWithItemsSpecification(basketId))",
+              "file": "src/ApplicationCore/Specifications/BasketWithItemsSpecification.cs",
+              "line": 8,
+              "db": { "table": "Baskets", "op": "select" }
+            },
+            {
+              "method": "BasketItem.SetQuantity(quantity)",
+              "notes": "Entity mutation per item in posted dictionary."
+            },
+            {
+              "method": "Basket.RemoveEmptyItems()",
+              "notes": "Removes in-memory items with Quantity=0 before save."
+            },
+            {
+              "method": "IRepository<Basket>.UpdateAsync(basket)",
+              "file": "src/ApplicationCore/Services/BasketService.cs",
+              "line": 62,
+              "db": [
+                { "table": "Baskets", "op": "update" },
+                { "table": "BasketItems", "op": "update" },
+                { "table": "BasketItems", "op": "delete" }
+              ]
+            }
+          ]
+        },
+        {
+          "method": "IOrderService.CreateOrderAsync",
+          "file": "src/ApplicationCore/Services/OrderService.cs",
+          "line": 30,
+          "notes": "Address hardcoded as new Address(\"123 Main St.\", \"Kent\", \"OH\", \"United States\", \"44240\"). Throws EmptyBasketOnCheckoutException if basket.Items is empty — caught by OnPost and redirects to /basket.",
+          "calls": [
+            {
+              "method": "IRepository<Basket>.FirstOrDefaultAsync(BasketWithItemsSpecification(basketId))",
+              "file": "src/ApplicationCore/Specifications/BasketWithItemsSpecification.cs",
+              "line": 8,
+              "db": { "table": "Baskets", "op": "select" }
+            },
+            {
+              "method": "IRepository<CatalogItem>.ListAsync(CatalogItemsSpecification(ids))",
+              "file": "src/ApplicationCore/Specifications/CatalogItemsSpecification.cs",
+              "line": 10,
+              "db": { "table": "CatalogItems", "op": "select" },
+              "notes": "Fetches Id, Name, PictureUri per basket item to build CatalogItemOrdered snapshots. Price comes from BasketItem.UnitPrice — CatalogItem.Price is NOT read here."
+            },
+            {
+              "method": "IUriComposer.ComposePicUri",
+              "notes": "Leaf — converts PictureUri to absolute URL for CatalogItemOrdered snapshot."
+            },
+            {
+              "method": "IRepository<Order>.AddAsync(order)",
+              "file": "src/ApplicationCore/Services/OrderService.cs",
+              "line": 51,
+              "db": [
+                { "table": "Orders", "op": "insert" },
+                { "table": "OrderItems", "op": "insert" }
+              ]
+            }
+          ]
+        },
+        {
+          "method": "IBasketService.DeleteBasketAsync",
+          "file": "src/ApplicationCore/Services/BasketService.cs",
+          "line": 40,
+          "calls": [
+            {
+              "method": "IRepository<Basket>.GetByIdAsync(basketId)",
+              "file": "src/ApplicationCore/Services/BasketService.cs",
+              "line": 42,
+              "db": { "table": "Baskets", "op": "select" }
+            },
+            {
+              "method": "IRepository<Basket>.DeleteAsync(basket)",
+              "file": "src/ApplicationCore/Services/BasketService.cs",
+              "line": 44,
+              "db": [
+                { "table": "Baskets", "op": "delete" },
+                { "table": "BasketItems", "op": "delete" }
+              ],
+              "notes": "EF cascade delete removes all BasketItems rows for this basket."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,487 @@
+#options:
+#  Global options page
+#  docker: true
+#clone:
+#  Git clone behavior page
+#definitions:
+#  Cache and service container definitions page
+#image:
+#  Docker image options page
+
+definitions:
+  steps:
+    - step: &ConfigReport
+        name: Config Report
+        script:
+          - |
+            echo $(pwd)
+            echo $(ls /opt/atlassian/pipelines/agent/tmp/)
+            cat $BITBUCKET_PIPELINES_VARIABLES_PATH || touch $BITBUCKET_PIPELINES_VARIABLES_PATH
+            [[ -z $TargetEnv ]] && echo "Target Environment is not set, defaulting to Dev" && echo TargetEnv="dev" >> $BITBUCKET_PIPELINES_VARIABLES_PATH # Default to Dev environment
+            [[ -z $AWSAccountID ]] && echo "AWS Account ID is not set, defaulting to Dev account" && echo AWSAccountID="577638363028" >> $BITBUCKET_PIPELINES_VARIABLES_PATH # Default to Dev account
+            [[ -z $TF_MODE ]] && echo "Terraform mode is not set, defaulting to plan" && echo TF_MODE="plan" >> $BITBUCKET_PIPELINES_VARIABLES_PATH # Default to plan mode
+            echo "SH_COMMIT_SHA=${BITBUCKET_COMMIT:0:7}" >> $BITBUCKET_PIPELINES_VARIABLES_PATH
+            source $BITBUCKET_PIPELINES_VARIABLES_PATH
+            echo "Terraform command is $TF_MODE"
+            echo "Target Environment is $TargetEnv"
+            echo "AWS Account ID is $AWSAccountID"
+            echo "Commit SHA is $BITBUCKET_COMMIT"
+            echo "Short Commit SHA is $SH_COMMIT_SHA"
+            env
+            env | grep BITBUCKET
+        output-variables:
+          - TargetEnv
+          - AWSAccountID
+          - TF_MODE
+          - SH_COMMIT_SHA
+
+    - step: &UnitTests
+        name: Unit Tests
+        runs-on:
+          - 'self.hosted'
+          - 'linux.shell'
+          - 'ec2'
+
+        script:
+          - |
+            echo "PATH at beginning of script: $PATH"
+            echo "Current branch: $(git rev-parse --abbrev-ref HEAD)"
+            whoami
+            sudo systemctl start docker
+            export DOCKER_HOST=unix:///var/run/docker.sock
+            docker info
+            echo "Operating System Info:"
+            uname -a
+            export PATH="/usr/local/bin:$HOME/.local/bin:$PATH"
+            echo "PATH before python3 --version: $PATH"
+            python3 --version
+            which python3
+            echo "PATH before uv lock: $PATH"
+            uv lock
+            uv add dagger-io
+            # Use unique engine name to avoid conflicts with parallel stages
+            export DAGGER_ENGINE_DOCKER_CONTAINER_NAME="dagger-engine-${BITBUCKET_BUILD_NUMBER:-local}-unit-tests"
+            dagger version
+            cp config.dev.yaml config.yaml
+            dagger run uv run pipelines/ci.py unit-tests
+
+    - step: &WorkflowTests
+        name: Workflow Tests
+        runs-on:
+          - 'self.hosted'
+          - 'linux.shell'
+          - 'ec2'
+
+        script:
+          - |
+            echo "PATH at beginning of script: $PATH"
+            echo "Current branch: $(git rev-parse --abbrev-ref HEAD)"
+          - whoami
+          - sudo systemctl start docker
+          - export DOCKER_HOST=unix:///var/run/docker.sock
+          - docker info
+          - |
+            echo "Operating System Info:"
+            uname -a
+          - export PATH="/usr/local/bin:$HOME/.local/bin:$PATH"
+          - |
+            echo "PATH before python3 --version: $PATH"
+          - python3 --version
+          - which python3
+          - |
+            echo "PATH before uv lock: $PATH"
+          - uv lock
+          - uv add dagger-io
+          # Use unique engine name to avoid conflicts with parallel stages
+          - export DAGGER_ENGINE_DOCKER_CONTAINER_NAME="dagger-engine-${BITBUCKET_BUILD_NUMBER:-local}-workflow-tests"
+          - dagger version
+          - cp config.dev.yaml config.yaml
+          - dagger run uv run pipelines/ci.py workflow-tests
+
+    - step: &TerraformSetup
+        name: Terraform Setup
+        image: hashicorp/terraform:1.7.5 #atlassian/default-image:2
+        oidc: true
+        script:
+          - |
+            cat $BITBUCKET_PIPELINES_VARIABLES_PATH || echo "No variables set yet"
+            #[[ -z $TargetEnv ]] && export TargetEnv="dev"
+            #[[ -z $AWSAccountID ]] && export AWSAccountID="577638363028" # Default to Dev account
+          - echo "Target Environment is $TargetEnv"
+          - echo "AWS Account ID is $AWSAccountID"
+          - echo "Terraform command is $TF_MODE"
+          - apk update && apk add unzip curl
+          # Install AWS CLI v2
+          - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          - unzip awscliv2.zip
+          - ./aws/install
+          # Configure AWS credentials
+          - export AWS_REGION=us-east-1
+          - export AWS_ROLE_ARN=$AWS_OIDC_ROLE_ARN
+          - export AWS_WEB_IDENTITY_TOKEN_FILE=$(pwd)/web-identity-token
+          - echo -n $BITBUCKET_STEP_OIDC_TOKEN > $(pwd)/web-identity-token
+          - |
+            echo "Target Environment is $TargetEnv"
+            echo "AWS Account ID is $AWSAccountID"
+            echo "Current working directory: $(pwd)"
+            cd infra/aws/terraform
+            [[ $TargetEnv == "infra" ]] && mv providers.tf.tftest providers.tf
+            terraform init
+            if [ $TF_MODE == "apply" ]; then
+               terraform apply -var-file="env/$TargetEnv.tfvars" -auto-approve
+            else
+               terraform plan -var-file="env/$TargetEnv.tfvars" -out="tfplan"
+            fi
+
+    - step: &UITests
+        name: UI Tests
+        runs-on:
+          - 'self.hosted'
+          - 'linux.shell'
+          - 'ec2'
+
+        script:
+          - |
+            echo "PATH at beginning of script: $PATH"
+            echo "Current branch: $(git rev-parse --abbrev-ref HEAD)"
+            whoami
+            sudo systemctl start docker
+            export DOCKER_HOST=unix:///var/run/docker.sock
+            docker info
+            echo "Operating System Info:"
+            uname -a
+            export PATH="/usr/local/bin:$HOME/.local/bin:$PATH"
+            echo "PATH before python3 --version: $PATH"
+            python3 --version
+            which python3
+            echo "PATH before uv lock: $PATH"
+            uv lock
+            uv add dagger-io
+            # Use unique engine name to avoid conflicts with parallel stages
+            export DAGGER_ENGINE_DOCKER_CONTAINER_NAME="dagger-engine-${BITBUCKET_BUILD_NUMBER:-local}-ui-tests"
+            dagger version
+            cp config.dev.yaml config.yaml
+            dagger run uv run pipelines/ci.py ui-tests
+
+    - step: &APITests
+        name: API Tests
+        runs-on:
+          - 'self.hosted'
+          - 'linux.shell'
+          - 'ec2'
+
+        script:
+          - |
+            echo "PATH at beginning of script: $PATH"
+            echo "Current branch: $(git rev-parse --abbrev-ref HEAD)"
+            whoami
+            sudo systemctl start docker
+            export DOCKER_HOST=unix:///var/run/docker.sock
+            docker info
+            echo "Operating System Info:"
+            uname -a
+            export PATH="/usr/local/bin:$HOME/.local/bin:$PATH"
+            echo "PATH before python3 --version: $PATH"
+            python3 --version
+            which python3
+            echo "PATH before uv lock: $PATH"
+            uv lock
+            uv add dagger-io
+            # Use unique engine name to avoid conflicts with parallel stages
+            export DAGGER_ENGINE_DOCKER_CONTAINER_NAME="dagger-engine-${BITBUCKET_BUILD_NUMBER:-local}-api-tests"
+            dagger version
+            cp config.dev.yaml config.yaml
+            dagger run uv run pipelines/ci.py api-tests
+
+    - step: &UpdateECSCluster
+          name: Update ECS Cluster
+          image: atlassian/default-image:2 #hashicorp/terraform:1.7.5
+          oidc: true
+          script:
+            - apk update && apk add unzip curl jq
+            #Install AWS CLI v2
+            - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            - unzip awscliv2.zip
+            - ./aws/install
+            # Configure AWS credentials
+            - export AWS_REGION=us-east-1
+            - export AWS_ROLE_ARN=$AWS_OIDC_ROLE_ARN
+            - export AWS_WEB_IDENTITY_TOKEN_FILE=$(pwd)/web-identity-token
+            - echo -n $BITBUCKET_STEP_OIDC_TOKEN > $(pwd)/web-identity-token
+            - export ECS_CLUSTER_NAME=awa-$TargetEnv-cluster
+            - export ECS_SERVICE_NAME=awa-$TargetEnv-service
+            - export ECS_TASK_DEFINITION=awa-$TargetEnv-task
+            - aws ecs list-task-definitions --family-prefix $ECS_TASK_DEFINITION
+            - export ACTIVE_TASK_VERSION=$(aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION | jq '.taskDefinition.revision')
+            - echo "Active task version is $ACTIVE_TASK_VERSION"
+            - aws ecs update-service --cluster $ECS_CLUSTER_NAME --service $ECS_SERVICE_NAME --task-definition $ECS_TASK_DEFINITION:$ACTIVE_TASK_VERSION --force-new-deployment
+            - |
+              echo " Waiting for service to stabilize..."
+              aws ecs wait services-stable \
+                --cluster $ECS_CLUSTER_NAME \
+                --services $ECS_SERVICE_NAME \
+                --region $AWS_REGION \
+                --cli-read-timeout 60 \
+                --cli-connect-timeout 60
+              echo "Service is stable!"
+            - |
+              echo "Verifying latest image deployment..."
+              CURRENT_LATEST_DIGEST=$(aws ecr describe-images \
+                --repository-name $ECR_REPOSITORY \
+                --image-ids imageTag=latest \
+                --region $AWS_REGION \
+                --query 'imageDetails[0].imageDigest' \
+                --output text)
+              TASK_ARNS=$(aws ecs list-tasks \
+                --cluster $ECS_CLUSTER_NAME \
+                --service-name $ECS_SERVICE_NAME \
+                --desired-status RUNNING \
+                --region $AWS_REGION \
+                --query 'taskArns' \
+                --output text)
+              ALL_LATEST=true
+              for TASK_ARN in $TASK_ARNS; do
+                TASK_DIGEST=$(aws ecs describe-tasks \
+                  --cluster $ECS_CLUSTER_NAME \
+                  --tasks $TASK_ARN \
+                  --region $AWS_REGION \
+                  --query 'tasks[0].containers[0].imageDigest' \
+                  --output text)
+                if [ "$TASK_DIGEST" != "$CURRENT_LATEST_DIGEST" ]; then
+                  echo "Task $TASK_ARN is not running the latest image"
+                  ALL_LATEST=false
+                fi
+              done
+
+              if [ "$ALL_LATEST" = true ]; then
+                echo "All tasks are running the latest image"
+              else
+                echo "Some tasks are not running the latest image"
+                exit 1
+              fi
+
+    - step: &PreCommitChecks
+        name: Code Quality Checks
+        runs-on:
+          - 'self.hosted'
+          - 'linux.shell'
+          - 'ec2'
+
+        script:
+          - |
+            echo "PATH at beginning of script: $PATH"
+            echo "Current branch: $(git rev-parse --abbrev-ref HEAD)"
+            whoami
+            sudo systemctl start docker
+            export DOCKER_HOST=unix:///var/run/docker.sock
+            docker info
+            echo "Operating System Info:"
+            uname -a
+            export PATH="/usr/local/bin:$HOME/.local/bin:$PATH"
+            echo "PATH before python3 --version: $PATH"
+            python3 --version
+            which python3
+            echo "PATH before uv lock: $PATH"
+            uv lock
+            uv add dagger-io
+            # Use unique engine name to avoid conflicts with parallel stages
+            export DAGGER_ENGINE_DOCKER_CONTAINER_NAME="dagger-engine-${BITBUCKET_BUILD_NUMBER:-local}-precommit"
+            dagger version
+            cp config.dev.yaml config.yaml
+            dagger run uv run pipelines/ci.py pre-commit-checks
+            echo "Pre-commit checks completed successfully!"
+
+    - step: &BuildDocs
+        name: Build Documentation
+        runs-on:
+          - 'self.hosted'
+          - 'linux.shell'
+          - 'ec2'
+
+        script:
+          - |
+            echo "PATH at beginning of script: $PATH"
+            echo "Current branch: $(git rev-parse --abbrev-ref HEAD)"
+            whoami
+            sudo systemctl start docker
+            export DOCKER_HOST=unix:///var/run/docker.sock
+            docker info
+            echo "Operating System Info:"
+            uname -a
+            export PATH="/usr/local/bin:$HOME/.local/bin:$PATH"
+            echo "PATH before python3 --version: $PATH"
+            python3 --version
+            which python3
+            echo "PATH before uv lock: $PATH"
+            uv lock
+            uv add dagger-io
+            # Use unique engine name to avoid conflicts with parallel stages
+            export DAGGER_ENGINE_DOCKER_CONTAINER_NAME="dagger-engine-${BITBUCKET_BUILD_NUMBER:-local}-docs"
+            dagger version
+            cp config.dev.yaml config.yaml
+            export BITBUCKET_USERNAME=$BITBUCKET_USERNAME
+            export BITBUCKET_PASSWORD=$BITBUCKET_PASSWORD
+            dagger run uv run pipelines/ci.py build-docs
+            echo "Documentation built successfully!"
+        artifacts:
+          - docs/.vitepress/dist/**
+
+    - step: &BuildPushDocker
+        name: Build and Push Docker Image
+        runs-on:
+          - 'self.hosted'
+          - 'linux.shell'
+          - 'ec2'
+        oidc: true
+        script:
+            - |
+              echo "PATH at beginning of script: $PATH"
+              echo "Current branch: $(git rev-parse --abbrev-ref HEAD)"
+            - whoami
+            - sudo systemctl start docker
+            - export DOCKER_HOST=unix:///var/run/docker.sock
+            - docker info
+            - |
+              echo "Operating System Info:"
+              uname -a
+            - export PATH="/usr/local/bin:$HOME/.local/bin:$PATH"
+            - |
+              echo "PATH before python3 --version: $PATH"
+            - python3 --version
+            - which python3
+            - |
+              echo "PATH before uv lock: $PATH"
+            - uv lock
+            - uv add dagger-io
+            - dagger version
+            - cp config.dev.yaml config.yaml
+            - export AWS_REGION=us-east-1
+            - export AWS_ROLE_ARN=$AWS_OIDC_ROLE_ARN
+            - export AWS_WEB_IDENTITY_TOKEN_FILE=$(pwd)/web-identity-token
+            - echo -n $BITBUCKET_STEP_OIDC_TOKEN > $(pwd)/web-identity-token
+            - |
+              export IMAGE_TAG=$SH_COMMIT_SHA
+              export AWS_REGION=us-east-1
+              export ECR_REGISTRY=$ECR_REGISTRY
+              export ECR_REPOSITORY=$ECR_REPOSITORY
+              export COMMON_ECR_REGISTRY=$COMMON_ECR_REGISTRY
+              export COMMON_ECR_REPOSITORY=$COMMON_ECR_REPOSITORY
+              export AUTH_COGNITO_CLIENT_ID=$AUTH_COGNITO_CLIENT_ID
+              export AUTH_COGNITO_CLIENT_SECRET=$AUTH_COGNITO_CLIENT_SECRET
+              export AUTH_COGNITO_ISSUER=$AUTH_COGNITO_ISSUER
+              export AUTH_SECRET=$AUTH_SECRET
+            - dagger run uv run pipelines/cd.py $IMAGE_TAG --cd=true
+
+    - step: &PublishSDKs
+        name: Publish SDKs
+        runs-on:
+          - 'self.hosted'
+          - 'linux.shell'
+          - 'ec2'
+        oidc: true
+        script:
+          - |
+            sudo systemctl start docker
+            export DOCKER_HOST=unix:///var/run/docker.sock
+            export PATH="/usr/local/bin:$HOME/.local/bin:$PATH"
+            uv lock
+            uv add dagger-io
+            dagger version
+            export AWS_REGION=us-east-1
+            export AWS_ROLE_ARN=$AWS_OIDC_ROLE_ARN
+            export AWS_WEB_IDENTITY_TOKEN_FILE=$(pwd)/web-identity-token
+            echo -n $BITBUCKET_STEP_OIDC_TOKEN > $(pwd)/web-identity-token
+            echo "Publishing SDKs to AWS CodeArtifact..."
+            dagger run uv run -m pipelines.publish_sdk
+
+pipelines:
+  pull-requests:
+    '**':
+       - step:
+           name: PRPipeline
+           script:
+             - echo "Running pull request pipeline"
+       - step: *ConfigReport
+       - parallel:
+           max-parallel: 2
+           steps:
+            - step: *UITests
+            - step: *PreCommitChecks
+            - step: *BuildDocs
+            - step: *UnitTests
+            - step: *APITests
+            - step: *WorkflowTests
+
+  branches:
+    main:
+      - step: *ConfigReport
+      - parallel:
+           max-parallel: 2
+           steps:
+            - step: *UITests
+            - step: *PreCommitChecks
+            - step: *BuildDocs
+            - step: *APITests
+            - step: *WorkflowTests
+      - step: *TerraformSetup
+      - step: *BuildPushDocker
+      - step: *UpdateECSCluster
+      - step: *PublishSDKs
+
+    infra/**:
+      - step: *ConfigReport
+      - step: *TerraformSetup
+
+  custom: # Pipelines that are triggered manually
+    MANUALDEPLOY: # The name that is displayed in the list in the Bitbucket Cloud GUI
+      - variables:
+          - name: AWS_Account_ID
+            default: "Dev" # optionally provide a default variable value
+            description: "AWS Account ID to use for the build"
+            allowed-values: # optionally restrict variable values
+              - "Dev"
+              - "Test"
+              - "Prod"
+          - name: TargetEnvironment
+            default: "Dev"
+            description: "Target environment for the build"
+            allowed-values:
+              - "Dev"
+              - "Test"
+              - "Prod"
+              - "TFTest"
+          - name: Deploy
+            default: "false"
+            description: "Whether to deploy the build or not"
+            allowed-values:
+              - "true"
+              - "false"
+
+      - step:
+          name: Setup Environment
+          script:
+            - |
+              touch $BITBUCKET_PIPELINES_VARIABLES_PATH
+              echo "$Username manually triggered for a build for $Region as $Role!"
+              [[ $AWS_Account_ID == "Dev" ]] && echo AWSAccountID="577638363028" >> $BITBUCKET_PIPELINES_VARIABLES_PATH
+              [[ $AWS_Account_ID == "Test" ]] && echo AWSAccountID="060795916735" >> $BITBUCKET_PIPELINES_VARIABLES_PATH
+              [[ $AWS_Account_ID == "Prod" ]] && echo AWSAccountID="509399639490" >> $BITBUCKET_PIPELINES_VARIABLES_PATH
+              [[ $TargetEnvironment == "Dev" ]] && echo TargetEnv="dev" >> $BITBUCKET_PIPELINES_VARIABLES_PATH
+              [[ $TargetEnvironment == "Test" ]] && echo TargetEnv="test" >> $BITBUCKET_PIPELINES_VARIABLES_PATH
+              [[ $TargetEnvironment == "Prod" ]] && echo TargetEnv="prod" >> $BITBUCKET_PIPELINES_VARIABLES_PATH
+              [[ $TargetEnvironment == "TFTest" ]] && echo TargetEnv="infra" >> $BITBUCKET_PIPELINES_VARIABLES_PATH
+              [[ $BITBUCKET_BRANCH == "main" ]] && export TF_MODE="apply" >> $BITBUCKET_PIPELINES_VARIABLES_PATH
+              [[ $Deploy == "true" ]] && echo TF_MODE="apply" >> $BITBUCKET_PIPELINES_VARIABLES_PATH
+              [[ $Deploy == "false" ]] && echo TF_MODE="plan" >> $BITBUCKET_PIPELINES_VARIABLES_PATH
+              source $BITBUCKET_PIPELINES_VARIABLES_PATH
+              echo "AWS Account ID is $AWSAccountID"
+              echo "Target Environment is $TargetEnv"
+              echo "Running TF apply with $TF_MODE"
+          output-variables:
+            - TargetEnv
+            - AWSAccountID
+            - TF_MODE
+      - step: *ConfigReport
+      - step: *TerraformSetup
+      - step: *BuildPushDocker
+      - step: *UpdateECSCluster

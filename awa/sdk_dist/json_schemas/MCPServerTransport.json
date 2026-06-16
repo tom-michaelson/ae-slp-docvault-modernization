@@ -1,0 +1,9 @@
+{
+  "type": "string",
+  "enum": [
+    "stdio",
+    "sse",
+    "streamable_http"
+  ],
+  "title": "MCPServerTransport"
+}

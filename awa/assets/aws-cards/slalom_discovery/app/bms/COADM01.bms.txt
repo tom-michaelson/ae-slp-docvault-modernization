@@ -1,0 +1,57 @@
+This file is a Basic Mapping Support (BMS) macro definition for a CICS (Customer Information Control System) application. It defines the layout and properties of a screen, specifically an Admin Menu screen. Let's break down the key components:
+
+Header:
+
+The file starts with copyright and license information.
+
+It's part of a "CardDemo" application.
+
+Main Screen Definition:
+
+COADM01 is defined as the main screen (DFHMSD macro).
+
+It sets various attributes like CTRL, LANG, MODE, etc.
+
+Screen Layout (COADM1A):
+
+Defined using DFHMDI macro.
+
+Sets the screen size to 24 lines by 80 columns.
+
+Header Fields:
+
+Transaction name (TRNNAME)
+
+Date (CURDATE)
+
+Program name (PGMNAME)
+
+Time (CURTIME)
+
+Two title fields (TITLE01 and TITLE02)
+
+Main Content:
+
+"Admin Menu" title at position (4,35)
+
+12 option fields (OPTN001 to OPTN012) from line 6 to 17
+
+Each option field is 40 characters long and initially blank
+
+Field Attributes:
+
+Most fields use ATTRB=(ASKIP,FSET,NORM), meaning they are display-only
+
+Colors are specified (BLUE, YELLOW, NEUTRAL)
+
+Some fields have initial values (like 'Date:', 'Time:', etc.)
+
+Positioning:
+
+Each field's position is precisely defined using the POS parameter
+
+This BMS macro creates a screen template for an admin menu. The actual content of the menu options would be populated by the associated COBOL program at runtime. The screen includes standard elements like transaction name, date, time, and program name, followed by up to 12 menu options.
+
+The layout is designed to be clear and organized, with consistent formatting and color coding. Blue is used for most labels and fields, with yellow for titles and a neutral color for the main "Admin Menu" heading.
+
+This type of screen would typically be used in a mainframe environment, allowing administrators to select various options for managing the card demo system. The COBOL program would interpret user inputs on this screen and navigate to other parts of the application based on the selected option.

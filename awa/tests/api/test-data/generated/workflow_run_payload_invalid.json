@@ -1,0 +1,45 @@
+[
+  {
+    "description": "Missing required 'name' field",
+    "payload": {
+      "input": "{\"name\": \"TestUser\"}",
+      "task_queue": "default-task-queue"
+    },
+    "expected_error": "422 - Validation Error"
+  },
+  {
+    "description": "Missing required 'input' field",
+    "payload": {
+      "name": "test-worker",
+      "task_queue": "default-task-queue"
+    },
+    "expected_error": "422 - Validation Error"
+  },
+  {
+    "description": "Wrong type for 'name' field",
+    "payload": {
+      "name": 12345,
+      "input": "{\"name\": \"TestUser\"}",
+      "task_queue": "default-task-queue"
+    },
+    "expected_error": "422 - Validation Error"
+  },
+  {
+    "description": "Wrong type for 'input' field",
+    "payload": {
+      "name": "test-worker",
+      "input": 12345,
+      "task_queue": "default-task-queue"
+    },
+    "expected_error": "422 - Validation Error"
+  },
+  {
+    "description": "Wrong type for 'task_queue' field",
+    "payload": {
+      "name": "test-worker",
+      "input": "{\"name\": \"TestUser\"}",
+      "task_queue": 12345
+    },
+    "expected_error": "422 - Validation Error"
+  }
+]

@@ -1,0 +1,20 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - article [ref=e5]:
+      - link "eShop On Web" [ref=e7] [cursor=pointer]:
+        - /url: /
+        - img "eShop On Web" [ref=e8]
+      - link "Login" [ref=e13] [cursor=pointer]:
+        - /url: /Identity/Account/Login
+      - link "0" [ref=e15] [cursor=pointer]:
+        - /url: /Basket
+        - img [ref=e17]
+        - generic [ref=e18]: "0"
+  - img [ref=e21]
+  - generic [ref=e22]:
+    - heading "Basket is empty." [level=3] [ref=e23]
+    - link "[ Continue Shopping ]" [ref=e25] [cursor=pointer]:
+      - /url: /
+  - contentinfo [ref=e26]:
+    - article [ref=e28]:
+      - generic [ref=e31]: e-ShopOnWeb. All rights reserved

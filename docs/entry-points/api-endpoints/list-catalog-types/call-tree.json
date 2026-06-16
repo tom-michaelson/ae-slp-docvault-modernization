@@ -1,0 +1,19 @@
+{
+  "entryPoint": {
+    "method": "Microsoft.eShopWeb.PublicApi.CatalogTypeEndpoints.CatalogTypeListEndpoint.HandleAsync",
+    "file": "src/PublicApi/CatalogTypeEndpoints/CatalogTypeListEndpoint.cs",
+    "line": 36,
+    "signature": "Task<IResult> HandleAsync(IRepository<CatalogType> catalogTypeRepository)"
+  },
+  "calls": [
+    {
+      "method": "IRepository<CatalogType>.ListAsync()",
+      "db": {"table": "CatalogTypes", "op": "select"},
+      "notes": "No specification passed — returns ALL rows in CatalogTypes. No filtering, no pagination."
+    },
+    {
+      "method": "IMapper.Map<CatalogTypeDto>(item)",
+      "notes": "AutoMapper leaf — maps CatalogType entity to CatalogTypeDto. ForMember rule in MappingProfile: CatalogType.Type (entity) → CatalogTypeDto.Name (DTO). Java target must apply the same field rename."
+    }
+  ]
+}
