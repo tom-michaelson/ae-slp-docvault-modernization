@@ -1,0 +1,36 @@
+{
+  "entryPoint": {
+    "method": "LoginForm.handleSubmit",
+    "file": "frontend/src/components/LoginForm.jsx",
+    "line": 72
+  },
+  "calls": [
+    {
+      "method": "AuthContext.login",
+      "file": "frontend/src/context/AuthContext.jsx",
+      "line": 50,
+      "writes": [
+        "localStorage.docvault_token (line 63 — initial token from /login response)",
+        "localStorage.docvault_refresh_token (line 64 — refresh token from /login response)"
+      ],
+      "calls": [
+        {
+          "method": "axios.post",
+          "endpoint": "POST /api/auth/login",
+          "file": "backend/src/routes/auth.js",
+          "line": 17,
+          "reads": ["req.body.email", "req.body.password"],
+          "notes": "Validates against hardcoded admin@docvault.local / bcrypt hash. Returns {token, refreshToken} on 200; {error} on 400 (missing fields) or 401 (wrong credentials). No database access — credentials are hardcoded in the route file."
+        },
+        {
+          "method": "axios.post",
+          "endpoint": "POST /api/auth/refresh",
+          "file": "backend/src/routes/auth.js",
+          "line": 61,
+          "reads": ["req.body.refreshToken"],
+          "notes": "BUG (FR-007): Backend verifies the refresh JWT correctly but returns {session:{userId, email, createdAt}} instead of {token, refreshToken}. AuthContext immediately calls refreshResponse.data.token.split('.') — token is undefined — crashing with TypeError unconditionally whenever valid credentials are submitted. The localStorage overwrite at AuthContext.jsx:85 is therefore never reached."
+        }
+      ]
+    }
+  ]
+}

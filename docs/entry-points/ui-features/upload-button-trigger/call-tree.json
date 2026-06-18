@@ -1,0 +1,64 @@
+{
+  "handlers": [
+    {
+      "entryPoint": {
+        "method": "UploadButton.handleClick",
+        "file": "frontend/src/components/UploadButton.jsx",
+        "line": 29
+      },
+      "calls": [
+        {
+          "method": "HTMLInputElement.click",
+          "reads": ["fileInputRef.current"],
+          "notes": "Programmatic click on the hidden <input type='file'> via React ref; delegates to the browser's native OS file picker. If uploading===true the button is disabled and this handler is never reached."
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "UploadButton.handleFileChange",
+        "file": "frontend/src/components/UploadButton.jsx",
+        "line": 33
+      },
+      "calls": [
+        {
+          "method": "uploadDocument",
+          "file": "frontend/src/utils/api.js",
+          "line": 36,
+          "notes": "Wraps axios.post('/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' } }). FormData carries field 'file' (binary blob) and field 'name' (filename string). JWT Bearer token is attached by the axios request interceptor reading localStorage.getItem('docvault_token').",
+          "calls": [
+            {
+              "method": "POST /api/upload (Express route handler)",
+              "file": "backend/src/routes/upload.js",
+              "line": 35,
+              "calls": [
+                {
+                  "method": "multer.single('file') — write to disk",
+                  "file": "backend/src/routes/upload.js",
+                  "line": 11,
+                  "notes": "multer diskStorage writes file to config.uploadDir as {uuid}{ext}. fileFilter rejects non-PDF/JPEG/PNG MIME types with HTTP 500."
+                },
+                {
+                  "method": "pool.query INSERT INTO documents",
+                  "file": "backend/src/routes/upload.js",
+                  "line": 45,
+                  "db": {"table": "documents", "op": "insert"},
+                  "notes": "Inserts name, file_type (MIME string), file_path (/uploads/{uuid}{ext}), tags (comma-split from body or null), uploaded_by (req.user.email or null). RETURNING * — full row returned as response body with HTTP 201.",
+                  "calls": [
+                    {
+                      "method": "trg_sync_to_v2 (PostgreSQL trigger)",
+                      "file": "backend/src/db/migrations/003-create-trigger.sql",
+                      "line": 3,
+                      "db": {"table": "documents_v2", "op": "insert"},
+                      "notes": "Fires AFTER INSERT on documents FOR EACH ROW. Copies id, name, file_type, file_path, uploaded_at, uploaded_by into documents_v2. Deliberately omits tags — documents_v2.tags is always NULL for uploaded documents."
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

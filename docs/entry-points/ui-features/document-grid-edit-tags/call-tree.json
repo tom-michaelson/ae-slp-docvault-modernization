@@ -1,0 +1,102 @@
+{
+  "handlers": [
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleOpenTagEditor",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 619,
+        "trigger": "onClick on 🏷️ button (card line 881, list row line 926)"
+      },
+      "calls": [
+        {
+          "method": "Event.stopPropagation",
+          "notes": "Prevents the parent card/row onClick (handleDocumentClick) from also firing."
+        },
+        {
+          "method": "DocumentGrid.setState",
+          "notes": "Sets tagEditorVisible=true, tagEditorDocId=doc.id, tagEditorTags=[...doc.tags] (shallow copy), tagEditorInput=''. No API call."
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleAddTag",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 642,
+        "trigger": "onClick on Add button (line 831) or Enter keypress in tag input (handleTagKeyPress, line 659)"
+      },
+      "calls": [
+        {
+          "method": "DocumentGrid.setState",
+          "notes": "Appends trimmed input to tagEditorTags and clears tagEditorInput. Guard: tag must be non-empty, not already present, and tagEditorTags.length < 10."
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleRemoveTag",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 653,
+        "trigger": "onClick on × span next to each tag (line 840)"
+      },
+      "calls": [
+        {
+          "method": "DocumentGrid.setState",
+          "notes": "Filters tagEditorTags to remove the clicked tag by value."
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleSaveTags",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 666,
+        "trigger": "onClick on Save button (line 853)"
+      },
+      "calls": [
+        {
+          "method": "DocumentGrid.setState",
+          "notes": "Sets tagSaving=true before API call; disables Save button."
+        },
+        {
+          "method": "updateTags",
+          "file": "frontend/src/utils/api.js",
+          "line": 33,
+          "calls": [
+            {
+              "method": "axios.put",
+              "http": {
+                "method": "PUT",
+                "url": "/api/documents/{id}/tags",
+                "body": "{ tags: string[] }"
+              },
+              "notes": "Bearer token from localStorage('docvault_token') is attached by request interceptor."
+            }
+          ]
+        },
+        {
+          "method": "DocumentGrid.setState (success path)",
+          "notes": "Maps over documents array, replaces matching doc's tags with tagEditorTags. Sets tagSaving=false and tagEditorVisible=false."
+        },
+        {
+          "method": "DocumentGrid.setState (error path)",
+          "notes": "Sets tagSaving=false only; modal stays open. Error is logged to console.error, not displayed to the user."
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleCloseTagEditor",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 629,
+        "trigger": "onClick on Cancel button (line 849) or onClick on overlay backdrop (line 818)"
+      },
+      "calls": [
+        {
+          "method": "DocumentGrid.setState",
+          "notes": "Sets tagEditorVisible=false, tagEditorDocId=null, tagEditorTags=[], tagEditorInput=''. Discards unsaved changes."
+        }
+      ]
+    }
+  ]
+}

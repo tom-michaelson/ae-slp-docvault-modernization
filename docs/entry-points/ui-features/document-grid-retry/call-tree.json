@@ -1,0 +1,44 @@
+{
+  "entryPoint": {
+    "method": "DocumentGrid.handleRefresh",
+    "file": "frontend/src/components/DocumentGrid.jsx",
+    "line": 612,
+    "trigger": "onClick on <button style={styles.errorRetry}> inside renderError()",
+    "triggerLine": 951
+  },
+  "calls": [
+    {
+      "method": "DocumentGrid.loadDocuments",
+      "file": "frontend/src/components/DocumentGrid.jsx",
+      "line": 550,
+      "writes": [
+        "state.loading = true",
+        "state.error = null"
+      ],
+      "calls": [
+        {
+          "method": "fetchDocuments",
+          "file": "frontend/src/utils/api.js",
+          "line": 37,
+          "notes": "Wraps axios GET /api/documents with a Bearer token from localStorage('docvault_token') via request interceptor.",
+          "calls": [
+            {
+              "method": "pool.query('SELECT * FROM documents_v2 ORDER BY uploaded_at DESC')",
+              "file": "backend/src/routes/documents.js",
+              "line": 12,
+              "db": { "table": "documents_v2", "op": "select" }
+            }
+          ]
+        }
+      ],
+      "successWrites": [
+        "state.documents = response.data.documents",
+        "state.loading = false"
+      ],
+      "errorWrites": [
+        "state.error = err.response?.data?.error || 'Failed to load documents'",
+        "state.loading = false"
+      ]
+    }
+  ]
+}

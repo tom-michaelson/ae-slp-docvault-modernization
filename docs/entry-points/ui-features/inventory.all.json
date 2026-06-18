@@ -1,0 +1,615 @@
+[
+  {
+    "key": "login",
+    "name": "Login Page",
+    "elementType": "ui-page",
+    "location": "frontend/src/components/LoginForm.jsx",
+    "uri": "/",
+    "domain": "auth",
+    "notes": [
+      "React class component. Shown when AuthContext.isAuthenticated is false.",
+      "Auth: public (no authentication required).",
+      "Calls AuthContext.login(email, password) on submit.",
+      "login() calls POST /api/auth/login then POST /api/auth/refresh; /refresh has a bug that returns session-shaped response causing a crash."
+    ],
+    "javaEquivalent": "Angular 19 page component at /login; Angular AuthService calls HTTP POST to Spring @RestController @PostMapping('/api/auth/login'); Spring Security issues JWT on success; Angular AuthGuard redirects unauthenticated users to /login"
+  },
+  {
+    "key": "login-form",
+    "name": "Login Credentials Form",
+    "elementType": "ui-form",
+    "location": "frontend/src/components/LoginForm.jsx:95-115",
+    "parentKey": "login",
+    "domain": "auth",
+    "notes": [
+      "POST form. onSubmit calls AuthContext.login(email, password).",
+      "Fields: email (type=email, required), password (type=password, required).",
+      "No client-side validation beyond HTML required attribute.",
+      "On error: displays error message from AuthContext.error or caught exception.",
+      "Submit button is disabled when AuthContext.loading is true."
+    ],
+    "javaEquivalent": "Angular 19 reactive form (FormGroup with email Validators.email and Validators.required, password Validators.required); (ngSubmit) calls Angular AuthService HTTP POST to Spring @RestController; @Valid on LoginRequest DTO"
+  },
+  {
+    "key": "login-form-submit",
+    "name": "Sign In Button",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/LoginForm.jsx:112",
+    "parentKey": "login-form",
+    "domain": "auth",
+    "actionType": "form-post",
+    "notes": [
+      "Submits login credentials to AuthContext.login().",
+      "Disabled and shows 'Signing in...' while loading.",
+      "On success: AuthContext sets isAuthenticated=true; App renders main workspace.",
+      "On failure: error message rendered below the form."
+    ],
+    "javaEquivalent": "Angular (ngSubmit) calls Angular AuthService.login(); HTTP POST to Spring @RestController @PostMapping('/api/auth/login'); on success store JWT in localStorage, Angular Router.navigate(['/'])"
+  },
+  {
+    "key": "app-workspace",
+    "name": "Main Application Workspace",
+    "elementType": "ui-page",
+    "location": "frontend/src/App.jsx",
+    "uri": "/",
+    "domain": "documents",
+    "notes": [
+      "React class component. Shown when AuthContext.isAuthenticated is true.",
+      "Auth: requires authentication; redirects to LoginForm when unauthenticated.",
+      "State: activeSection (documents|upload|search|tags), selectedDocument, showPreview.",
+      "No URL routing — section changes are pure React state; URL stays at /.",
+      "Composed of: Header, Sidebar, SearchBar, DocumentGrid, and conditional PreviewPanel.",
+      "DocumentGrid is wired via ref so SearchBar can delegate to DocumentGrid.handleSearch()."
+    ],
+    "javaEquivalent": "Angular 19 root shell component at /; Angular AuthGuard protects route; child components data fetched via Angular services (HttpClient) from Spring @RestController endpoints; Angular Router handles section navigation as child routes"
+  },
+  {
+    "key": "app-workspace-header",
+    "name": "Application Header",
+    "elementType": "ui-panel",
+    "location": "frontend/src/components/Header.jsx:33-49",
+    "parentKey": "app-workspace",
+    "domain": "navigation",
+    "notes": [
+      "Read-only display panel with three section navigation links.",
+      "Receives onNavigate callback from App; calls onNavigate(section) on click.",
+      "Sections: 'documents', 'upload', 'search'.",
+      "No active-state highlighting on header links (only Sidebar has active highlight)."
+    ],
+    "javaEquivalent": "Angular 19 header component with routerLink navigation to Angular routes /documents, /upload, /search; Angular Router handles active link styling"
+  },
+  {
+    "key": "app-workspace-header-documents-nav",
+    "name": "Documents Header Link",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/Header.jsx:37",
+    "parentKey": "app-workspace-header",
+    "domain": "navigation",
+    "actionType": "navigation",
+    "notes": [
+      "onClick calls onNavigate('documents').",
+      "Sets App.activeSection to 'documents'; highlights Sidebar item."
+    ],
+    "javaEquivalent": "Angular routerLink='/documents'"
+  },
+  {
+    "key": "app-workspace-header-upload-nav",
+    "name": "Upload Header Link",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/Header.jsx:40",
+    "parentKey": "app-workspace-header",
+    "domain": "navigation",
+    "actionType": "navigation",
+    "notes": [
+      "onClick calls onNavigate('upload').",
+      "Sets App.activeSection to 'upload'; highlights Sidebar item. DocumentGrid upload area is always visible regardless."
+    ],
+    "javaEquivalent": "Angular routerLink='/upload'"
+  },
+  {
+    "key": "app-workspace-header-search-nav",
+    "name": "Search Header Link",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/Header.jsx:43",
+    "parentKey": "app-workspace-header",
+    "domain": "navigation",
+    "actionType": "navigation",
+    "notes": [
+      "onClick calls onNavigate('search').",
+      "Sets App.activeSection to 'search'; highlights Sidebar item."
+    ],
+    "javaEquivalent": "Angular routerLink='/search'"
+  },
+  {
+    "key": "app-workspace-sidebar",
+    "name": "Navigation Sidebar",
+    "elementType": "ui-panel",
+    "location": "frontend/src/components/Sidebar.jsx:41-55",
+    "parentKey": "app-workspace",
+    "domain": "navigation",
+    "notes": [
+      "Vertical navigation panel with four sections.",
+      "Receives activeSection and onNavigate from App.",
+      "Active section highlighted with different background color.",
+      "Sections: 'documents' (All Documents), 'upload' (Upload), 'search' (Search), 'tags' (Tags).",
+      "Tags section has no corresponding view — same DocumentGrid shown for all sections."
+    ],
+    "javaEquivalent": "Angular 19 sidebar component with routerLink and routerLinkActive for /documents, /upload, /search, /tags routes"
+  },
+  {
+    "key": "app-workspace-sidebar-documents-nav",
+    "name": "All Documents Sidebar Link",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/Sidebar.jsx:44",
+    "parentKey": "app-workspace-sidebar",
+    "domain": "navigation",
+    "actionType": "navigation",
+    "notes": [
+      "onClick calls onNavigate('documents').",
+      "Highlighted when activeSection === 'documents'."
+    ],
+    "javaEquivalent": "Angular routerLink='/documents' with routerLinkActive='active'"
+  },
+  {
+    "key": "app-workspace-sidebar-upload-nav",
+    "name": "Upload Sidebar Link",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/Sidebar.jsx:44",
+    "parentKey": "app-workspace-sidebar",
+    "domain": "navigation",
+    "actionType": "navigation",
+    "notes": [
+      "onClick calls onNavigate('upload').",
+      "Highlighted when activeSection === 'upload'."
+    ],
+    "javaEquivalent": "Angular routerLink='/upload' with routerLinkActive='active'"
+  },
+  {
+    "key": "app-workspace-sidebar-search-nav",
+    "name": "Search Sidebar Link",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/Sidebar.jsx:44",
+    "parentKey": "app-workspace-sidebar",
+    "domain": "navigation",
+    "actionType": "navigation",
+    "notes": [
+      "onClick calls onNavigate('search').",
+      "Highlighted when activeSection === 'search'."
+    ],
+    "javaEquivalent": "Angular routerLink='/search' with routerLinkActive='active'"
+  },
+  {
+    "key": "app-workspace-sidebar-tags-nav",
+    "name": "Tags Sidebar Link",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/Sidebar.jsx:44",
+    "parentKey": "app-workspace-sidebar",
+    "domain": "tags",
+    "actionType": "navigation",
+    "notes": [
+      "onClick calls onNavigate('tags').",
+      "Highlighted when activeSection === 'tags'.",
+      "No dedicated Tags view exists — same DocumentGrid is displayed for this section."
+    ],
+    "javaEquivalent": "Angular routerLink='/tags' with routerLinkActive='active'; target Angular /tags route should render a dedicated tag management component"
+  },
+  {
+    "key": "app-workspace-search-bar",
+    "name": "Global Search Bar",
+    "elementType": "ui-form",
+    "location": "frontend/src/components/SearchBar.jsx:39-52",
+    "parentKey": "app-workspace",
+    "domain": "documents",
+    "notes": [
+      "GET-style form rendered in the search container between header and main content.",
+      "Fields: query (type=text, placeholder='Search documents...', required non-empty).",
+      "onSubmit calls onSearch(query) prop; App.handleSearch() delegates to DocumentGrid.handleSearch() via ref.",
+      "DocumentGrid.handleSearch() calls GET /api/search?q={query}.",
+      "If query is empty after trim, no action taken."
+    ],
+    "javaEquivalent": "Angular 19 reactive form with search input; (ngSubmit) calls Angular DocumentService.search(query) HTTP GET to Spring @RestController @GetMapping('/api/search') with @RequestParam String q"
+  },
+  {
+    "key": "app-workspace-search-bar-submit",
+    "name": "Search Submit Button",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/SearchBar.jsx:47",
+    "parentKey": "app-workspace-search-bar",
+    "domain": "documents",
+    "actionType": "filter",
+    "notes": [
+      "Submits search query to DocumentGrid.handleSearch().",
+      "Triggers GET /api/search?q={query} via searchDocuments() utility.",
+      "Replaces document list with search results.",
+      "Empty query is ignored (no-op)."
+    ],
+    "javaEquivalent": "Angular (ngSubmit) calls Angular DocumentService.search(q) → HTTP GET to Spring @RestController @GetMapping('/api/search'); results bound to @for loop in document list component"
+  },
+  {
+    "key": "document-grid",
+    "name": "Document Grid",
+    "elementType": "ui-panel",
+    "location": "frontend/src/components/DocumentGrid.jsx:961-1047",
+    "parentKey": "app-workspace",
+    "domain": "documents",
+    "notes": [
+      "React class component (~800 lines). God component containing: API calls, filtering/sorting logic, inline styles, embedded tag editor modal, drag-and-drop upload.",
+      "Loads documents via GET /api/documents on componentDidMount.",
+      "Supports two view modes: 'grid' (card tiles) and 'list' (table rows).",
+      "Client-side filter by file type and text query (name/tags match).",
+      "Client-side sort by date (default), name, or type.",
+      "Empty state: '📂 No documents found — Upload a document to get started'.",
+      "Exports formatFileSize() utility function imported by DocumentCard and PreviewPanel (anti-pattern)."
+    ],
+    "javaEquivalent": "Angular 19 DocumentListComponent at /documents; data loaded via Angular DocumentService (HttpClient GET /api/documents from Spring @RestController); filtering/sorting as Angular pipes or computed signals; child components for card, list-row, upload-area, tag-editor-dialog"
+  },
+  {
+    "key": "document-grid-controls",
+    "name": "Document Grid Controls",
+    "elementType": "ui-form",
+    "location": "frontend/src/components/DocumentGrid.jsx:971-1007",
+    "parentKey": "document-grid",
+    "domain": "documents",
+    "notes": [
+      "Header bar with inline filter controls and view/sort actions.",
+      "Fields: searchQuery (text input, placeholder='Filter...'), fileType (select: All Types / PDF / JPEG / PNG).",
+      "Both filter fields fire onChange immediately — no submit button for filtering.",
+      "View toggle and refresh buttons also in this bar.",
+      "All filtering is client-side against already-loaded document list."
+    ],
+    "javaEquivalent": "Angular 19 form with reactive FormControl bindings; valueChanges pipe triggers client-side filter via Angular signal or pipe; no HTTP call on filter change"
+  },
+  {
+    "key": "document-grid-filter-text",
+    "name": "Text Filter Input",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/DocumentGrid.jsx:979-985",
+    "parentKey": "document-grid-controls",
+    "domain": "documents",
+    "actionType": "filter",
+    "notes": [
+      "onChange fires handleFilterChange({ searchQuery: value }).",
+      "Filters document list client-side: matches document.name and document.tags (case-insensitive contains).",
+      "No API call — filters already-loaded documents."
+    ],
+    "javaEquivalent": "Angular FormControl with valueChanges subscription; Angular pipe or computed signal filters the documents array client-side"
+  },
+  {
+    "key": "document-grid-filter-type",
+    "name": "File Type Filter",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/DocumentGrid.jsx:986-995",
+    "parentKey": "document-grid-controls",
+    "domain": "documents",
+    "actionType": "filter",
+    "notes": [
+      "onChange fires handleFilterChange({ fileType: value }).",
+      "Options: '' (All Types), 'application/pdf', 'image/jpeg', 'image/png'.",
+      "Filters document list client-side by exact file_type match.",
+      "No API call — filters already-loaded documents."
+    ],
+    "javaEquivalent": "Angular FormControl (select) with valueChanges subscription; Angular pipe or computed signal filters documents by fileType field"
+  },
+  {
+    "key": "document-grid-view-toggle",
+    "name": "Grid/List View Toggle",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/DocumentGrid.jsx:996-1002",
+    "parentKey": "document-grid-controls",
+    "domain": "documents",
+    "actionType": "other",
+    "notes": [
+      "onClick fires handleViewToggle(); toggles state.viewMode between 'grid' and 'list'.",
+      "Grid mode: CSS grid with auto-fill columns. List mode: flex column rows.",
+      "Button label: '☰' in grid mode (to switch to list), '⊞' in list mode (to switch to grid).",
+      "No API call — pure UI state change."
+    ],
+    "javaEquivalent": "Angular (click) toggles a viewMode signal between 'grid' and 'list'; @if/@switch in template switches between grid and list Angular sub-components"
+  },
+  {
+    "key": "document-grid-refresh",
+    "name": "Refresh Documents Button",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/DocumentGrid.jsx:1003-1005",
+    "parentKey": "document-grid-controls",
+    "domain": "documents",
+    "actionType": "api-call",
+    "notes": [
+      "onClick fires handleRefresh() → loadDocuments().",
+      "Calls GET /api/documents; replaces entire document list.",
+      "Sets loading=true during fetch."
+    ],
+    "javaEquivalent": "Angular (click) calls Angular DocumentService.getDocuments() HTTP GET to Spring @RestController @GetMapping('/api/documents'); result updates documents signal/BehaviorSubject"
+  },
+  {
+    "key": "document-grid-upload-area",
+    "name": "Document Upload Area",
+    "elementType": "ui-panel",
+    "location": "frontend/src/components/DocumentGrid.jsx:782-809",
+    "parentKey": "document-grid",
+    "domain": "upload",
+    "notes": [
+      "Drag-and-drop target zone rendered above document list.",
+      "Accepts: .pdf, .jpg, .jpeg, .png (enforced by accept attribute and backend fileFilter).",
+      "Visual states: default (dashed border) and isDragging (highlighted dashed border).",
+      "On successful upload: calls loadDocuments() to refresh list; shows '✅ Upload complete!' for 2 seconds.",
+      "On error: shows error message inline.",
+      "Sends FormData with fields: file, name to POST /api/upload.",
+      "Note: POST /api/upload writes to documents table; a DB trigger copies to documents_v2 but drops tags."
+    ],
+    "javaEquivalent": "Angular 19 drag-and-drop upload component; (drop) and (click) handlers call Angular UploadService HTTP POST multipart/form-data to Spring @RestController @PostMapping('/api/upload') with @RequestParam MultipartFile file"
+  },
+  {
+    "key": "document-grid-upload-drop",
+    "name": "Drag-and-Drop Upload",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/DocumentGrid.jsx:705-715",
+    "parentKey": "document-grid-upload-area",
+    "domain": "upload",
+    "actionType": "other",
+    "notes": [
+      "onDrop fires handleDrop() → uploadFile(file).",
+      "Only first file is processed (files[0]).",
+      "Calls POST /api/upload with multipart FormData.",
+      "On success: reloads document list."
+    ],
+    "javaEquivalent": "Angular (drop) event handler on CDK drop zone or native drag events; calls Angular UploadService HTTP POST multipart to Spring @RestController"
+  },
+  {
+    "key": "document-grid-upload-click",
+    "name": "Click to Select File",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/DocumentGrid.jsx:789",
+    "parentKey": "document-grid-upload-area",
+    "domain": "upload",
+    "actionType": "other",
+    "notes": [
+      "onClick fires handleFileInputClick() which triggers hidden file input click.",
+      "Hidden file input accepts .pdf,.jpg,.jpeg,.png.",
+      "onChange fires handleFileInputChange() → uploadFile(file).",
+      "Calls POST /api/upload with multipart FormData."
+    ],
+    "javaEquivalent": "Angular (click) on upload button triggers hidden <input type=file> click; (change) handler calls Angular UploadService HTTP POST to Spring @RestController"
+  },
+  {
+    "key": "document-grid-document-list",
+    "name": "Document List",
+    "elementType": "ui-panel",
+    "location": "frontend/src/components/DocumentGrid.jsx:1025-1031",
+    "parentKey": "document-grid",
+    "domain": "documents",
+    "notes": [
+      "Renders documents after client-side filter and sort applied.",
+      "Grid mode: card tiles via renderCard() — fields shown: file icon, name, file type label, upload date, preview link (if previewable), tags.",
+      "List mode: compact rows via renderListRow() — fields: file icon, name, type+date+tag count, tag edit button.",
+      "Empty state: '📂 No documents found — Upload a document to get started'.",
+      "Loading state: 'Loading documents...' spinner text.",
+      "Error state: error message + Retry button.",
+      "Data source: GET /api/documents (all), or GET /api/search?q={query} (search results)."
+    ],
+    "javaEquivalent": "Angular 19 @for loop over documents signal; card view as DocumentCardComponent @Input(), list view as DocumentListRowComponent @Input(); loaded via Angular DocumentService from Spring @RestController @GetMapping('/api/documents')"
+  },
+  {
+    "key": "document-grid-document-select",
+    "name": "Select Document",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/DocumentGrid.jsx:873",
+    "parentKey": "document-grid-document-list",
+    "domain": "documents",
+    "actionType": "other",
+    "notes": [
+      "onClick fires handleDocumentClick(doc).",
+      "Sets state.selectedDocument; applies selected card style.",
+      "Calls onDocumentSelect(doc) prop → App.handleDocumentSelect() → shows PreviewPanel."
+    ],
+    "javaEquivalent": "Angular (click) on document card emits @Output() documentSelected event; parent App component updates selectedDocument signal and shows PreviewPanelComponent"
+  },
+  {
+    "key": "document-grid-edit-tags",
+    "name": "Edit Tags Button",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/DocumentGrid.jsx:879-885",
+    "parentKey": "document-grid-document-list",
+    "domain": "tags",
+    "actionType": "modal-open",
+    "notes": [
+      "🏷️ button on each document card and list row.",
+      "onClick (with e.stopPropagation()) fires handleOpenTagEditor(e, doc).",
+      "Sets tagEditorVisible=true, tagEditorDocId=doc.id, tagEditorTags=doc.tags.",
+      "Opens inline tag editor modal within DocumentGrid."
+    ],
+    "javaEquivalent": "Angular (click) on tag edit button opens Angular MatDialog (or CDK Dialog) TagEditorDialogComponent; passes document id and current tags as dialog data"
+  },
+  {
+    "key": "document-grid-retry",
+    "name": "Retry on Error",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/DocumentGrid.jsx:951",
+    "parentKey": "document-grid",
+    "domain": "documents",
+    "actionType": "api-call",
+    "notes": [
+      "Shown only when error state is non-null.",
+      "onClick fires handleRefresh() → loadDocuments().",
+      "Calls GET /api/documents; clears error state on success."
+    ],
+    "javaEquivalent": "Angular (click) calls Angular DocumentService.getDocuments() again; error state cleared on success response"
+  },
+  {
+    "key": "document-grid-tag-editor-modal",
+    "name": "Tag Editor Modal",
+    "elementType": "ui-panel",
+    "location": "frontend/src/components/DocumentGrid.jsx:817-862",
+    "parentKey": "document-grid",
+    "domain": "tags",
+    "notes": [
+      "Fixed-position overlay modal rendered inside DocumentGrid (not a separate component).",
+      "Visible when state.tagEditorVisible is true.",
+      "Fields: tag text input (maxLength=50, Enter key adds tag), list of current tags with × remove buttons.",
+      "Maximum 10 tags per document enforced client-side and server-side.",
+      "Click on backdrop (overlay) closes modal without saving.",
+      "On save: calls PUT /api/documents/{id}/tags with tags array; updates local document list state."
+    ],
+    "javaEquivalent": "Angular MatDialog TagEditorDialogComponent; dialog data: { documentId, tags }; (save) calls Angular TagService HTTP PUT to Spring @RestController @PutMapping('/api/documents/{id}/tags'); afterClosed() updates parent document list"
+  },
+  {
+    "key": "document-grid-tag-editor-add-tag",
+    "name": "Add Tag Button",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/DocumentGrid.jsx:831",
+    "parentKey": "document-grid-tag-editor-modal",
+    "domain": "tags",
+    "actionType": "other",
+    "notes": [
+      "onClick fires handleAddTag(); also triggered by Enter key in tag input.",
+      "Adds trimmed non-empty, non-duplicate tag to tagEditorTags if count < 10.",
+      "No API call — modifies local modal state only."
+    ],
+    "javaEquivalent": "Angular (click) pushes new tag to FormArray; Validators.max(10) enforces tag count limit"
+  },
+  {
+    "key": "document-grid-tag-editor-save",
+    "name": "Save Tags Button",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/DocumentGrid.jsx:852-858",
+    "parentKey": "document-grid-tag-editor-modal",
+    "domain": "tags",
+    "actionType": "form-post",
+    "notes": [
+      "onClick fires handleSaveTags().",
+      "Calls PUT /api/documents/{tagEditorDocId}/tags with { tags: tagEditorTags }.",
+      "On success: updates document in local documents array; closes modal.",
+      "Button disabled and shows 'Saving...' while request is in-flight.",
+      "On error: logs to console; modal stays open."
+    ],
+    "javaEquivalent": "Angular (click) calls Angular TagService HTTP PUT to Spring @RestController @PutMapping('/api/documents/{id}/tags') with @RequestBody @Valid TagUpdateRequest; @Size(max=10) on tags field; closes dialog on success"
+  },
+  {
+    "key": "app-workspace-preview-panel",
+    "name": "Document Preview Panel",
+    "elementType": "ui-panel",
+    "location": "frontend/src/components/PreviewPanel.jsx:97-141",
+    "parentKey": "app-workspace",
+    "domain": "documents",
+    "notes": [
+      "React class component. Conditionally rendered by App when showPreview=true.",
+      "Displays selected document metadata: name, file_type, file_size (formatted).",
+      "PDF preview: uses react-pdf <Document>/<Page> with pdf.js worker from CDN. Shows page X of N.",
+      "Image preview: renders <img> with src from GET /api/documents/{id}/preview.",
+      "Other file types: 'Preview not available for this file type.'",
+      "Empty state (no document selected): 'Select a document to preview'.",
+      "Preview URL: GET /api/documents/{id}/preview — streams file binary with Content-Type header."
+    ],
+    "javaEquivalent": "Angular 19 PreviewPanelComponent receiving @Input() selectedDocument; PDF rendered via ng2-pdf-viewer or ngx-extended-pdf-viewer; image via <img [src]>; preview URL calls Spring @RestController @GetMapping('/api/documents/{id}/preview') which streams file with ResponseEntity<Resource>"
+  },
+  {
+    "key": "app-workspace-preview-panel-close",
+    "name": "Close Preview Button",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/PreviewPanel.jsx:101",
+    "parentKey": "app-workspace-preview-panel",
+    "domain": "documents",
+    "actionType": "other",
+    "notes": [
+      "onClick fires onClose() prop → App.handleClosePreview().",
+      "Clears selectedDocument; sets showPreview=false; hides PreviewPanel.",
+      "No API call."
+    ],
+    "javaEquivalent": "Angular (click) emits @Output() closed event; parent App component sets showPreview = false, hiding PreviewPanelComponent via @if"
+  },
+  {
+    "key": "upload-button",
+    "name": "Standalone Upload Button",
+    "elementType": "ui-panel",
+    "location": "frontend/src/components/UploadButton.jsx:57-73",
+    "parentKey": "app-workspace",
+    "domain": "upload",
+    "notes": [
+      "Standalone React functional component. Not mounted in App.jsx — exists as an alternative upload implementation alongside DocumentGrid's built-in upload area.",
+      "Hidden file input accepts .pdf,.jpg,.jpeg,.png.",
+      "On file select: sends FormData (file, name) to POST /api/upload via uploadDocument().",
+      "Status messages: 'Uploading...' during upload, 'Uploaded: {name}' on success, 'Upload failed: {error}' on error.",
+      "Calls onUploadComplete(response.data) prop on success."
+    ],
+    "javaEquivalent": "Angular 19 UploadButtonComponent; (change) on hidden file input calls Angular UploadService HTTP POST multipart to Spring @RestController @PostMapping('/api/upload'); emits @Output() uploadComplete on success"
+  },
+  {
+    "key": "upload-button-trigger",
+    "name": "Upload Document Button",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/UploadButton.jsx:66",
+    "parentKey": "upload-button",
+    "domain": "upload",
+    "actionType": "other",
+    "notes": [
+      "onClick fires handleClick() which triggers hidden file input click.",
+      "Button disabled and shows 'Uploading...' during upload.",
+      "Accepted file types: .pdf, .jpg, .jpeg, .png."
+    ],
+    "javaEquivalent": "Angular (click) programmatically clicks hidden <input type=file>; onChange calls Angular UploadService HTTP POST to Spring @RestController"
+  },
+  {
+    "key": "tag-editor-standalone",
+    "name": "Standalone Tag Editor",
+    "elementType": "ui-panel",
+    "location": "frontend/src/components/TagEditor.jsx:101-131",
+    "parentKey": "app-workspace",
+    "domain": "tags",
+    "notes": [
+      "Standalone React functional component. Not mounted in App.jsx — exists as an alternative tag editor alongside DocumentGrid's built-in inline tag editor modal.",
+      "Props: documentId, initialTags (array), onTagsUpdated callback.",
+      "Fields: tag text input (maxLength=50, Enter key adds tag), list of current tags with × remove buttons.",
+      "Maximum 10 tags enforced client-side (tags.length < 10 check).",
+      "Calls PUT /api/documents/{documentId}/tags via updateTags() on save."
+    ],
+    "javaEquivalent": "Angular 19 TagEditorComponent receiving @Input() documentId and @Input() initialTags; emits @Output() tagsUpdated; calls Angular TagService HTTP PUT to Spring @RestController @PutMapping('/api/documents/{id}/tags')"
+  },
+  {
+    "key": "tag-editor-standalone-add-tag",
+    "name": "Add Tag Button",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/TagEditor.jsx:113",
+    "parentKey": "tag-editor-standalone",
+    "domain": "tags",
+    "actionType": "other",
+    "notes": [
+      "onClick fires handleAdd(); also triggered by Enter key in tag input.",
+      "Adds trimmed non-empty, non-duplicate tag if count < 10.",
+      "No API call — updates local component state only."
+    ],
+    "javaEquivalent": "Angular (click) pushes new tag to FormArray; client-side validation enforces max 10 tags"
+  },
+  {
+    "key": "tag-editor-standalone-save-tags",
+    "name": "Save Tags Button",
+    "elementType": "ui-action",
+    "location": "frontend/src/components/TagEditor.jsx:127",
+    "parentKey": "tag-editor-standalone",
+    "domain": "tags",
+    "actionType": "form-post",
+    "notes": [
+      "onClick fires handleSave().",
+      "Calls updateTags(documentId, tags) → PUT /api/documents/{documentId}/tags with { tags }.",
+      "On success: calls onTagsUpdated(tags) prop.",
+      "Button disabled and shows 'Saving...' while request is in-flight.",
+      "On error: logs to console."
+    ],
+    "javaEquivalent": "Angular (click) calls Angular TagService HTTP PUT to Spring @RestController @PutMapping('/api/documents/{id}/tags') with @RequestBody @Valid TagUpdateRequest; emits @Output() tagsUpdated on success"
+  },
+  {
+    "key": "document-card",
+    "name": "Document Card",
+    "elementType": "ui-panel",
+    "location": "frontend/src/components/DocumentCard.jsx:45-67",
+    "parentKey": "document-grid-document-list",
+    "domain": "documents",
+    "notes": [
+      "Standalone React functional component. Not used by DocumentGrid (which renders cards inline via renderCard()); exists as a separate alternative card implementation.",
+      "Props: document (object with name, file_type, tags, uploaded_at), onClick callback.",
+      "Displays: document name, file type, upload date (via formatDate), tags as chips, 'No tags' italic text when no tags.",
+      "Imports formatFileSize from DocumentGrid.jsx (anti-pattern: utility exported from god component).",
+      "onClick fires onClick(document) prop."
+    ],
+    "javaEquivalent": "Angular 19 DocumentCardComponent receiving @Input() document: DocumentDto; emits @Output() selected EventEmitter on click; tag chips rendered with @for loop"
+  }
+]

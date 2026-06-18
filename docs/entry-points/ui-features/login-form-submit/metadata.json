@@ -1,0 +1,16 @@
+{
+  "key": "login-form-submit",
+  "name": "Sign In Button",
+  "type": "ui-feature",
+  "elementType": "ui-action",
+  "uri": "Client-side form submit; triggers POST /api/auth/login then POST /api/auth/refresh",
+  "location": "frontend/src/components/LoginForm.jsx",
+  "codeBehind": "frontend/src/context/AuthContext.jsx",
+  "domain": "auth",
+  "notes": [
+    "Submit button is disabled and label switches to 'Signing in...' while AuthContext.loading is true (AuthContext.jsx:51).",
+    "On form submit, calls AuthContext.login(email, password) which chains POST /api/auth/login then POST /api/auth/refresh before setting isAuthenticated=true.",
+    "BUG (FR-007): POST /api/auth/refresh returns {session:{...}} instead of {token:'...'}; AuthContext crashes unconditionally with TypeError: Cannot read properties of undefined (reading 'split') on valid credentials.",
+    "Two independent error surfaces exist below the form: this.state.error (set by LoginForm.handleSubmit catch) and this.context.error (set by AuthContext catch); both can render simultaneously."
+  ]
+}

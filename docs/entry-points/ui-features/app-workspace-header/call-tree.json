@@ -1,0 +1,52 @@
+{
+  "entryPoint": {
+    "method": "Header",
+    "file": "frontend/src/components/Header.jsx",
+    "line": 32,
+    "notes": "Functional React component. Receives onNavigate callback prop from App.handleNavigate."
+  },
+  "calls": [
+    {
+      "method": "onNavigate('documents')",
+      "trigger": "onClick on Documents span",
+      "file": "frontend/src/components/Header.jsx",
+      "line": 37,
+      "calls": [
+        {
+          "method": "App.handleNavigate",
+          "file": "frontend/src/App.jsx",
+          "line": 58,
+          "notes": "Calls this.setState({ activeSection: 'documents' }). No API call. No DB op."
+        }
+      ]
+    },
+    {
+      "method": "onNavigate('upload')",
+      "trigger": "onClick on Upload span",
+      "file": "frontend/src/components/Header.jsx",
+      "line": 40,
+      "calls": [
+        {
+          "method": "App.handleNavigate",
+          "file": "frontend/src/App.jsx",
+          "line": 58,
+          "notes": "Calls this.setState({ activeSection: 'upload' }). No API call. No DB op."
+        }
+      ]
+    },
+    {
+      "method": "onNavigate('search')",
+      "trigger": "onClick on Search span",
+      "file": "frontend/src/components/Header.jsx",
+      "line": 43,
+      "calls": [
+        {
+          "method": "App.handleNavigate",
+          "file": "frontend/src/App.jsx",
+          "line": 58,
+          "notes": "Calls this.setState({ activeSection: 'search' }). No API call. No DB op."
+        }
+      ]
+    }
+  ]
+}

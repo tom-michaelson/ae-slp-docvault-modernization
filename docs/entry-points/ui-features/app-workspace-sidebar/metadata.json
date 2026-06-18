@@ -1,0 +1,15 @@
+{
+  "key": "app-workspace-sidebar",
+  "name": "App Workspace Sidebar",
+  "type": "ui-feature",
+  "elementType": "ui-panel",
+  "uri": "N/A — embedded navigation panel rendered inside the authenticated app layout; not a routed page",
+  "location": "frontend/src/components/Sidebar.jsx",
+  "domain": "navigation",
+  "notes": [
+    "The sidebar is a stateless presentational component — activeSection and onNavigate are fully controlled by the parent (App.jsx class component state).",
+    "The 'tags' section (🏷️ Tags) is exclusive to the sidebar; Header.jsx duplicates Documents/Upload/Search navigation but omits Tags.",
+    "A TOGGLE_SIDEBAR Redux action exists in uiReducer.js, but the Sidebar component does not read ui.sidebarOpen from the Redux store — collapse/expand behavior is not implemented.",
+    "The sidebar is only rendered when AuthContext.isAuthenticated === true; App.jsx returns <LoginForm /> instead when unauthenticated."
+  ]
+}

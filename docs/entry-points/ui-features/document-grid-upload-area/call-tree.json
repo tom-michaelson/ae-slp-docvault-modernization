@@ -1,0 +1,108 @@
+{
+  "entryPoint": {
+    "method": "DocumentGrid.renderUploadArea",
+    "file": "frontend/src/components/DocumentGrid.jsx",
+    "line": 778,
+    "notes": "Render helper, not a lifecycle method. Called unconditionally from render() at line 1010."
+  },
+  "eventHandlers": [
+    {
+      "event": "onDragEnter",
+      "method": "DocumentGrid.handleDragEnter",
+      "file": "frontend/src/components/DocumentGrid.jsx",
+      "line": 688,
+      "writes": ["state.isDragging = true"]
+    },
+    {
+      "event": "onDragOver",
+      "method": "DocumentGrid.handleDragOver",
+      "file": "frontend/src/components/DocumentGrid.jsx",
+      "line": 700,
+      "notes": "Calls e.preventDefault() and e.stopPropagation() only — no state change."
+    },
+    {
+      "event": "onDragLeave",
+      "method": "DocumentGrid.handleDragLeave",
+      "file": "frontend/src/components/DocumentGrid.jsx",
+      "line": 694,
+      "writes": ["state.isDragging = false"]
+    },
+    {
+      "event": "onDrop",
+      "method": "DocumentGrid.handleDrop",
+      "file": "frontend/src/components/DocumentGrid.jsx",
+      "line": 705,
+      "writes": ["state.isDragging = false"],
+      "calls": [
+        {
+          "method": "DocumentGrid.uploadFile",
+          "file": "frontend/src/components/DocumentGrid.jsx",
+          "line": 728,
+          "writes": ["state.uploadProgress = 'uploading'", "state.uploadError = null"],
+          "calls": [
+            {
+              "method": "uploadDocument(formData)",
+              "file": "frontend/src/utils/api.js",
+              "line": 36,
+              "notes": "POST /api/upload with Content-Type: multipart/form-data. FormData fields: file (File), name (string = file.name).",
+              "calls": [
+                {
+                  "method": "router.post('/') in upload.js",
+                  "file": "backend/src/routes/upload.js",
+                  "line": 35,
+                  "calls": [
+                    {
+                      "method": "pool.query INSERT INTO documents",
+                      "file": "backend/src/routes/upload.js",
+                      "line": 45,
+                      "db": {"table": "documents", "op": "insert"},
+                      "notes": "Inserts name, file_type, file_path, tags (null from upload area — body.tags not sent), uploaded_by (req.user.email or null). INSERT fires trg_sync_to_v2 which copies the row to documents_v2 without tags."
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "method": "DocumentGrid.loadDocuments",
+              "file": "frontend/src/components/DocumentGrid.jsx",
+              "line": 550,
+              "notes": "Called after successful upload to refresh the document list.",
+              "calls": [
+                {
+                  "method": "fetchDocuments()",
+                  "file": "frontend/src/utils/api.js",
+                  "line": 34,
+                  "notes": "GET /api/documents",
+                  "db": {"table": "documents", "op": "select"}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "event": "onClick (drop zone)",
+      "method": "DocumentGrid.handleFileInputClick",
+      "file": "frontend/src/components/DocumentGrid.jsx",
+      "line": 717,
+      "notes": "Programmatically clicks the hidden file input (fileInputRef) to open the OS file picker.",
+      "calls": []
+    },
+    {
+      "event": "onChange (hidden file input)",
+      "method": "DocumentGrid.handleFileInputChange",
+      "file": "frontend/src/components/DocumentGrid.jsx",
+      "line": 721,
+      "notes": "Reads e.target.files[0]; resets input value to '' after upload so the same file can be re-selected.",
+      "calls": [
+        {
+          "method": "DocumentGrid.uploadFile",
+          "file": "frontend/src/components/DocumentGrid.jsx",
+          "line": 728,
+          "notes": "Same path as onDrop — see above."
+        }
+      ]
+    }
+  ]
+}

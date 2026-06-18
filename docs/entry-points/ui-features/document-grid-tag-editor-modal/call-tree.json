@@ -1,0 +1,138 @@
+{
+  "handlers": [
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleOpenTagEditor",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 619,
+        "trigger": "onClick on 🏷️ button (card and list row)"
+      },
+      "calls": [
+        {
+          "method": "Event.stopPropagation",
+          "notes": "Prevents the click from bubbling to the parent card's handleDocumentClick handler."
+        },
+        {
+          "method": "DocumentGrid.setState",
+          "writes": [
+            "tagEditorVisible = true",
+            "tagEditorDocId = doc.id",
+            "tagEditorTags = [...doc.tags] (shallow copy of existing tags, or [] if none)",
+            "tagEditorInput = ''"
+          ]
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleCloseTagEditor",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 629,
+        "trigger": "onClick on Cancel button or on backdrop overlay"
+      },
+      "calls": [
+        {
+          "method": "DocumentGrid.setState",
+          "writes": [
+            "tagEditorVisible = false",
+            "tagEditorDocId = null",
+            "tagEditorTags = []",
+            "tagEditorInput = ''"
+          ]
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleAddTag",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 642,
+        "trigger": "onClick on Add button, or Enter key press in tag input"
+      },
+      "calls": [
+        {
+          "method": "DocumentGrid.setState",
+          "notes": "Only called when: trimmed input is non-empty, tag is not already in tagEditorTags, and tagEditorTags.length < 10.",
+          "writes": [
+            "tagEditorTags = [...tagEditorTags, newTag]",
+            "tagEditorInput = ''"
+          ]
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleRemoveTag",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 653,
+        "trigger": "onClick on × span next to a tag chip"
+      },
+      "calls": [
+        {
+          "method": "DocumentGrid.setState",
+          "writes": [
+            "tagEditorTags = tagEditorTags.filter(t !== tagToRemove)"
+          ]
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleSaveTags",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 666,
+        "trigger": "onClick on Save button"
+      },
+      "calls": [
+        {
+          "method": "DocumentGrid.setState",
+          "writes": ["tagSaving = true"]
+        },
+        {
+          "method": "updateTags",
+          "file": "frontend/src/utils/api.js",
+          "line": 40,
+          "calls": [
+            {
+              "method": "axios.put",
+              "http": {
+                "method": "PUT",
+                "path": "/api/documents/:id/tags",
+                "body": "{ tags: string[] }"
+              },
+              "calls": [
+                {
+                  "method": "router.put('/:id/tags')",
+                  "file": "backend/src/routes/tags.js",
+                  "line": 7,
+                  "calls": [
+                    {
+                      "method": "pool.query",
+                      "file": "backend/src/routes/tags.js",
+                      "line": 21,
+                      "db": { "table": "documents_v2", "op": "update" },
+                      "notes": "UPDATE documents_v2 SET tags = $1 WHERE id = $2 RETURNING id, tags. Returns 404 if row not found. Validates: tags must be array, max 10 after filtering blanks."
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "method": "DocumentGrid.setState (success path)",
+          "writes": [
+            "documents = documents.map(d => d.id === tagEditorDocId ? {...d, tags: tagEditorTags} : d)",
+            "tagSaving = false",
+            "tagEditorVisible = false"
+          ]
+        },
+        {
+          "method": "DocumentGrid.setState (error path)",
+          "notes": "Only tagSaving is reset to false on error; modal stays open, error is console.error only (no UI error message shown).",
+          "writes": ["tagSaving = false"]
+        }
+      ]
+    }
+  ]
+}

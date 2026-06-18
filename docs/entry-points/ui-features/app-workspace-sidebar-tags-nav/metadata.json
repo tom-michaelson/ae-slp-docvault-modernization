@@ -1,0 +1,15 @@
+{
+  "key": "app-workspace-sidebar-tags-nav",
+  "name": "Workspace sidebar – Tags navigation",
+  "type": "ui-feature",
+  "elementType": "ui-panel",
+  "uri": "n/a — client-side section switch; sets activeSection = 'tags' in App state",
+  "location": "frontend/src/components/Sidebar.jsx",
+  "domain": "tags",
+  "notes": [
+    "The Tags nav item calls onNavigate('tags'), which sets App.state.activeSection = 'tags'. App.jsx renders DocumentGrid unconditionally regardless of activeSection — no separate tags view or route is mounted.",
+    "Sidebar is a stateless functional component; it holds no Redux connection and receives activeSection and onNavigate purely as props from App (class component).",
+    "Header.jsx provides duplicate navigation for Documents, Upload, and Search but deliberately omits Tags, making this sidebar item the only entry point for the tags section concept.",
+    "The inline tag editor modal lives in DocumentGrid (handleOpenTagEditor / renderTagEditor), not in this sidebar item — opening that modal is triggered per-document from DocumentGrid, not from this nav click."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "key": "document-grid-document-list",
+  "name": "Document List",
+  "type": "ui-feature",
+  "elementType": "ui-panel",
+  "uri": "/",
+  "location": "frontend/src/components/DocumentGrid.jsx:1025-1031",
+  "domain": "documents",
+  "notes": [
+    "Sub-panel of DocumentGrid. Renders the filtered+sorted document set in either grid (card tiles) or list (compact rows) layout depending on state.viewMode.",
+    "displayDocs is computed inside render() by chaining filterDocuments(documents, filters) → sortDocuments(result, sortBy); no extra API call is issued when filters or sort change.",
+    "Data source switches between GET /api/documents (full list on mount/refresh) and GET /api/search?q={query} (search results when the search bar has a non-empty query); both responses overwrite state.documents.",
+    "Three mutually exclusive overlay states take priority over the list: loading ('Loading documents...'), error (message + Retry button), and empty (📂 'No documents found' + hint)."
+  ]
+}

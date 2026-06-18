@@ -1,0 +1,37 @@
+{
+  "entryPoint": {
+    "method": "TagEditor.handleAdd",
+    "file": "frontend/src/components/TagEditor.jsx",
+    "line": 70,
+    "triggers": [
+      "button onClick (TagEditor.jsx:113)",
+      "input onKeyPress Enter (TagEditor.jsx:94-98 via handleKeyPress)"
+    ]
+  },
+  "calls": [
+    {
+      "method": "String.prototype.trim",
+      "notes": "Trims whitespace from newTag state value. Result stored in local variable `tag`.",
+      "reads": ["newTag (React state)"]
+    },
+    {
+      "method": "Array.prototype.includes",
+      "notes": "Duplicate-tag guard: returns true if `tag` already exists in current tags array; handleAdd exits silently when true.",
+      "reads": ["tags (React state)"]
+    },
+    {
+      "method": "React.useState setter — setTags",
+      "file": "frontend/src/components/TagEditor.jsx",
+      "line": 66,
+      "notes": "Called only when tag is non-empty, non-duplicate, and tags.length < 10. Appends tag via spread: [...tags, tag].",
+      "writes": ["tags (React state)"]
+    },
+    {
+      "method": "React.useState setter — setNewTag",
+      "file": "frontend/src/components/TagEditor.jsx",
+      "line": 67,
+      "notes": "Resets input field to empty string after a successful add.",
+      "writes": ["newTag (React state)"]
+    }
+  ]
+}

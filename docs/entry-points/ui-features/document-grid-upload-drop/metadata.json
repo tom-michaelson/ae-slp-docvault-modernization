@@ -1,0 +1,16 @@
+{
+  "key": "document-grid-upload-drop",
+  "name": "Drag-and-Drop Upload",
+  "type": "ui-feature",
+  "elementType": "ui-action",
+  "uri": "POST /api/upload",
+  "location": "frontend/src/components/DocumentGrid.jsx",
+  "domain": "upload",
+  "parentKey": "document-grid-upload-area",
+  "notes": [
+    "handleDrop processes only files[0] — multi-file drops silently discard all files after the first.",
+    "Drag visual feedback is managed by isDragging state toggled by handleDragEnter/handleDragLeave; handleDragOver only calls preventDefault so the browser allows the drop.",
+    "uploadFile is a shared method called by both the drop handler (handleDrop) and the click-to-browse handler (handleFileInputChange), so the two upload paths are identical once a File object is obtained.",
+    "On successful upload the component immediately re-fetches the full document list via loadDocuments(); the 'done' progress indicator is cleared after a 2-second timeout."
+  ]
+}

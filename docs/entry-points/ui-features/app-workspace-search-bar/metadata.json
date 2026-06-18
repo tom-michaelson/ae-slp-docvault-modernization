@@ -1,0 +1,15 @@
+{
+  "key": "app-workspace-search-bar",
+  "name": "Workspace Search Bar",
+  "type": "ui-feature",
+  "elementType": "ui-panel",
+  "uri": "/app (authenticated workspace — no dedicated route)",
+  "location": "frontend/src/components/SearchBar.jsx",
+  "domain": "search",
+  "notes": [
+    "SearchBar is a controlled form component that holds its own local query state (useState); it does NOT read from or write to the Redux store directly.",
+    "Submitting an empty or whitespace-only query is silently ignored — SearchBar's handleSubmit guards with query.trim() and never calls onSearch.",
+    "App.jsx routes the onSearch callback to DocumentGrid via an imperative ref (this.documentGridRef.handleSearch), bypassing Redux entirely; the actual HTTP call is made inside DocumentGrid, not SearchBar.",
+    "The component is rendered only when the user is authenticated; App.jsx returns <LoginForm /> unconditionally if isAuthenticated is false, so SearchBar is never mounted for unauthenticated users."
+  ]
+}

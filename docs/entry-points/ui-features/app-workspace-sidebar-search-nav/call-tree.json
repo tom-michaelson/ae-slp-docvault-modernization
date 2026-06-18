@@ -1,0 +1,92 @@
+{
+  "handlers": [
+    {
+      "entryPoint": {
+        "method": "Sidebar (li onClick handler)",
+        "file": "frontend/src/components/Sidebar.jsx",
+        "line": 48,
+        "notes": "Inline arrow function on each <li>: onClick={() => onNavigate && onNavigate(section.id)}"
+      },
+      "calls": [
+        {
+          "method": "App.handleNavigate",
+          "file": "frontend/src/App.jsx",
+          "line": 58,
+          "writes": ["App.state.activeSection"],
+          "notes": "Sets activeSection to one of: 'documents', 'upload', 'search', 'tags'. No API call is made. All four sections re-render DocumentGrid unchanged."
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "SearchBar.handleSubmit",
+        "file": "frontend/src/components/SearchBar.jsx",
+        "line": 31,
+        "notes": "Bound to <form onSubmit>. Guards with query.trim() check before firing onSearch prop."
+      },
+      "calls": [
+        {
+          "method": "App.handleSearch",
+          "file": "frontend/src/App.jsx",
+          "line": 70,
+          "notes": "Imperative delegate: calls this.documentGridRef?.handleSearch(query) via a React ref. If the ref is unset (e.g., DocumentGrid not yet mounted), the call is silently dropped.",
+          "calls": [
+            {
+              "method": "DocumentGrid.handleSearch",
+              "file": "frontend/src/components/DocumentGrid.jsx",
+              "line": 566,
+              "calls": [
+                {
+                  "method": "searchDocuments",
+                  "file": "frontend/src/utils/api.js",
+                  "line": 42,
+                  "notes": "GET /api/search?q={encodeURIComponent(query)} with Bearer token header from localStorage.",
+                  "calls": [
+                    {
+                      "method": "SearchOrchestrator.search",
+                      "file": "backend/src/services/SearchOrchestrator.js",
+                      "line": 17,
+                      "calls": [
+                        {
+                          "method": "IndexManager.search",
+                          "file": "backend/src/services/IndexManager.js",
+                          "line": 23,
+                          "notes": "IndexManager.isIndexAvailable() always returns false; always delegates to FallbackSearchProvider.",
+                          "calls": [
+                            {
+                              "method": "FallbackSearchProvider.search",
+                              "file": "backend/src/services/FallbackSearchProvider.js",
+                              "line": 9,
+                              "db": { "table": "documents_v2", "op": "select" },
+                              "notes": "SELECT * FROM documents_v2 WHERE name ILIKE $1 ORDER BY uploaded_at DESC. Pattern is %{normalizedQuery}%."
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleFilterChange (internal Filter input)",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 600,
+        "notes": "Separate from the SearchBar path. Bound to an <input> inside DocumentGrid's own header controls. Does NOT call the API."
+      },
+      "calls": [
+        {
+          "method": "filterDocuments (module-level function)",
+          "file": "frontend/src/components/DocumentGrid.jsx",
+          "line": 485,
+          "notes": "Pure client-side filter: case-insensitive substring match on document.name and document.tags. No network call. Operates on already-loaded documents in local state."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "key": "tag-editor-standalone-save-tags",
+  "name": "Tag Editor — Save Tags",
+  "type": "ui-feature",
+  "elementType": "ui-component",
+  "uri": "PUT /api/documents/:id/tags",
+  "location": "frontend/src/components/TagEditor.jsx",
+  "domain": "tags",
+  "notes": [
+    "Standalone React component receiving documentId, initialTags, and onTagsUpdated callback as props; all tag list mutations are local-state-only until Save Tags is clicked.",
+    "Tag uniqueness and the 10-tag cap are enforced client-side in handleAdd; the backend re-enforces the 10-tag cap server-side and rejects non-string entries.",
+    "The save call requires an authenticated session — the axios instance attaches a Bearer token from localStorage key 'docvault_token'; the backend middleware checks JWT, session, or API key.",
+    "The entire tags array is replaced atomically on every save (PostgreSQL TEXT[] column overwritten); there is no partial-update or delta mechanism."
+  ]
+}

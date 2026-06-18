@@ -1,0 +1,15 @@
+{
+  "key": "app-workspace-sidebar-upload-nav",
+  "name": "Upload Sidebar Link",
+  "type": "ui-feature",
+  "elementType": "ui-action",
+  "uri": null,
+  "location": "frontend/src/components/Sidebar.jsx",
+  "domain": "navigation",
+  "notes": [
+    "Rendered as a <li> element inside Sidebar's sections.map() at line 44; section id is 'upload', label is '⬆️ Upload'.",
+    "onClick calls the onNavigate prop with 'upload', which resolves to App.handleNavigate and sets activeSection='upload' in App class component state.",
+    "Active-state styling (navItemActiveStyle: darker background #0f3460, white text) is applied when the activeSection prop equals 'upload'; otherwise navItemStyle is used.",
+    "Clicking the link does NOT switch the main content area — App.jsx always renders DocumentGrid regardless of activeSection; the Upload link is a visual-only selection with no corresponding upload-specific content panel."
+  ]
+}

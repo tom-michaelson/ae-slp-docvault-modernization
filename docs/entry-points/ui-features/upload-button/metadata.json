@@ -1,0 +1,16 @@
+{
+  "key": "upload-button",
+  "name": "Standalone Upload Button",
+  "type": "ui-feature",
+  "elementType": "ui-panel",
+  "uri": "N/A — component is not routed; rendered wherever the parent mounts it",
+  "location": "frontend/src/components/UploadButton.jsx",
+  "domain": "upload",
+  "notes": [
+    "Standalone React functional component that is NOT mounted in App.jsx — it exists as an alternative upload implementation alongside DocumentGrid's built-in upload area.",
+    "Hidden <input type='file'> accepts .pdf, .jpg, .jpeg, .png; the visible button programmatically triggers it via a ref click.",
+    "On file selection, sends multipart/form-data (fields: 'file', 'name') to POST /api/upload via uploadDocument() from utils/api.js; no 'tags' field is submitted.",
+    "Calls the onUploadComplete(response.data) prop on success, enabling parent components to refresh state; status messages are rendered inline below the button.",
+    "Auth: all /api/* routes require a JWT Bearer token stored in localStorage under 'docvault_token'; a missing or invalid token causes the axios interceptor to log a 401 warning and reject the request."
+  ]
+}

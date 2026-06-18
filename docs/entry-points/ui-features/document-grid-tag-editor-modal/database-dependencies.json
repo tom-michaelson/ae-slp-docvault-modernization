@@ -1,0 +1,17 @@
+[
+  {
+    "type": "table",
+    "name": "documents_v2",
+    "key": "documents-v2",
+    "operations": ["update"],
+    "columns": ["id", "tags"],
+    "locations": [
+      "backend/src/routes/tags.js",
+      "backend/src/db/migrations/002-create-documents-v2.sql"
+    ],
+    "notes": [
+      "The tag editor issues a full replacement UPDATE on the tags column (TEXT[] in PostgreSQL) — it replaces the entire array, not individual elements.",
+      "The route validates the inbound array (must be an array, max 10 non-blank strings) and filters empty strings before writing. The RETURNING clause sends back the persisted id and tags so the caller can confirm."
+    ]
+  }
+]

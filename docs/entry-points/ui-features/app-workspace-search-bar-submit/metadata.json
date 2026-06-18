@@ -1,0 +1,15 @@
+{
+  "key": "app-workspace-search-bar-submit",
+  "name": "Search Submit Button",
+  "type": "ui-feature",
+  "elementType": "ui-action",
+  "uri": "GET /api/search?q={query}",
+  "location": "frontend/src/components/SearchBar.jsx",
+  "domain": "documents",
+  "notes": [
+    "Button is type='submit' inside a <form onSubmit={handleSubmit}> — keyboard Enter also triggers the same handler.",
+    "Empty or whitespace-only queries are silently ignored client-side; no API call is made.",
+    "App.handleSearch delegates to DocumentGrid via an imperative React ref (documentGridRef?.handleSearch); if the ref is null the call is silently swallowed.",
+    "The backend search path always executes a PostgreSQL ILIKE on documents_v2.name; the IndexManager index-availability branch is dead code (indexReady is hardcoded false)."
+  ]
+}

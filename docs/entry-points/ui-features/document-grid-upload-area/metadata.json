@@ -1,0 +1,16 @@
+{
+  "key": "document-grid-upload-area",
+  "name": "Document Upload Area",
+  "type": "ui-feature",
+  "elementType": "ui-panel",
+  "uri": "POST /api/upload",
+  "location": "frontend/src/components/DocumentGrid.jsx",
+  "codeBehind": null,
+  "domain": "upload",
+  "notes": [
+    "Drag-and-drop zone rendered above the document list; also handles click-to-browse via a hidden file input.",
+    "Accepts PDF, JPEG, and PNG only — enforced both by the accept attribute on the hidden input and by multer's fileFilter on the server.",
+    "Three upload-progress visual states: idle ('Drop files here or click to upload'), uploading ('Uploading...'), and done ('✅ Upload complete!'); done clears after 2 seconds.",
+    "On successful upload calls loadDocuments() to refresh the grid; on error displays the server error message inline in red text."
+  ]
+}

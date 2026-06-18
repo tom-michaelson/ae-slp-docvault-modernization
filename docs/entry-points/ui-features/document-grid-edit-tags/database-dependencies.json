@@ -1,0 +1,17 @@
+[
+  {
+    "type": "table",
+    "name": "documents_v2",
+    "key": "documents-v2",
+    "operations": ["update"],
+    "columns": ["id", "tags"],
+    "locations": [
+      "backend/src/db/migrations/002-create-documents-v2.sql",
+      "backend/src/routes/tags.js"
+    ],
+    "notes": [
+      "The tags column is a PostgreSQL TEXT[] array. The PUT handler replaces the entire array atomically with a single UPDATE … SET tags = $1 WHERE id = $2.",
+      "The backend re-filters the submitted tags array (trims whitespace, removes non-strings, enforces max 10) before writing; the frontend enforces the same max-10 and no-duplicate rules client-side, so the backend filter is a defence-in-depth check."
+    ]
+  }
+]

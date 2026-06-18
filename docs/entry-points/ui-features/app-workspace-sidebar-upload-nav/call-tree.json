@@ -1,0 +1,32 @@
+{
+  "entryPoint": {
+    "method": "Sidebar.<li onClick>",
+    "file": "frontend/src/components/Sidebar.jsx",
+    "line": 48,
+    "notes": "Fires when user clicks the list item whose section.id === 'upload'; guard `onNavigate &&` prevents crash when prop is absent."
+  },
+  "calls": [
+    {
+      "method": "props.onNavigate('upload')",
+      "file": "frontend/src/components/Sidebar.jsx",
+      "line": 48,
+      "notes": "Prop passed from App.jsx; resolves at runtime to App.handleNavigate.",
+      "calls": [
+        {
+          "method": "App.handleNavigate",
+          "file": "frontend/src/App.jsx",
+          "line": 58,
+          "calls": [
+            {
+              "method": "this.setState({ activeSection: 'upload' })",
+              "file": "frontend/src/App.jsx",
+              "line": 59,
+              "notes": "Triggers re-render; updated activeSection prop is passed down to Sidebar, switching the Upload <li> to navItemActiveStyle. No content panel change occurs — DocumentGrid is always rendered.",
+              "writes": ["App.state.activeSection"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

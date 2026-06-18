@@ -1,0 +1,15 @@
+{
+  "key": "document-grid-filter-type",
+  "name": "Document Grid — Filter by Type",
+  "type": "ui-feature",
+  "elementType": "ui-control",
+  "uri": "/",
+  "location": "frontend/src/components/DocumentGrid.jsx",
+  "domain": "documents",
+  "notes": [
+    "The type filter is a controlled <select> rendered inside DocumentGrid's header bar; state lives in DocumentGrid.state.filters.fileType (initialized as empty string = 'All Types').",
+    "Filtering is purely client-side: changing the select calls handleFilterChange which setState-merges the new fileType into filters; the render path then re-runs filterDocuments() with no API call.",
+    "filterDocuments() performs an exact MIME-type match (===) against doc.file_type; selecting 'All Types' (empty string) skips the type check and shows every document.",
+    "The active filter label is echoed in the status bar at the bottom of the component (DocumentGrid.jsx:1040) as '· Filter: <mimeType>'."
+  ]
+}

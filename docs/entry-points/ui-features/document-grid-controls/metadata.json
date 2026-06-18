@@ -1,0 +1,15 @@
+{
+  "key": "document-grid-controls",
+  "name": "Document grid header controls",
+  "type": "ui-feature",
+  "elementType": "ui-panel",
+  "uri": null,
+  "location": "frontend/src/components/DocumentGrid.jsx",
+  "domain": "document-management",
+  "notes": [
+    "The controls bar occupies lines 971-1007 of the render() method inside the DocumentGrid class component; it is not a standalone page or route.",
+    "Client-side filtering (search text and file type) is applied in render() via filterDocuments() — no API call is made when the user types or changes the select; the full document list stays in component state.",
+    "The Refresh button is the only control in this panel that triggers an API call (GET /api/documents); the search input does NOT invoke the backend GET /api/search endpoint.",
+    "View mode (grid/list) and sort order are kept only in component state and are reset on every unmount."
+  ]
+}

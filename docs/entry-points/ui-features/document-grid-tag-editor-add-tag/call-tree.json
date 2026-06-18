@@ -1,0 +1,21 @@
+{
+  "entryPoint": {
+    "method": "DocumentGrid.handleAddTag",
+    "file": "frontend/src/components/DocumentGrid.jsx",
+    "line": 642,
+    "trigger": "onClick on Add button (line 831), also delegated from handleTagKeyPress on Enter key (line 659–663)"
+  },
+  "calls": [
+    {
+      "method": "DocumentGrid.setState",
+      "notes": "Guards: (1) newTag = tagEditorInput.trim() must be truthy, (2) newTag must not already be in tagEditorTags, (3) tagEditorTags.length must be < 10. When all guards pass: appends newTag to tagEditorTags and sets tagEditorInput to ''. When any guard fails: no state change (silent no-op)."
+    }
+  ],
+  "companionHandler": {
+    "method": "DocumentGrid.handleTagKeyPress",
+    "file": "frontend/src/components/DocumentGrid.jsx",
+    "line": 659,
+    "trigger": "onKeyPress on tag text input (line 826)",
+    "notes": "If e.key === 'Enter', calls e.preventDefault() then delegates to handleAddTag(). Acts as a keyboard shortcut for the Add button; identical validation applies."
+  }
+}

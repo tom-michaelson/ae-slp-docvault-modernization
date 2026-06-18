@@ -1,0 +1,17 @@
+[
+  {
+    "type": "table",
+    "name": "documents_v2",
+    "key": "documents-v2",
+    "operations": ["select"],
+    "columns": ["id", "name", "file_type", "file_path", "tags", "uploaded_at", "uploaded_by"],
+    "locations": [
+      "backend/src/routes/documents.js",
+      "backend/src/db/migrations/002-create-documents-v2.sql"
+    ],
+    "notes": [
+      "All rows are fetched (SELECT * FROM documents_v2 ORDER BY uploaded_at DESC) each time the Refresh button is clicked or on component mount; the response payload is stored in this.state.documents.",
+      "Client-side filterDocuments() and sortDocuments() operate on the in-memory copy, so the database is not re-queried when the user types in the search box or changes the file-type dropdown."
+    ]
+  }
+]

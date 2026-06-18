@@ -1,0 +1,15 @@
+{
+  "key": "app-workspace-header-search-nav",
+  "name": "App workspace header search navigation",
+  "type": "ui-feature",
+  "elementType": "ui-nav",
+  "uri": "/",
+  "location": "frontend/src/components/Header.jsx",
+  "domain": "navigation",
+  "notes": [
+    "Header is always rendered in the authenticated workspace; its three nav links (Documents, Upload, Search) update App's activeSection state via the onNavigate callback.",
+    "Clicking 'Search' (Header.jsx:43) calls onNavigate('search'), which highlights 'Search' in the Sidebar — the SearchBar is always visible regardless of activeSection.",
+    "The SearchBar (SearchBar.jsx) is mounted in App.jsx, not inside Header; search submission is routed through an imperative ref (App.documentGridRef) to DocumentGrid.handleSearch.",
+    "Auth guard: App.render() returns <LoginForm /> before rendering the Header if AuthContext.isAuthenticated is false; the Header itself has no auth logic."
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "handlers": [
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.componentDidMount",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 543
+      },
+      "calls": [
+        {
+          "method": "DocumentGrid.loadDocuments",
+          "file": "frontend/src/components/DocumentGrid.jsx",
+          "line": 550,
+          "calls": [
+            {
+              "method": "fetchDocuments",
+              "file": "frontend/src/utils/api.js",
+              "line": 34,
+              "calls": [
+                {
+                  "method": "axios.get /api/documents",
+                  "file": "backend/src/routes/documents.js",
+                  "line": 10,
+                  "db": { "table": "documents_v2", "op": "select" },
+                  "notes": "SELECT * FROM documents_v2 ORDER BY uploaded_at DESC; response shape: { documents: [...] }"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleRefresh",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 612
+      },
+      "calls": [
+        {
+          "method": "DocumentGrid.loadDocuments",
+          "file": "frontend/src/components/DocumentGrid.jsx",
+          "line": 550,
+          "notes": "Same as componentDidMount path. Triggered by the Refresh button click."
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleSearch",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 566
+      },
+      "calls": [
+        {
+          "method": "searchDocuments",
+          "file": "frontend/src/utils/api.js",
+          "line": 42,
+          "notes": "Only called when query.trim() is non-empty. Falls back to DocumentGrid.loadDocuments() when the query is cleared.",
+          "calls": [
+            {
+              "method": "axios.get /api/search?q={query}",
+              "file": "backend/src/routes/search.js",
+              "line": 8,
+              "calls": [
+                {
+                  "method": "SearchOrchestrator.search",
+                  "file": "backend/src/services/SearchOrchestrator.js",
+                  "db": { "table": "documents_v2", "op": "select" },
+                  "notes": "Response shape: { results: [...], query, total }. Component maps response.data.results to state.documents."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.uploadFile",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 728
+      },
+      "calls": [
+        {
+          "method": "uploadDocument",
+          "file": "frontend/src/utils/api.js",
+          "line": 36,
+          "calls": [
+            {
+              "method": "axios.post /api/upload (multipart/form-data)",
+              "file": "backend/src/routes/upload.js",
+              "line": 35,
+              "db": [
+                { "table": "documents", "op": "insert" },
+                { "table": "documents_v2", "op": "insert" }
+              ],
+              "notes": "multer saves file to disk; INSERT INTO documents RETURNING *. DB trigger trg_sync_to_v2 copies row to documents_v2 but omits the tags column — tag-loss bug on initial upload."
+            }
+          ]
+        },
+        {
+          "method": "DocumentGrid.loadDocuments",
+          "file": "frontend/src/components/DocumentGrid.jsx",
+          "line": 550,
+          "notes": "Called after successful upload to refresh the document list."
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleSaveTags",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 666
+      },
+      "calls": [
+        {
+          "method": "updateTags",
+          "file": "frontend/src/utils/api.js",
+          "line": 40,
+          "calls": [
+            {
+              "method": "axios.put /api/documents/:id/tags",
+              "file": "backend/src/routes/tags.js",
+              "line": 7,
+              "db": { "table": "documents_v2", "op": "update" },
+              "notes": "UPDATE documents_v2 SET tags = $1 WHERE id = $2 RETURNING id, tags. Validates: tags must be array, max 10 items. On success the component optimistically updates state.documents without a re-fetch."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

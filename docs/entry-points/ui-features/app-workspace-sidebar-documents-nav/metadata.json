@@ -1,0 +1,17 @@
+{
+  "key": "app-workspace-sidebar-documents-nav",
+  "name": "All Documents Sidebar Link",
+  "type": "ui-feature",
+  "elementType": "ui-action",
+  "uri": "client-side only — no route change; sets activeSection='documents' in App state",
+  "location": "frontend/src/components/Sidebar.jsx",
+  "domain": "navigation",
+  "parentKey": "app-workspace-sidebar",
+  "actionType": "navigation",
+  "notes": [
+    "Rendered inside a sections.map() loop at Sidebar.jsx:44; the 'documents' entry is the first item in the sections array (index 0) with id='documents' and label='📁 All Documents'.",
+    "onClick evaluates onNavigate && onNavigate('documents') — the guard prevents a TypeError when the prop is omitted.",
+    "Active styling is applied inline: when App.state.activeSection === 'documents', navItemActiveStyle (background #0f3460, white text) is used instead of navItemStyle.",
+    "The Sidebar exposes 4 nav targets (documents, upload, search, tags); the Header nav exposes only 3 (documents, upload, search). Both surfaces set the same App.state.activeSection field via the same App.handleNavigate handler."
+  ]
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "type": "table",
+    "name": "documents_v2",
+    "key": "documents-v2",
+    "operations": ["select"],
+    "columns": ["id", "file_path", "file_type"],
+    "locations": [
+      "backend/src/routes/documents.js"
+    ],
+    "notes": [
+      "Queried by GET /api/documents/:id/preview to retrieve file_path (to locate the binary on disk) and file_type (to set the Content-Type response header); the query uses SELECT * but only those two columns are consumed.",
+      "This DB read is conditional: it only fires when the selected document has a previewable MIME type (application/pdf, image/jpeg, image/png, image/gif). Clicking a document with a non-previewable type (e.g., text/plain) does not trigger any DB access."
+    ]
+  }
+]

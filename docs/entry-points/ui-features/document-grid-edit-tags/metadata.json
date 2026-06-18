@@ -1,0 +1,15 @@
+{
+  "key": "document-grid-edit-tags",
+  "name": "Edit Tags Button",
+  "type": "ui-feature",
+  "elementType": "ui-action",
+  "uri": "PUT /api/documents/{id}/tags",
+  "location": "frontend/src/components/DocumentGrid.jsx",
+  "domain": "tags",
+  "notes": [
+    "The 🏷️ button appears on every document card (grid view, line 879-885) and every list row (list view, lines 925-930); both call the same handler.",
+    "onClick uses e.stopPropagation() to prevent the card/row click-to-select handler from also firing.",
+    "Opening the modal is pure client-side state: tagEditorVisible, tagEditorDocId, tagEditorTags are set without any API call.",
+    "Saving calls PUT /api/documents/{id}/tags and on success updates the documents array in local state — no full page reload."
+  ]
+}

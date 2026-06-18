@@ -1,0 +1,52 @@
+{
+  "entryPoint": {
+    "method": "DocumentGrid.handleDocumentClick",
+    "file": "frontend/src/components/DocumentGrid.jsx",
+    "line": 589
+  },
+  "calls": [
+    {
+      "method": "DocumentGrid.setState({ selectedDocument: doc })",
+      "file": "frontend/src/components/DocumentGrid.jsx",
+      "line": 590,
+      "notes": "Sets local selectedDocument state. Triggers re-render of the clicked card (renderCard) or row (renderListRow), swapping styles.card → styles.cardSelected (or styles.listRow → styles.listRowSelected): border changes to 2px solid #0f3460, background to #f0f4ff."
+    },
+    {
+      "method": "App.handleDocumentSelect",
+      "file": "frontend/src/App.jsx",
+      "line": 62,
+      "notes": "Called via this.props.onDocumentSelect(doc). Only invoked if the prop is defined (it always is when DocumentGrid is rendered inside App).",
+      "calls": [
+        {
+          "method": "App.setState({ selectedDocument: doc, showPreview: true })",
+          "file": "frontend/src/App.jsx",
+          "line": 63,
+          "notes": "Mounts PreviewPanel beside DocumentGrid. Previously selected document (if any) is replaced without an explicit deselect step."
+        },
+        {
+          "method": "PreviewPanel.render",
+          "file": "frontend/src/components/PreviewPanel.jsx",
+          "line": 81,
+          "notes": "Receives document prop. Renders document name, file_type, and file_size from the already-loaded doc object (no fetch for metadata).",
+          "calls": [
+            {
+              "method": "getPreviewUrl(document.id)",
+              "file": "frontend/src/utils/api.js",
+              "line": 43,
+              "notes": "Constructs URL string: `${API_BASE_URL}/documents/${id}/preview`. The URL is placed in <Document file=...> (react-pdf) for PDFs, or <img src=...> for images. The browser fetches the URL — there is no explicit axios/fetch call in JS.",
+              "calls": [
+                {
+                  "method": "GET /api/documents/:id/preview",
+                  "file": "backend/src/routes/documents.js",
+                  "line": 42,
+                  "db": { "table": "documents_v2", "op": "select" },
+                  "notes": "Fetches document row to obtain file_path and file_type; resolves the physical file from config.uploadDir; sends binary with correct Content-Type header. Only triggered for previewable MIME types."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

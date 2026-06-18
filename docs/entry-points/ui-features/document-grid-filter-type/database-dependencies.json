@@ -1,0 +1,18 @@
+[
+  {
+    "type": "table",
+    "name": "documents_v2",
+    "key": "documents-v2",
+    "operations": ["select"],
+    "columns": ["id", "name", "file_type", "file_path", "tags", "uploaded_at", "uploaded_by"],
+    "locations": [
+      "frontend/src/utils/api.js",
+      "backend/src/routes/documents.js",
+      "backend/src/db/migrations/002-create-documents-v2.sql"
+    ],
+    "notes": [
+      "All columns are fetched by the single SELECT * query in GET /api/documents; the filter feature uses file_type for its exact-match comparison and name/tags for the combined text search in filterDocuments().",
+      "This table is read once on component mount; the type filter then operates entirely in-memory against the cached rows — no further DB access is triggered when the user changes the filter value."
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+{
+  "entryPoint": {
+    "method": "DocumentGrid.handleRefresh",
+    "file": "frontend/src/components/DocumentGrid.jsx",
+    "line": 612
+  },
+  "calls": [
+    {
+      "method": "DocumentGrid.loadDocuments",
+      "file": "frontend/src/components/DocumentGrid.jsx",
+      "line": 550,
+      "writes": [
+        "this.state.loading (true → false)",
+        "this.state.error (cleared on entry, set on failure)",
+        "this.state.documents (replaced with API response on success)"
+      ],
+      "calls": [
+        {
+          "method": "fetchDocuments",
+          "file": "frontend/src/utils/api.js",
+          "line": 37,
+          "reads": ["localStorage['docvault_token']"],
+          "notes": "axios.get('/documents') → HTTP GET /api/documents with Bearer token if present",
+          "calls": [
+            {
+              "method": "router.get('/')",
+              "file": "backend/src/routes/documents.js",
+              "line": 8,
+              "calls": [
+                {
+                  "method": "pool.query",
+                  "file": "backend/src/routes/documents.js",
+                  "line": 11,
+                  "db": { "table": "documents_v2", "op": "select" },
+                  "notes": "SELECT * FROM documents_v2 ORDER BY uploaded_at DESC; returns all rows including id, name, file_type, file_path, tags, uploaded_at, uploaded_by"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "alternateEntryPoints": [
+    {
+      "method": "DocumentGrid.renderError (Retry button onClick)",
+      "file": "frontend/src/components/DocumentGrid.jsx",
+      "line": 951,
+      "notes": "Retry button is only rendered when this.state.error is non-null. Its onClick fires handleRefresh(), producing an identical call chain to the primary entry point.",
+      "callsThrough": "DocumentGrid.handleRefresh (line 612)"
+    }
+  ]
+}

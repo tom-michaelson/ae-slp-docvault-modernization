@@ -1,0 +1,32 @@
+[
+  {
+    "type": "table",
+    "name": "documents",
+    "key": "documents",
+    "operations": ["insert"],
+    "columns": ["id", "name", "file_type", "file_path", "tags", "uploaded_at", "uploaded_by"],
+    "locations": [
+      "backend/src/routes/upload.js",
+      "backend/src/db/migrations/001-create-documents.sql"
+    ],
+    "notes": [
+      "A new row is inserted by POST /api/upload with name, file_type (MIME string), file_path (/uploads/{uuid}{ext}), tags (null for click-to-upload — frontend sends no tags field), and uploaded_by (req.user.email or null).",
+      "uploaded_at is set by the column DEFAULT NOW() in the migration; the INSERT does not supply it explicitly."
+    ]
+  },
+  {
+    "type": "table",
+    "name": "documents_v2",
+    "key": "documents-v2",
+    "operations": ["insert"],
+    "columns": ["id", "name", "file_type", "file_path", "uploaded_at", "uploaded_by"],
+    "locations": [
+      "backend/src/db/migrations/002-create-documents-v2.sql",
+      "backend/src/db/migrations/003-create-trigger.sql"
+    ],
+    "notes": [
+      "Populated automatically by trigger trg_sync_to_v2 immediately after the documents INSERT; the trigger function copies id, name, file_type, file_path, uploaded_at, and uploaded_by but deliberately omits tags.",
+      "A freshly uploaded document therefore has tags = null in documents_v2 regardless of any tags supplied during upload; they remain null until a separate PUT /api/documents/{id}/tags call is made."
+    ]
+  }
+]

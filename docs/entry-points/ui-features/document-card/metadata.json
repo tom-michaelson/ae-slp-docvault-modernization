@@ -1,0 +1,15 @@
+{
+  "key": "document-card",
+  "name": "Document Card",
+  "type": "ui-feature",
+  "elementType": "ui-panel",
+  "uri": null,
+  "location": "frontend/src/components/DocumentCard.jsx",
+  "domain": "documents",
+  "notes": [
+    "Standalone React functional component. Not used by DocumentGrid (which renders cards inline via renderCard()); exists as a separate alternative card implementation.",
+    "Props: document (object with name, file_type, tags, uploaded_at), onClick callback.",
+    "Displays: document name, file type, upload date (via formatDate), tags as chips, 'No tags' italic text when no tags.",
+    "Imports formatFileSize from DocumentGrid.jsx but never calls it — dead import caused by the anti-pattern of exporting utilities from a god component."
+  ]
+}

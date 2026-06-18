@@ -1,0 +1,17 @@
+{
+  "key": "document-grid-retry",
+  "name": "Retry on Error",
+  "type": "ui-feature",
+  "elementType": "ui-action",
+  "uri": "N/A — no route change; triggers GET /api/documents",
+  "location": "frontend/src/components/DocumentGrid.jsx",
+  "domain": "documents",
+  "parentKey": "document-grid",
+  "actionType": "api-call",
+  "notes": [
+    "Rendered only when DocumentGrid.state.error is non-null; the entire errorContainer div is conditionally displayed via {error && this.renderError()}.",
+    "onClick fires handleRefresh() (line 612) which delegates immediately to loadDocuments() — no additional state check occurs before the API call.",
+    "loadDocuments() sets loading:true and error:null before calling fetchDocuments(), so the error banner disappears the moment Retry is clicked regardless of outcome.",
+    "On a successful retry the documents array is repopulated from GET /api/documents and the error state is cleared; on a second failure the error banner reappears with the new message."
+  ]
+}

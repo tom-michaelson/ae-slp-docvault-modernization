@@ -1,0 +1,71 @@
+{
+  "handlers": [
+    {
+      "entryPoint": {
+        "method": "AuthProvider.componentDidMount",
+        "file": "frontend/src/context/AuthContext.jsx",
+        "line": 31,
+        "notes": "AuthProvider.componentDidMount fires automatically when the AuthProvider mounts (inside AppWithAuth before App renders). Calls this.checkAuthBypass() synchronously; if the bypass succeeds, App.jsx never renders LoginForm."
+      },
+      "calls": [
+        {
+          "method": "AuthProvider.checkAuthBypass",
+          "file": "frontend/src/context/AuthContext.jsx",
+          "line": 36,
+          "calls": [
+            {
+              "method": "axios.get",
+              "file": "frontend/src/context/AuthContext.jsx",
+              "line": 38,
+              "http": { "method": "GET", "url": "${API_BASE_URL}/health" },
+              "notes": "If response.data.skipAuth is truthy (set by backend DEV_SKIP_AUTH=true env var), state is set to { user: { email: 'dev@docvault.local', role: 'admin' }, isAuthenticated: true }. On any network error the catch block swallows the exception silently and LoginForm remains visible."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "LoginForm.handleSubmit",
+        "file": "frontend/src/components/LoginForm.jsx",
+        "line": 72,
+        "notes": "Triggered by form onSubmit. Calls e.preventDefault() then delegates entirely to AuthContext.login(email, password)."
+      },
+      "calls": [
+        {
+          "method": "AuthProvider.login",
+          "file": "frontend/src/context/AuthContext.jsx",
+          "line": 50,
+          "calls": [
+            {
+              "method": "axios.post — /api/auth/login",
+              "file": "frontend/src/context/AuthContext.jsx",
+              "line": 55,
+              "http": { "method": "POST", "url": "${API_BASE_URL}/auth/login", "body": "{ email, password }" },
+              "writes": [
+                "localStorage['docvault_token'] = token",
+                "localStorage['docvault_refresh_token'] = refreshToken"
+              ],
+              "notes": "Backend validates against hardcoded credentials (admin@docvault.local / docvault123). Returns { token: 'eyJ...', refreshToken: 'eyJ...' } on success; 400 if fields missing, 401 if credentials wrong."
+            },
+            {
+              "method": "axios.post — /api/auth/refresh",
+              "file": "frontend/src/context/AuthContext.jsx",
+              "line": 68,
+              "http": { "method": "POST", "url": "${API_BASE_URL}/auth/refresh", "body": "{ refreshToken }" },
+              "notes": "BUG (FR-007): backend returns { session: { userId, email, createdAt } } instead of { token, refreshToken }. The very next line — refreshResponse.data.token.split('.') — throws 'Cannot read properties of undefined (reading split)' because refreshResponse.data.token is undefined.",
+              "calls": [
+                {
+                  "method": "String.prototype.split — CRASHES HERE",
+                  "file": "frontend/src/context/AuthContext.jsx",
+                  "line": 75,
+                  "notes": "refreshResponse.data.token is undefined. This line always throws. Execution falls to the catch block, which sets error state and re-throws; LoginForm renders the error message."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "handlers": [
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.componentDidMount",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 543
+      },
+      "calls": [
+        {
+          "method": "DocumentGrid.loadDocuments",
+          "file": "frontend/src/components/DocumentGrid.jsx",
+          "line": 550,
+          "calls": [
+            {
+              "method": "fetchDocuments",
+              "file": "frontend/src/utils/api.js",
+              "line": 34,
+              "calls": [
+                {
+                  "method": "axios.get('/documents')",
+                  "file": "backend/src/routes/documents.js",
+                  "line": 10,
+                  "calls": [
+                    {
+                      "method": "pool.query",
+                      "file": "backend/src/routes/documents.js",
+                      "line": 12,
+                      "db": { "table": "documents_v2", "op": "select" },
+                      "notes": "SELECT * FROM documents_v2 ORDER BY uploaded_at DESC. Returns all documents; client-side filter and sort are applied in render()."
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleSearch",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 566,
+        "notes": "Called when the controls-bar search input changes. Empty query falls back to loadDocuments(); non-empty query calls searchDocuments."
+      },
+      "calls": [
+        {
+          "method": "searchDocuments",
+          "file": "frontend/src/utils/api.js",
+          "line": 42,
+          "calls": [
+            {
+              "method": "axios.get('/search?q={query}')",
+              "file": "backend/src/routes/search.js",
+              "line": 8,
+              "calls": [
+                {
+                  "method": "SearchOrchestrator.search",
+                  "file": "backend/src/services/SearchOrchestrator.js",
+                  "line": 17,
+                  "calls": [
+                    {
+                      "method": "SearchOrchestrator.normalizeQuery",
+                      "file": "backend/src/services/SearchOrchestrator.js",
+                      "line": 32,
+                      "notes": "Trims and lowercases the query string. Returns null for blank input."
+                    },
+                    {
+                      "method": "IndexManager.search",
+                      "file": "backend/src/services/IndexManager.js",
+                      "line": 23,
+                      "notes": "isIndexAvailable() always returns false; always delegates to FallbackSearchProvider.",
+                      "calls": [
+                        {
+                          "method": "FallbackSearchProvider.search",
+                          "file": "backend/src/services/FallbackSearchProvider.js",
+                          "line": 9,
+                          "calls": [
+                            {
+                              "method": "pool.query",
+                              "file": "backend/src/services/FallbackSearchProvider.js",
+                              "line": 11,
+                              "db": { "table": "documents_v2", "op": "select" },
+                              "notes": "SELECT * FROM documents_v2 WHERE name ILIKE $1 ORDER BY uploaded_at DESC. Pattern is '%{normalizedQuery}%'. Tags are not searched at the DB level; tag matching is client-side only."
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "method": "SearchOrchestrator.rerank",
+                      "file": "backend/src/services/SearchOrchestrator.js",
+                      "line": 44,
+                      "notes": "No-op: sets score: 1.0 on every result. Intended for TF-IDF/BM25 ranking that was never implemented."
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.render (panel lines 1025-1031)",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 961,
+        "notes": "Not an event handler — called on every state change. Client-side filter and sort run here before the list renders."
+      },
+      "calls": [
+        {
+          "method": "filterDocuments",
+          "file": "frontend/src/components/DocumentGrid.jsx",
+          "line": 485,
+          "notes": "Filters state.documents by filters.fileType (exact match on file_type) and filters.searchQuery (case-insensitive substring on name or any tag). No DB call."
+        },
+        {
+          "method": "sortDocuments",
+          "file": "frontend/src/components/DocumentGrid.jsx",
+          "line": 468,
+          "notes": "Sorts by 'date' (uploaded_at DESC, default), 'name' (localeCompare ASC), or 'type' (file_type localeCompare ASC). No DB call."
+        },
+        {
+          "method": "DocumentGrid.renderCard",
+          "file": "frontend/src/components/DocumentGrid.jsx",
+          "line": 865,
+          "notes": "Called for each doc when viewMode='grid'. Uses getFileIcon, getFileTypeLabel, formatDate, isPreviewable from utils/fileHelpers and utils/formatDate."
+        },
+        {
+          "method": "DocumentGrid.renderListRow",
+          "file": "frontend/src/components/DocumentGrid.jsx",
+          "line": 907,
+          "notes": "Called for each doc when viewMode='list'. Shows icon, name, type+date+tag-count meta line."
+        }
+      ]
+    }
+  ]
+}

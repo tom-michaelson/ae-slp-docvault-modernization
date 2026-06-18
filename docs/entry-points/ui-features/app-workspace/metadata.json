@@ -1,0 +1,17 @@
+{
+  "key": "app-workspace",
+  "name": "Application workspace shell",
+  "type": "ui-feature",
+  "elementType": "ui-page",
+  "uri": "/",
+  "location": "frontend/src/App.jsx",
+  "domain": "workspace",
+  "notes": [
+    "Root SPA shell that orchestrates the entire DocVault UI: auth gate, navigation, document browsing, search, upload, and document preview in a single-page layout.",
+    "Authentication gate: renders LoginForm exclusively when AuthContext.isAuthenticated is false; renders the full workspace (Header + Sidebar + SearchBar + DocumentGrid + optional PreviewPanel) when true.",
+    "Auth bypass: on mount, AuthContext.checkAuthBypass calls GET /api/health — if response.data.skipAuth is true the user is auto-authenticated as dev@docvault.local without credentials.",
+    "Login flow has a known crash (FR-007): POST /api/auth/refresh returns { session: {...} } instead of { token: '...' }, causing response.data.token.split('.') to throw a null-reference TypeError — login is effectively blocked unless the backend DEV_SKIP_AUTH env var is active.",
+    "No client-side routing: section changes (documents, upload, search, tags) update App.state.activeSection only; the URL stays at / throughout.",
+    "DocumentGrid is wired via an imperative ref (this.documentGridRef) so the SearchBar can call DocumentGrid.handleSearch() directly — an anti-pattern that couples sibling components through the parent."
+  ]
+}

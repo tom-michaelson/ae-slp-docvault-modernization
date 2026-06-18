@@ -1,0 +1,15 @@
+{
+  "key": "app-workspace-header",
+  "name": "Application Header",
+  "type": "ui-feature",
+  "elementType": "ui-panel",
+  "uri": "persistent — rendered in App.jsx for all authenticated routes",
+  "location": "frontend/src/components/Header.jsx",
+  "domain": "navigation",
+  "notes": [
+    "Header is rendered only when AuthContext.isAuthenticated is true; unauthenticated users are shown LoginForm instead (App.jsx:80-82).",
+    "Navigation is click-handler-based with no React Router — clicking a nav item calls the onNavigate callback prop which sets App.state.activeSection; the URL does not change.",
+    "Header exposes three nav targets (documents, upload, search); the Sidebar additionally exposes 'tags', which is absent from the Header.",
+    "Header is stateless and consumes no Redux store or AuthContext directly — all state is owned by the parent App class component."
+  ]
+}

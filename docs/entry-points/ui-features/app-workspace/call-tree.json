@@ -1,0 +1,186 @@
+{
+  "handlers": [
+    {
+      "entryPoint": {
+        "method": "AuthProvider.componentDidMount → checkAuthBypass",
+        "file": "frontend/src/context/AuthContext.jsx",
+        "line": 31
+      },
+      "calls": [
+        {
+          "method": "axios.get",
+          "endpoint": "GET /api/health",
+          "notes": "If response.data.skipAuth === true, sets isAuthenticated=true with synthetic user { email: 'dev@docvault.local', role: 'admin' } — no credentials required.",
+          "db": null
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "LoginForm.handleSubmit → AuthProvider.login",
+        "file": "frontend/src/context/AuthContext.jsx",
+        "line": 50
+      },
+      "calls": [
+        {
+          "method": "axios.post",
+          "endpoint": "POST /api/auth/login",
+          "notes": "Step 1 — works correctly. Returns { token, refreshToken }. Stores both in localStorage under keys 'docvault_token' and 'docvault_refresh_token'.",
+          "writes": ["localStorage['docvault_token']", "localStorage['docvault_refresh_token']"]
+        },
+        {
+          "method": "axios.post",
+          "endpoint": "POST /api/auth/refresh",
+          "notes": "Step 2 — crashes. Backend returns { session: {...} } instead of { token: '...' }. The next line calls response.data.token.split('.') which throws TypeError: Cannot read properties of undefined (reading 'split'). This is FR-007.",
+          "crashLine": 75,
+          "db": null
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "App.handleNavigate",
+        "file": "frontend/src/App.jsx",
+        "line": 58
+      },
+      "calls": [
+        {
+          "method": "App.setState({ activeSection })",
+          "notes": "Pure state update — no API call. Sidebar and Header both call this; the active section is reflected only in Sidebar highlighting (no route change).",
+          "db": null
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "App.handleDocumentSelect",
+        "file": "frontend/src/App.jsx",
+        "line": 62
+      },
+      "calls": [
+        {
+          "method": "App.setState({ selectedDocument, showPreview: true })",
+          "notes": "Sets the document object received from DocumentGrid into App state, which causes PreviewPanel to render.",
+          "db": null
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "App.handleClosePreview",
+        "file": "frontend/src/App.jsx",
+        "line": 66
+      },
+      "calls": [
+        {
+          "method": "App.setState({ selectedDocument: null, showPreview: false })",
+          "notes": "Hides PreviewPanel by clearing selected document from App state.",
+          "db": null
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "App.handleSearch → DocumentGrid.handleSearch",
+        "file": "frontend/src/App.jsx",
+        "line": 70
+      },
+      "calls": [
+        {
+          "method": "DocumentGrid.handleSearch",
+          "file": "frontend/src/components/DocumentGrid.jsx",
+          "line": 566,
+          "notes": "Invoked via imperative ref (this.documentGridRef.handleSearch). If query is empty string, delegates to loadDocuments() instead.",
+          "calls": [
+            {
+              "method": "searchDocuments(query)",
+              "file": "frontend/src/utils/api.js",
+              "line": 42,
+              "endpoint": "GET /api/search?q={query}",
+              "notes": "Results placed in DocumentGrid.state.documents replacing the full list.",
+              "db": { "table": "documents_v2", "op": "select", "notes": "SearchOrchestrator queries documents_v2 via full-text or ILIKE depending on provider." }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.componentDidMount → loadDocuments",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 543
+      },
+      "calls": [
+        {
+          "method": "fetchDocuments()",
+          "file": "frontend/src/utils/api.js",
+          "line": 34,
+          "endpoint": "GET /api/documents",
+          "db": { "table": "documents_v2", "op": "select" },
+          "notes": "Returns { documents: [...] }. Response shape: response.data.documents."
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.uploadFile",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 728
+      },
+      "calls": [
+        {
+          "method": "uploadDocument(formData)",
+          "file": "frontend/src/utils/api.js",
+          "line": 36,
+          "endpoint": "POST /api/upload",
+          "notes": "Multipart form data. Backend writes to 'documents' table; a PostgreSQL trigger copies the row to 'documents_v2' but deliberately omits the tags column (FR-008).",
+          "db": [
+            { "table": "documents", "op": "insert" },
+            { "table": "documents_v2", "op": "insert", "notes": "Via trigger trg_sync_to_v2 — tags column is NULL on this inserted row." }
+          ]
+        },
+        {
+          "method": "DocumentGrid.loadDocuments",
+          "file": "frontend/src/components/DocumentGrid.jsx",
+          "line": 550,
+          "notes": "Called after successful upload to refresh the document list.",
+          "db": { "table": "documents_v2", "op": "select" }
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleSaveTags",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 666
+      },
+      "calls": [
+        {
+          "method": "updateTags(docId, tags)",
+          "file": "frontend/src/utils/api.js",
+          "line": 40,
+          "endpoint": "PUT /api/documents/{id}/tags",
+          "db": { "table": "documents_v2", "op": "update", "columns": ["tags"] },
+          "notes": "Writes directly to documents_v2.tags. Max 10 tags enforced by backend. Local DocumentGrid state is also updated optimistically."
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "PreviewPanel.render → getPreviewUrl",
+        "file": "frontend/src/components/PreviewPanel.jsx",
+        "line": 93
+      },
+      "calls": [
+        {
+          "method": "getPreviewUrl(document.id)",
+          "file": "frontend/src/utils/api.js",
+          "line": 43,
+          "endpoint": "GET /api/documents/{id}/preview",
+          "notes": "Returns the raw file binary with correct Content-Type. Used by react-pdf <Document> for PDFs and <img> for images.",
+          "db": { "table": "documents_v2", "op": "select", "columns": ["file_path", "file_type"] }
+        }
+      ]
+    }
+  ]
+}

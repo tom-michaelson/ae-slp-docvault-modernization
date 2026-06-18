@@ -1,0 +1,15 @@
+{
+  "key": "document-grid-tag-editor-modal",
+  "name": "Document Grid – Tag Editor Modal",
+  "type": "ui-feature",
+  "elementType": "modal",
+  "uri": null,
+  "location": "frontend/src/components/DocumentGrid.jsx",
+  "domain": "documents",
+  "notes": [
+    "The modal is entirely self-contained inside the DocumentGrid class component; it duplicates the logic of the standalone TagEditor.jsx functional component that is never actually consumed anywhere.",
+    "All modal state lives in DocumentGrid class state: tagEditorVisible, tagEditorDocId, tagEditorTags, tagEditorInput, tagSaving.",
+    "Clicking the backdrop overlay closes the modal; click propagation is stopped on the inner modal container to prevent accidental dismissal.",
+    "On successful save the local documents array in DocumentGrid state is patched in place (map over id) so the grid reflects the new tags immediately without a full API re-fetch."
+  ]
+}

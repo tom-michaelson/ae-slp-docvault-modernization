@@ -1,0 +1,68 @@
+{
+  "handlers": [
+    {
+      "entryPoint": {
+        "method": "TagEditor.handleAdd",
+        "file": "frontend/src/components/TagEditor.jsx",
+        "line": 70
+      },
+      "calls": [],
+      "notes": "Pure local state mutation. Trims newTag, rejects empty string, rejects duplicates (Array.includes), rejects if tags.length >= 10. No API call."
+    },
+    {
+      "entryPoint": {
+        "method": "TagEditor.handleRemove",
+        "file": "frontend/src/components/TagEditor.jsx",
+        "line": 78
+      },
+      "calls": [],
+      "notes": "Pure local state mutation. Filters out the target tag string. No API call."
+    },
+    {
+      "entryPoint": {
+        "method": "TagEditor.handleKeyPress",
+        "file": "frontend/src/components/TagEditor.jsx",
+        "line": 94
+      },
+      "calls": [
+        {
+          "method": "TagEditor.handleAdd",
+          "file": "frontend/src/components/TagEditor.jsx",
+          "line": 70,
+          "notes": "Delegates to handleAdd when e.key === 'Enter'; calls e.preventDefault() first."
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "TagEditor.handleSave",
+        "file": "frontend/src/components/TagEditor.jsx",
+        "line": 82
+      },
+      "calls": [
+        {
+          "method": "updateTags",
+          "file": "frontend/src/utils/api.js",
+          "line": 40,
+          "calls": [
+            {
+              "method": "axios.put",
+              "endpoint": "PUT /api/documents/{documentId}/tags",
+              "requestBody": "{ tags: string[] }",
+              "file": "backend/src/routes/tags.js",
+              "line": 7,
+              "db": { "table": "documents_v2", "op": "update" },
+              "notes": "Server re-validates: tags must be an array, max 10 items. Returns 404 if document not found. Returns { id, tags } on success."
+            }
+          ]
+        },
+        {
+          "method": "onTagsUpdated (prop callback)",
+          "file": "frontend/src/components/TagEditor.jsx",
+          "line": 86,
+          "notes": "Called only if the PUT succeeds and the prop is defined. Passes the current tags array to the parent."
+        }
+      ]
+    }
+  ]
+}

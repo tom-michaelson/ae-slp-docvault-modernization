@@ -1,0 +1,55 @@
+{
+  "handlers": [
+    {
+      "entryPoint": {
+        "method": "PreviewPanel.render",
+        "file": "frontend/src/components/PreviewPanel.jsx",
+        "line": 81
+      },
+      "calls": [
+        {
+          "method": "getPreviewUrl",
+          "file": "frontend/src/utils/api.js",
+          "line": 43,
+          "notes": "Constructs URL string: `${API_BASE_URL}/documents/${id}/preview`. No HTTP call made here — URL string is passed as `file` prop to react-pdf <Document> and as `src` on <img>. Actual HTTP GET is initiated by the browser or react-pdf."
+        },
+        {
+          "method": "formatFileSize",
+          "file": "frontend/src/components/DocumentGrid.jsx",
+          "line": 21,
+          "notes": "Anti-pattern: utility imported from a 800-line god component. Converts raw byte count to human-readable string (B / KB / MB / GB / TB). Guarded by `document.file_size &&` so it is only called when the prop is present and non-zero."
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "PreviewPanel.onDocumentLoadSuccess",
+        "file": "frontend/src/components/PreviewPanel.jsx",
+        "line": 73
+      },
+      "calls": [],
+      "notes": "Callback registered on react-pdf <Document onLoadSuccess>. Sets numPages and clears loading=false in component state. Triggers re-render to show page count and hide 'Loading PDF...' message."
+    },
+    {
+      "entryPoint": {
+        "method": "PreviewPanel.onDocumentLoadError",
+        "file": "frontend/src/components/PreviewPanel.jsx",
+        "line": 77
+      },
+      "calls": [],
+      "notes": "Callback registered on react-pdf <Document onLoadError>. Sets error=error.message and loading=false. Triggers re-render to show red error message in place of PDF content."
+    }
+  ],
+  "backendEndpoint": {
+    "method": "GET /api/documents/:id/preview",
+    "file": "backend/src/routes/documents.js",
+    "line": 42,
+    "calls": [
+      {
+        "method": "pool.query",
+        "db": { "table": "documents_v2", "op": "select" },
+        "notes": "SELECT * FROM documents_v2 WHERE id = $1. Returns the document row to obtain file_path (physical disk path) and file_type (MIME type). Returns 404 JSON if id not found or file not on disk."
+      }
+    ]
+  }
+}

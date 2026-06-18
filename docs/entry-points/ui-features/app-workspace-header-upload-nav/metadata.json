@@ -1,0 +1,15 @@
+{
+  "key": "app-workspace-header-upload-nav",
+  "name": "Upload Header Link",
+  "type": "ui-feature",
+  "elementType": "ui-action",
+  "uri": "client-side only — no route change; sets activeSection='upload' in App state",
+  "location": "frontend/src/components/Header.jsx",
+  "domain": "navigation",
+  "notes": [
+    "Clicking 'Upload' calls onNavigate('upload'), a prop passed from App.jsx as this.handleNavigate.",
+    "App.handleNavigate sets this.state.activeSection = 'upload', which causes the Sidebar to highlight the Upload item; DocumentGrid (including its embedded upload area) is always rendered regardless of activeSection.",
+    "The Header component is only mounted when AuthContext.isAuthenticated is true; the entire app tree is replaced by LoginForm otherwise.",
+    "The onNavigate prop is guarded inline (onNavigate && onNavigate('upload')), so omitting the prop causes no crash."
+  ]
+}

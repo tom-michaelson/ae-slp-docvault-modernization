@@ -1,0 +1,29 @@
+{
+  "entryPoint": {
+    "method": "DocumentCard",
+    "file": "frontend/src/components/DocumentCard.jsx",
+    "line": 45
+  },
+  "calls": [
+    {
+      "method": "formatDate",
+      "file": "frontend/src/utils/formatDate.js",
+      "line": 5,
+      "notes": "Called with uploaded_at prop value; returns locale-formatted date string (en-US, year/month/day/hour/minute). Returns 'Unknown date' if input is falsy; returns 'Invalid date' if input fails Date parse."
+    },
+    {
+      "method": "onClick",
+      "file": "frontend/src/components/DocumentCard.jsx",
+      "line": 49,
+      "notes": "Fires onClick(document) when the card div is clicked. Guard: onClick is called only if the prop is defined (onClick && onClick(document))."
+    }
+  ],
+  "unusedImports": [
+    {
+      "method": "formatFileSize",
+      "importedFrom": "frontend/src/components/DocumentGrid.jsx",
+      "line": 21,
+      "notes": "Imported at DocumentCard.jsx:5 but never referenced in the component body. Dead import caused by the anti-pattern of exporting utilities from a god component."
+    }
+  ]
+}

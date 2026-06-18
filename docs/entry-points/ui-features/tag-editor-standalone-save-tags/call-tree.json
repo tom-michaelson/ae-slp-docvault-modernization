@@ -1,0 +1,81 @@
+{
+  "handlers": [
+    {
+      "entryPoint": {
+        "method": "TagEditor.handleAdd",
+        "file": "frontend/src/components/TagEditor.jsx",
+        "line": 70,
+        "trigger": "Add button onClick / input onKeyPress(Enter)"
+      },
+      "calls": [],
+      "notes": "Pure local-state operation. Trims input, checks tag not already present, enforces max-10 cap, then calls setTags and setNewTag. No API calls."
+    },
+    {
+      "entryPoint": {
+        "method": "TagEditor.handleRemove",
+        "file": "frontend/src/components/TagEditor.jsx",
+        "line": 78,
+        "trigger": "× span onClick on each tag chip"
+      },
+      "calls": [],
+      "notes": "Pure local-state operation. Filters the removed tag out of the tags array via setTags. No API calls."
+    },
+    {
+      "entryPoint": {
+        "method": "TagEditor.handleKeyPress",
+        "file": "frontend/src/components/TagEditor.jsx",
+        "line": 94,
+        "trigger": "input onKeyPress"
+      },
+      "calls": [
+        {
+          "method": "TagEditor.handleAdd",
+          "file": "frontend/src/components/TagEditor.jsx",
+          "line": 70,
+          "notes": "Called only when e.key === 'Enter'; e.preventDefault() suppresses form submission."
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "TagEditor.handleSave",
+        "file": "frontend/src/components/TagEditor.jsx",
+        "line": 82,
+        "trigger": "Save Tags button onClick"
+      },
+      "calls": [
+        {
+          "method": "updateTags",
+          "file": "frontend/src/utils/api.js",
+          "line": 40,
+          "notes": "Sets saving=true before call; sets saving=false in finally block. Calls onTagsUpdated(tags) prop callback on success.",
+          "calls": [
+            {
+              "method": "axios.put",
+              "endpoint": "PUT /api/documents/:id/tags",
+              "requestBody": "{ tags: string[] }",
+              "reads": ["localStorage['docvault_token']"],
+              "notes": "Axios instance attaches Authorization: Bearer <token> from localStorage via request interceptor.",
+              "calls": [
+                {
+                  "method": "router.put('/:id/tags')",
+                  "file": "backend/src/routes/tags.js",
+                  "line": 7,
+                  "calls": [
+                    {
+                      "method": "pool.query",
+                      "file": "backend/src/routes/tags.js",
+                      "line": 21,
+                      "db": { "table": "documents_v2", "op": "update" },
+                      "notes": "UPDATE documents_v2 SET tags = $1 WHERE id = $2 RETURNING id, tags. Returns 404 if no row matched."
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

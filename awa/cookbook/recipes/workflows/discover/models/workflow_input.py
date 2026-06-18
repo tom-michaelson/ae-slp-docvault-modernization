@@ -69,3 +69,10 @@ class DiscoverWorkflowInput(BaseModel):
         default=5,
         description="Maximum number of concurrent child workflows within a phase.",
     )
+    skip_screenshots: bool = Field(
+        default=False,
+        description=(
+            "When True, the screenshot phase in Phase 2 is skipped entirely. "
+            "Useful when the legacy application is not running."
+        ),
+    )

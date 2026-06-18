@@ -1,0 +1,39 @@
+{
+  "entryPoint": {
+    "method": "DocumentGrid.handleSaveTags",
+    "file": "frontend/src/components/DocumentGrid.jsx",
+    "line": 666
+  },
+  "calls": [
+    {
+      "method": "updateTags",
+      "file": "frontend/src/utils/api.js",
+      "line": 40,
+      "reads": ["localStorage.docvault_token"],
+      "notes": "Axios instance issues PUT /api/documents/:id/tags with JSON body { tags: string[] }. Request interceptor attaches Authorization: Bearer <token> from localStorage if present.",
+      "calls": [
+        {
+          "method": "PUT /api/documents/:id/tags (Express route handler)",
+          "file": "backend/src/routes/tags.js",
+          "line": 7,
+          "notes": "Mounted at /api/documents in index.js (line 93). Requires auth via composite middleware (JWT, session, or API key) unless DEV_SKIP_AUTH=true. Validates tags is an array; filters to non-empty strings; rejects if > 10 tags.",
+          "calls": [
+            {
+              "method": "pool.query — UPDATE documents_v2 SET tags WHERE id",
+              "file": "backend/src/routes/tags.js",
+              "line": 21,
+              "db": { "table": "documents_v2", "op": "update" },
+              "notes": "Returns RETURNING id, tags. Responds 404 if no row matched. Responds 400 if tags not an array or > 10 items. Responds 500 on DB error."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "method": "DocumentGrid.setState — patch documents[] and close modal",
+      "file": "frontend/src/components/DocumentGrid.jsx",
+      "line": 672,
+      "notes": "On success: maps over this.state.documents[], replaces the matching document (by id) with { ...d, tags: tagEditorTags }, sets tagSaving=false and tagEditorVisible=false. On catch: sets tagSaving=false only; tagEditorVisible remains true so the user can retry."
+    }
+  ]
+}

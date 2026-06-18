@@ -1,0 +1,15 @@
+{
+  "key": "upload-button-trigger",
+  "name": "Upload Document Button",
+  "type": "ui-feature",
+  "elementType": "ui-action",
+  "uri": "triggers POST /api/upload (multipart/form-data)",
+  "location": "frontend/src/components/UploadButton.jsx",
+  "domain": "upload",
+  "notes": [
+    "Button click programmatically triggers a hidden <input type='file'> via React ref; no HTML form or form submission involved.",
+    "Accepted file types enforced client-side via the 'accept' attribute (.pdf,.jpg,.jpeg,.png) and server-side via multer fileFilter (application/pdf, image/jpeg, image/png).",
+    "onUploadComplete callback prop is called with the newly created document object on success, allowing parent components to refresh their document lists.",
+    "DocumentGrid.jsx duplicates this upload logic separately (handleFileInputChange / uploadFile) for its drag-and-drop zone — the two implementations are not shared."
+  ]
+}

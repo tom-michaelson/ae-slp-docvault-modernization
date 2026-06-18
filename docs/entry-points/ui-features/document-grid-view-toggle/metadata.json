@@ -1,0 +1,16 @@
+{
+  "key": "document-grid-view-toggle",
+  "name": "Grid/List View Toggle",
+  "type": "ui-feature",
+  "elementType": "ui-action",
+  "uri": "N/A — embedded button in DocumentGrid.jsx controls toolbar; not a routed page",
+  "location": "frontend/src/components/DocumentGrid.jsx",
+  "domain": "documents",
+  "parentKey": "document-grid-controls",
+  "notes": [
+    "onClick fires handleViewToggle() which calls setState with a functional updater toggling state.viewMode between 'grid' and 'list'; no API call is made.",
+    "The button's visual state is driven by viewMode: active style (dark background, white text) when viewMode === 'grid'; inactive style (white background, dark border) when viewMode === 'list'.",
+    "Button label switches between '⊞' (grid mode → click to go list) and '☰' (list mode → click to go grid) — the icon shows the *current* layout, not the destination.",
+    "viewMode also controls the document container layout: CSS grid (auto-fill, minmax 280px) in 'grid' mode vs flex column in 'list' mode, and switches the per-document renderer between renderCard() and renderListRow()."
+  ]
+}

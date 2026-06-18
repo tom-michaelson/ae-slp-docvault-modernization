@@ -1,0 +1,15 @@
+{
+  "key": "tag-editor-standalone",
+  "name": "Standalone Tag Editor",
+  "type": "ui-feature",
+  "elementType": "ui-panel",
+  "uri": null,
+  "location": "frontend/src/components/TagEditor.jsx",
+  "domain": "tags",
+  "notes": [
+    "Standalone React functional component; not mounted in App.jsx — exists as an alternative to DocumentGrid's built-in inline tag editor modal (DocumentGrid.jsx:812-860).",
+    "Accepts three props: documentId (string), initialTags (string[]), onTagsUpdated (callback fired with the saved tag array after a successful PUT).",
+    "Maximum 10 tags enforced client-side (tags.length < 10); the same limit is re-enforced server-side in PUT /api/documents/:id/tags before the SQL UPDATE.",
+    "Save button is disabled and shows 'Saving…' while the PUT request is in-flight; errors are logged to console only — no user-visible error state is rendered."
+  ]
+}

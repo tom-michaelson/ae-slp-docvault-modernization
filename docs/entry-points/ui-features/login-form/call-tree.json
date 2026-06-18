@@ -1,0 +1,73 @@
+{
+  "entryPoint": {
+    "method": "LoginForm.handleSubmit",
+    "file": "frontend/src/components/LoginForm.jsx",
+    "line": 72,
+    "notes": "Bound to <form onSubmit> at LoginForm.jsx:95. Calls e.preventDefault(), reads this.state.email and this.state.password, then delegates to AuthContext.login(email, password)."
+  },
+  "calls": [
+    {
+      "method": "AuthContext.login",
+      "file": "frontend/src/context/AuthContext.jsx",
+      "line": 50,
+      "writes": [
+        "localStorage['docvault_token'] ← token from /login response (line 63)",
+        "localStorage['docvault_refresh_token'] ← refreshToken from /login response (line 64)"
+      ],
+      "calls": [
+        {
+          "method": "axios.post — /api/auth/login",
+          "file": "frontend/src/context/AuthContext.jsx",
+          "line": 55,
+          "http": { "method": "POST", "url": "${API_BASE_URL}/auth/login", "body": "{ email, password }" },
+          "notes": "Returns { token, refreshToken } on success (HTTP 200). Returns HTTP 400 if email or password absent; HTTP 401 { error: 'Invalid credentials' } on wrong credentials.",
+          "serverHandler": {
+            "method": "router.post('/login')",
+            "file": "backend/src/routes/auth.js",
+            "line": 17,
+            "notes": "Validates against hardcoded ADMIN_EMAIL='admin@docvault.local' and ADMIN_PASSWORD_HASH (bcrypt of 'docvault123'). No database access. Issues access token (1h) and refresh token (7d) via jwt.sign.",
+            "calls": [
+              {
+                "method": "bcrypt.compareSync",
+                "file": "backend/src/routes/auth.js",
+                "line": 26
+              },
+              {
+                "method": "jwt.sign (access token)",
+                "file": "backend/src/routes/auth.js",
+                "line": 31,
+                "notes": "Payload: { userId: 'abc-123', email, role: 'admin' }. Signed with config.jwtSecret. Expiry: 1h."
+              },
+              {
+                "method": "jwt.sign (refresh token)",
+                "file": "backend/src/routes/auth.js",
+                "line": 37,
+                "notes": "Payload: { userId: 'abc-123', email, type: 'refresh' }. Signed with config.jwtSecret. Expiry: 7d."
+              }
+            ]
+          }
+        },
+        {
+          "method": "axios.post — /api/auth/refresh",
+          "file": "frontend/src/context/AuthContext.jsx",
+          "line": 68,
+          "http": { "method": "POST", "url": "${API_BASE_URL}/auth/refresh", "body": "{ refreshToken }" },
+          "notes": "BUG (FR-007): backend returns { session: { userId, email, createdAt } } instead of { token, refreshToken }. The following line (AuthContext.jsx:75) calls refreshResponse.data.token.split('.') — token is undefined — throwing 'Cannot read properties of undefined (reading split)'. Execution falls to the catch block.",
+          "serverHandler": {
+            "method": "router.post('/refresh')",
+            "file": "backend/src/routes/auth.js",
+            "line": 61,
+            "notes": "BUG: verifies the refresh token with jwt.verify (correct) then returns { session: { userId, email, createdAt } } — a copy-paste from /session/login that was never corrected. Should return { token, refreshToken }.",
+            "calls": [
+              {
+                "method": "jwt.verify",
+                "file": "backend/src/routes/auth.js",
+                "line": 70
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

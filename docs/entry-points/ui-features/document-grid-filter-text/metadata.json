@@ -1,0 +1,15 @@
+{
+  "key": "document-grid-filter-text",
+  "name": "Text Filter Input",
+  "type": "ui-feature",
+  "elementType": "ui-action",
+  "uri": null,
+  "location": "frontend/src/components/DocumentGrid.jsx",
+  "domain": "documents",
+  "notes": [
+    "onChange fires handleFilterChange({ searchQuery: value }), which shallow-merges the update into state.filters.",
+    "Filtering is purely client-side via filterDocuments(documents, filters) in render(); no API call is triggered.",
+    "Match is case-insensitive substring against document.name and each element of document.tags[].",
+    "searchQuery resets visually when the component unmounts; it is not persisted to URL, session, or localStorage."
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "handlers": [
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleFilterChange",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 600,
+        "notes": "Triggered by the search text input onChange and the file-type select onChange. Merges the partial filter object into this.state.filters. No API call — filterDocuments() runs on next render."
+      },
+      "calls": []
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleViewToggle",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 606,
+        "notes": "Triggered by the view-mode toggle button onClick. Toggles this.state.viewMode between 'grid' and 'list'. No API call."
+      },
+      "calls": []
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleRefresh",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 612,
+        "notes": "Triggered by the Refresh button onClick. Delegates directly to loadDocuments()."
+      },
+      "calls": [
+        {
+          "method": "DocumentGrid.loadDocuments",
+          "file": "frontend/src/components/DocumentGrid.jsx",
+          "line": 550,
+          "notes": "Sets loading=true, clears error, then awaits fetchDocuments(). On success sets documents=[]; on failure sets error message.",
+          "calls": [
+            {
+              "method": "fetchDocuments",
+              "file": "frontend/src/utils/api.js",
+              "line": 34,
+              "notes": "axios GET /api/documents with Bearer token from localStorage('docvault_token').",
+              "calls": [
+                {
+                  "method": "router.get('/')",
+                  "file": "backend/src/routes/documents.js",
+                  "line": 10,
+                  "db": { "table": "documents_v2", "op": "select" },
+                  "notes": "SELECT * FROM documents_v2 ORDER BY uploaded_at DESC. Returns { documents: rows }."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

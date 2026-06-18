@@ -1,0 +1,17 @@
+[
+  {
+    "type": "table",
+    "name": "documents_v2",
+    "key": "documents-v2",
+    "operations": ["select"],
+    "columns": ["id", "name", "file_type", "file_path", "tags", "uploaded_at", "uploaded_by"],
+    "locations": [
+      "backend/src/services/FallbackSearchProvider.js",
+      "backend/src/db/migrations/002-create-documents-v2.sql"
+    ],
+    "notes": [
+      "Queried by FallbackSearchProvider with a case-insensitive ILIKE pattern match on the name column: WHERE name ILIKE '%{query}%' ORDER BY uploaded_at DESC.",
+      "All columns are returned via SELECT *; the full row (id, name, file_type, file_path, tags, uploaded_at, uploaded_by) is passed back to the client as each search result item."
+    ]
+  }
+]

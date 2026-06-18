@@ -35,6 +35,7 @@ class AnalyzeUiFeaturesWorkflow:
         app_url: str | None,
         max_concurrency: int,
         agent_provider: str = "claude",
+        skip_screenshots: bool = False,
     ) -> list[UiInventoryItem]:
         if not ui_inventory:
             return ui_inventory
@@ -63,6 +64,9 @@ class AnalyzeUiFeaturesWorkflow:
         )
 
         # Screenshots — serialized
+        if skip_screenshots:
+            return ui_inventory
+
         for idx, item in enumerate(ui_inventory):
             feature_dir = Path(docs_dir) / "entry-points" / "ui-features" / item.key
             marker_path = feature_dir / "screenshots" / "SCREENSHOTS_COMPLETE"

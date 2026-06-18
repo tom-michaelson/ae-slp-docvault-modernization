@@ -1,0 +1,15 @@
+{
+  "key": "document-grid",
+  "name": "Document Grid",
+  "type": "ui-feature",
+  "elementType": "ui-panel",
+  "uri": "/",
+  "location": "frontend/src/components/DocumentGrid.jsx",
+  "domain": "documents",
+  "notes": [
+    "React class component (~800 lines). God component containing API calls, filtering/sorting logic, inline CSS-in-JS styles, an embedded tag editor modal, and drag-and-drop file upload — all in one file.",
+    "Documents are loaded on componentDidMount via GET /api/documents; when a search query is active, the same document list slot is replaced by GET /api/search?q={query} results.",
+    "Client-side filtering (file type + text match against name/tags) and sorting (date|name|type) run inside render() using the module-local filterDocuments() and sortDocuments() helpers — no additional API round-trips.",
+    "Upload writes to the 'documents' table via POST /api/upload; a DB trigger (trg_sync_to_v2) copies the row to 'documents_v2' but deliberately omits the tags column, so a freshly uploaded document's tags are null in documents_v2 until the user saves them manually."
+  ]
+}

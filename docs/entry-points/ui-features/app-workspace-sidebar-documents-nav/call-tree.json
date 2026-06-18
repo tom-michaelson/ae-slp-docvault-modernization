@@ -1,0 +1,31 @@
+{
+  "entryPoint": {
+    "method": "Sidebar — onClick on <li key='documents'>",
+    "file": "frontend/src/components/Sidebar.jsx",
+    "line": 45,
+    "notes": "The <li> is rendered by sections.map() starting at line 44. The 'documents' section is defined at Sidebar.jsx:35 as { id: 'documents', label: '📁 All Documents' }."
+  },
+  "calls": [
+    {
+      "method": "props.onNavigate('documents')",
+      "file": "frontend/src/components/Sidebar.jsx",
+      "line": 48,
+      "notes": "Guard: onNavigate is called only when the prop is defined (onNavigate && onNavigate(section.id)). section.id is 'documents' for this nav item.",
+      "calls": [
+        {
+          "method": "App.handleNavigate",
+          "file": "frontend/src/App.jsx",
+          "line": 58,
+          "calls": [
+            {
+              "method": "App.setState",
+              "file": "frontend/src/App.jsx",
+              "line": 59,
+              "notes": "Sets { activeSection: 'documents' }. Triggers re-render. DocumentGrid is always rendered in the workspace tree; the Sidebar reads the updated activeSection prop and applies navItemActiveStyle to the 'documents' <li> via the ternary at Sidebar.jsx:47."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

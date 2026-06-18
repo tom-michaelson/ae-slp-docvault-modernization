@@ -1,0 +1,77 @@
+{
+  "handlers": [
+    {
+      "entryPoint": {
+        "method": "UploadButton.handleClick",
+        "file": "frontend/src/components/UploadButton.jsx",
+        "line": 29,
+        "trigger": "onClick on <button>"
+      },
+      "calls": [
+        {
+          "method": "fileInputRef.current.click",
+          "file": "frontend/src/components/UploadButton.jsx",
+          "line": 30,
+          "notes": "Programmatically opens the native OS file-picker dialog by forwarding the click to the hidden <input type='file'>. No network calls."
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "UploadButton.handleFileChange",
+        "file": "frontend/src/components/UploadButton.jsx",
+        "line": 33,
+        "trigger": "onChange on <input type='file'>"
+      },
+      "calls": [
+        {
+          "method": "React.useState setter: setUploading(true) / setStatus('Uploading...')",
+          "file": "frontend/src/components/UploadButton.jsx",
+          "line": 37,
+          "notes": "Sets uploading=true to disable the button; sets status text to 'Uploading...'."
+        },
+        {
+          "method": "uploadDocument(formData)",
+          "file": "frontend/src/utils/api.js",
+          "line": 37,
+          "calls": [
+            {
+              "method": "axios.post('/api/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' } })",
+              "file": "frontend/src/utils/api.js",
+              "line": 37,
+              "reads": ["localStorage['docvault_token']"],
+              "notes": "Request interceptor attaches Authorization: Bearer {token} header if token is present. POST /api/upload is authenticated — a missing token yields 401.",
+              "calls": [
+                {
+                  "method": "express POST /api/upload — multer.single('file') middleware",
+                  "file": "backend/src/routes/upload.js",
+                  "line": 35,
+                  "notes": "Validates MIME type (application/pdf, image/jpeg, image/png). Saves file to disk as {uuid}{ext} in config.uploadDir. Rejects non-matching MIME with Error('Invalid file type...')."
+                },
+                {
+                  "method": "pool.query INSERT INTO documents",
+                  "file": "backend/src/routes/upload.js",
+                  "line": 45,
+                  "db": { "table": "documents", "op": "insert" },
+                  "notes": "Inserts name (from req.body.name or originalname), file_type (MIME), file_path (/uploads/{filename}), tags (null — UploadButton does not submit tags), uploaded_by (req.user?.email or null). Returns the inserted row via RETURNING *."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "method": "onUploadComplete(response.data)",
+          "file": "frontend/src/components/UploadButton.jsx",
+          "line": 47,
+          "notes": "Calls the optional prop callback with the newly created document record. Only invoked when upload succeeds and the prop is provided."
+        },
+        {
+          "method": "React.useState setter: setUploading(false) / fileInputRef.current.value = ''",
+          "file": "frontend/src/components/UploadButton.jsx",
+          "line": 51,
+          "notes": "Always runs in the finally block. Resets the file input value so the same file can be re-uploaded."
+        }
+      ]
+    }
+  ]
+}

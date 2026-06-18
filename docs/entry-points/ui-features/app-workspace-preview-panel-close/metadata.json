@@ -1,0 +1,15 @@
+{
+  "key": "app-workspace-preview-panel-close",
+  "name": "Preview Panel Close",
+  "type": "ui-feature",
+  "elementType": "ui-button",
+  "uri": "N/A — workspace panel (no dedicated route)",
+  "location": "frontend/src/components/PreviewPanel.jsx",
+  "domain": "workspace",
+  "notes": [
+    "The close button at line 101 invokes the `onClose` prop callback; PreviewPanel owns no close logic itself.",
+    "Close state is held in App class component: `selectedDocument` is set to null and `showPreview` to false — no Redux slice is involved.",
+    "PreviewPanel is conditionally rendered via `{showPreview && <PreviewPanel .../>}` in App.jsx:101-106; a close unmounts the component fully and releases pdf.js internal state.",
+    "The `formatFileSize` utility is imported from the DocumentGrid god component (anti-pattern FR-014); the Angular replacement should import from a standalone utility service."
+  ]
+}

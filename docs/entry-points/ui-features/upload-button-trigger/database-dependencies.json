@@ -1,0 +1,32 @@
+[
+  {
+    "type": "table",
+    "name": "documents",
+    "key": "documents",
+    "operations": ["insert"],
+    "columns": ["id", "name", "file_type", "file_path", "tags", "uploaded_at", "uploaded_by"],
+    "locations": [
+      "backend/src/routes/upload.js",
+      "backend/src/db/migrations/001-create-documents.sql"
+    ],
+    "notes": [
+      "One row inserted per upload: name comes from req.body.name or the original filename; file_type is the MIME type string; file_path is /uploads/{uuid}{ext}; tags is a PostgreSQL TEXT[] parsed from a comma-delimited request body field (null when absent); uploaded_by is req.user.email (null when unauthenticated under DEV_SKIP_AUTH).",
+      "After INSERT, the PostgreSQL trigger trg_sync_to_v2 fires synchronously and copies the row into documents_v2 without the tags column."
+    ]
+  },
+  {
+    "type": "table",
+    "name": "documents_v2",
+    "key": "documents-v2",
+    "operations": ["insert"],
+    "columns": ["id", "name", "file_type", "file_path", "uploaded_at", "uploaded_by"],
+    "locations": [
+      "backend/src/db/migrations/002-create-documents-v2.sql",
+      "backend/src/db/migrations/003-create-trigger.sql"
+    ],
+    "notes": [
+      "Never written directly by the upload route — populated exclusively via the trg_sync_to_v2 AFTER INSERT trigger on the documents table.",
+      "The trigger deliberately omits the tags column, so documents_v2.tags is always NULL for every document uploaded through this flow — a known bug in the legacy implementation."
+    ]
+  }
+]

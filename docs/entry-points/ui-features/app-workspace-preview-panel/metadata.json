@@ -1,0 +1,15 @@
+{
+  "key": "app-workspace-preview-panel",
+  "name": "Document Preview Panel",
+  "type": "ui-feature",
+  "elementType": "ui-panel",
+  "uri": "N/A — rendered inline within the workspace (no dedicated route); preview asset fetched from GET /api/documents/{id}/preview",
+  "location": "frontend/src/components/PreviewPanel.jsx",
+  "domain": "documents",
+  "notes": [
+    "React class component conditionally rendered by App when showPreview=true; receives `document` object and `onClose` callback as props.",
+    "Renders three mutually exclusive content branches based on file_type: PDF (react-pdf <Document>/<Page> with pdf.js CDN worker), image (<img>), and unsupported-type fallback text.",
+    "PDF lifecycle state (numPages, pageNumber, loading, error) is managed in component state; page navigation UI is absent — component always renders page 1.",
+    "Imports formatFileSize() from DocumentGrid.jsx — a cross-component dependency on an 800-line god component, flagged as an anti-pattern in source comments."
+  ]
+}

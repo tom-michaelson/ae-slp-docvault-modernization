@@ -1,0 +1,16 @@
+{
+  "key": "tag-editor-standalone-add-tag",
+  "name": "Add Tag Button",
+  "type": "ui-feature",
+  "elementType": "ui-action",
+  "uri": null,
+  "location": "frontend/src/components/TagEditor.jsx",
+  "domain": "tags",
+  "parentKey": "tag-editor-standalone",
+  "notes": [
+    "onClick fires handleAdd(); also triggered by Enter key in the tag input via handleKeyPress (line 94).",
+    "Adds the trimmed input to local tags state only if: (a) non-empty after trim, (b) not already present in tags, (c) tags.length < 10.",
+    "No API call — modifies local React state only; the tag is not persisted until the user clicks Save Tags.",
+    "maxLength={50} on the input element provides a secondary guard on tag length, but handleAdd itself does not enforce a character-count limit."
+  ]
+}

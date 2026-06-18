@@ -1,0 +1,15 @@
+{
+  "key": "document-grid-upload-click",
+  "name": "Click to Select File",
+  "type": "ui-feature",
+  "elementType": "ui-action",
+  "uri": "POST /api/upload",
+  "location": "frontend/src/components/DocumentGrid.jsx",
+  "domain": "upload",
+  "notes": [
+    "onClick at line 789 calls handleFileInputClick(), which programmatically triggers a hidden <input type='file'> via React ref — the div's click does not open a file dialog directly; it delegates via fileInputRef.current.click().",
+    "Accepted types are enforced twice: by the hidden input's accept attribute (.pdf,.jpg,.jpeg,.png) and by multer's fileFilter on the backend (application/pdf, image/jpeg, image/png only).",
+    "Upload is auth-gated: POST /api/upload requires at least one of JWT Bearer token, session cookie, or API key (three coexisting auth systems); uploaded_by is set to req.user.email if resolved, else null.",
+    "After successful upload the DB trigger trg_sync_to_v2 copies the new row to documents_v2 but deliberately omits the tags column, leaving tags null in documents_v2 until the user manually saves them."
+  ]
+}

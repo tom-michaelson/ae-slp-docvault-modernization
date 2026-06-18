@@ -1,0 +1,15 @@
+{
+  "key": "document-grid-document-select",
+  "name": "Select Document",
+  "type": "ui-feature",
+  "elementType": "ui-action",
+  "uri": "N/A — client-side state change only; no route change on selection",
+  "location": "frontend/src/components/DocumentGrid.jsx",
+  "domain": "documents",
+  "notes": [
+    "onClick at line 873 (card view) and line 915 (list view) both dispatch handleDocumentClick(doc); the same handler covers both view modes.",
+    "handleDocumentClick sets DocumentGrid.state.selectedDocument and propagates to parent App via onDocumentSelect prop callback.",
+    "App.handleDocumentSelect sets showPreview=true, which mounts PreviewPanel — no URL route change occurs.",
+    "PreviewPanel lazily fetches GET /api/documents/{id}/preview only for previewable MIME types (application/pdf, image/jpeg, image/png, image/gif); non-previewable selections show a static message with no HTTP call."
+  ]
+}

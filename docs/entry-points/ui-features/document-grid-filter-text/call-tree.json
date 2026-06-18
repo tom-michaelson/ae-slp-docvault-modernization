@@ -1,0 +1,34 @@
+{
+  "entryPoint": {
+    "method": "DocumentGrid.handleFilterChange",
+    "file": "frontend/src/components/DocumentGrid.jsx",
+    "line": 600,
+    "notes": "Triggered by onChange on the text <input> at line 984. Receives { searchQuery: e.target.value }."
+  },
+  "calls": [
+    {
+      "method": "DocumentGrid.setState",
+      "file": "frontend/src/components/DocumentGrid.jsx",
+      "line": 601,
+      "notes": "Shallow-merges filterUpdate into prevState.filters. Triggers a synchronous re-render.",
+      "writes": ["state.filters.searchQuery"]
+    },
+    {
+      "method": "filterDocuments",
+      "file": "frontend/src/components/DocumentGrid.jsx",
+      "line": 485,
+      "notes": "Called during render() at line 965 with the full documents array and current filters. Pure function — no side effects, no API call.",
+      "reads": ["state.documents", "state.filters.searchQuery", "state.filters.fileType"],
+      "calls": [
+        {
+          "method": "Array.filter — name match",
+          "notes": "d.name.toLowerCase().includes(query) — case-insensitive substring match on the document filename."
+        },
+        {
+          "method": "Array.filter — tags match",
+          "notes": "d.tags && d.tags.some(t => t.toLowerCase().includes(query)) — case-insensitive substring match on any tag string."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+[
+  {
+    "type": "table",
+    "name": "documents_v2",
+    "key": "documents-v2",
+    "operations": ["select"],
+    "columns": ["id", "name", "file_type", "file_path", "tags", "uploaded_at", "uploaded_by"],
+    "locations": [
+      "backend/src/services/FallbackSearchProvider.js",
+      "backend/src/db/migrations/002-create-documents-v2.sql"
+    ],
+    "notes": [
+      "All columns are returned via SELECT * WHERE name ILIKE '%{query}%' ORDER BY uploaded_at DESC; only the name column is used in the WHERE predicate.",
+      "Tag-based search is not performed at the database level; a parallel client-side filterDocuments() in DocumentGrid.jsx also checks tags, but the server-side search ignores the tags column entirely."
+    ]
+  }
+]

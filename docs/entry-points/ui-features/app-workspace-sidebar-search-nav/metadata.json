@@ -1,0 +1,15 @@
+{
+  "key": "app-workspace-sidebar-search-nav",
+  "name": "App Workspace Sidebar & Search Navigation",
+  "type": "ui-feature",
+  "elementType": "ui-panel",
+  "uri": "/ (persistent layout component — not a routed page)",
+  "location": "frontend/src/components/Sidebar.jsx",
+  "domain": "navigation",
+  "notes": [
+    "The Sidebar renders four fixed nav items (documents, upload, search, tags); clicking any item lifts activeSection state to App.jsx via the onNavigate callback prop.",
+    "App.jsx owns activeSection state and passes it back to Sidebar for active-item highlighting — but the current implementation renders DocumentGrid regardless of which section is active, so section switching is purely cosmetic.",
+    "SearchBar.jsx sits in a toolbar strip above DocumentGrid; its onSearch prop chains through App.handleSearch to DocumentGrid.handleSearch via an imperative React ref — an anti-pattern that creates tight coupling between App and DocumentGrid.",
+    "Two separate search paths coexist: SearchBar submits GET /api/search?q= (server-side ILIKE), while DocumentGrid's internal Filter input does synchronous client-side filtering on the already-loaded documents list."
+  ]
+}

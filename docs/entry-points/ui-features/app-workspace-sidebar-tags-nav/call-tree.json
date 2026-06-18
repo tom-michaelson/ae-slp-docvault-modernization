@@ -1,0 +1,27 @@
+{
+  "entryPoint": {
+    "method": "Sidebar.<li>.onClick",
+    "file": "frontend/src/components/Sidebar.jsx",
+    "line": 48
+  },
+  "calls": [
+    {
+      "method": "props.onNavigate",
+      "notes": "Callback supplied by App. Receives the section id string 'tags'.",
+      "calls": [
+        {
+          "method": "App.handleNavigate",
+          "file": "frontend/src/App.jsx",
+          "line": 58,
+          "calls": [
+            {
+              "method": "App.setState",
+              "notes": "Sets { activeSection: 'tags' }. No API call is made. DocumentGrid continues rendering its current document list unchanged.",
+              "writes": ["App.state.activeSection"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

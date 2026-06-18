@@ -73,6 +73,7 @@ class DiscoverWorkflow:
             ).expanduser(),
         )
         agent_provider = workflow_input.agent_provider
+        skip_screenshots = workflow_input.skip_screenshots
 
         workflow.set_current_details(
             f"Discovering {legacy_dir} (domain={domain}, target_stack={target_stack or 'unset'}).",
@@ -101,6 +102,7 @@ class DiscoverWorkflow:
                 app_url,
                 max_concurrency,
                 agent_provider,
+                skip_screenshots,
             ],
         )
 

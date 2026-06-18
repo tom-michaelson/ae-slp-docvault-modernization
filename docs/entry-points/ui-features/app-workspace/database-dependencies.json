@@ -1,0 +1,36 @@
+[
+  {
+    "type": "table",
+    "name": "documents_v2",
+    "key": "documents-v2",
+    "operations": ["select", "insert", "update"],
+    "columns": ["id", "name", "file_type", "file_path", "tags", "uploaded_at", "uploaded_by"],
+    "locations": [
+      "backend/src/db/migrations/002-create-documents-v2.sql",
+      "backend/src/routes/documents.js",
+      "backend/src/routes/tags.js",
+      "backend/src/routes/search.js"
+    ],
+    "notes": [
+      "Primary read table for the workspace: GET /api/documents and GET /api/search both query documents_v2 ordered by uploaded_at DESC.",
+      "Tags are stored as a PostgreSQL TEXT[] array and updated directly by PUT /api/documents/:id/tags (max 10 tags enforced by backend); the insert path (via trigger) always sets tags to NULL — tags must be added after upload.",
+      "Rows are populated by the trigger trg_sync_to_v2 when a new row is inserted into the 'documents' table by POST /api/upload; the trigger deliberately omits the tags column (FR-008 — tags lost on upload)."
+    ]
+  },
+  {
+    "type": "table",
+    "name": "documents",
+    "key": "documents",
+    "operations": ["insert"],
+    "columns": ["id", "name", "file_type", "file_path", "tags", "uploaded_at", "uploaded_by"],
+    "locations": [
+      "backend/src/db/migrations/001-create-documents.sql",
+      "backend/src/db/migrations/003-create-trigger.sql",
+      "backend/src/routes/upload.js"
+    ],
+    "notes": [
+      "Write-only from the frontend's perspective: POST /api/upload inserts into 'documents'; neither the document list nor the search endpoint reads from this table (they both read documents_v2).",
+      "The trigger trg_sync_to_v2 fires AFTER INSERT and propagates the row to documents_v2, but the INSERT statement in the trigger function omits the tags column — meaning tags uploaded with the file are silently dropped."
+    ]
+  }
+]

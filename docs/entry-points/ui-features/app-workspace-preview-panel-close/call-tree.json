@@ -1,0 +1,27 @@
+{
+  "entryPoint": {
+    "method": "PreviewPanel.render → button onClick → props.onClose",
+    "file": "frontend/src/components/PreviewPanel.jsx",
+    "line": 101,
+    "notes": "The button calls the onClose prop directly; there is no local handler method inside PreviewPanel."
+  },
+  "calls": [
+    {
+      "method": "App.handleClosePreview",
+      "file": "frontend/src/App.jsx",
+      "line": 66,
+      "calls": [
+        {
+          "method": "App.setState",
+          "file": "frontend/src/App.jsx",
+          "line": 67,
+          "writes": [
+            "App.state.selectedDocument → null",
+            "App.state.showPreview → false"
+          ],
+          "notes": "Triggers React re-render; showPreview=false causes the conditional {showPreview && <PreviewPanel …/>} (App.jsx:101) to evaluate falsy, unmounting PreviewPanel from the DOM."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "entryPoint": {
+    "method": "DocumentGrid.handleFilterChange",
+    "file": "frontend/src/components/DocumentGrid.jsx",
+    "line": 600,
+    "reads": ["this.state.filters"],
+    "writes": ["this.state.filters.fileType"]
+  },
+  "calls": [
+    {
+      "method": "React.Component.setState",
+      "file": "frontend/src/components/DocumentGrid.jsx",
+      "line": 601,
+      "notes": "Merges { fileType } into state.filters via functional setState; triggers re-render."
+    },
+    {
+      "method": "filterDocuments",
+      "file": "frontend/src/components/DocumentGrid.jsx",
+      "line": 485,
+      "notes": "Pure function called during render() (line 965). If filters.fileType is non-empty, filters documents array by exact MIME match (d.file_type === filters.fileType). Also applies searchQuery filter in same pass.",
+      "calls": []
+    }
+  ],
+  "dataOrigin": {
+    "note": "The documents array filtered here was loaded once at componentDidMount via loadDocuments(). No API call is made when the filter changes.",
+    "method": "DocumentGrid.loadDocuments",
+    "file": "frontend/src/components/DocumentGrid.jsx",
+    "line": 550,
+    "calls": [
+      {
+        "method": "fetchDocuments",
+        "file": "frontend/src/utils/api.js",
+        "line": 34,
+        "calls": [
+          {
+            "method": "axios.get /api/documents",
+            "file": "frontend/src/utils/api.js",
+            "line": 34,
+            "db": {"table": "documents_v2", "op": "select"}
+          }
+        ]
+      }
+    ]
+  }
+}

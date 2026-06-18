@@ -1,0 +1,77 @@
+{
+  "handlers": [
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleFileInputClick",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 717
+      },
+      "calls": [
+        {
+          "method": "HTMLInputElement.click",
+          "notes": "Programmatically triggers the native file-picker dialog on the hidden <input type='file' ref={fileInputRef}>. Synchronous; no async call or state change here."
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleFileInputChange",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 721
+      },
+      "calls": [
+        {
+          "method": "DocumentGrid.uploadFile",
+          "file": "frontend/src/components/DocumentGrid.jsx",
+          "line": 728,
+          "writes": ["state.uploadProgress = 'uploading'", "state.uploadError = null"],
+          "calls": [
+            {
+              "method": "uploadDocument",
+              "file": "frontend/src/utils/api.js",
+              "line": 36,
+              "notes": "axios POST /api/upload with Content-Type: multipart/form-data; FormData fields: file (binary), name (string from file.name).",
+              "calls": [
+                {
+                  "method": "multer.single('file') → router.post /api/upload",
+                  "file": "backend/src/routes/upload.js",
+                  "line": 35,
+                  "notes": "Multer validates MIME type via fileFilter; saves file to config.uploadDir as {uuid}{ext}. Reads req.body.name (falls back to originalname) and req.user.email.",
+                  "calls": [
+                    {
+                      "method": "pool.query INSERT INTO documents",
+                      "file": "backend/src/routes/upload.js",
+                      "line": 45,
+                      "db": { "table": "documents", "op": "insert" }
+                    },
+                    {
+                      "method": "sync_document_to_v2 (trigger trg_sync_to_v2 AFTER INSERT ON documents)",
+                      "file": "backend/src/db/migrations/003-create-trigger.sql",
+                      "line": 3,
+                      "db": { "table": "documents_v2", "op": "insert" },
+                      "notes": "Fires automatically for each inserted row. Copies id, name, file_type, file_path, uploaded_at, uploaded_by — tags deliberately omitted."
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "method": "DocumentGrid.loadDocuments",
+              "file": "frontend/src/components/DocumentGrid.jsx",
+              "line": 550,
+              "notes": "Called after successful upload to refresh the document list. Sets uploadProgress='done' first, then clears to null after 2 000 ms timeout.",
+              "calls": [
+                {
+                  "method": "fetchDocuments",
+                  "file": "frontend/src/utils/api.js",
+                  "line": 34,
+                  "notes": "axios GET /api/documents — replaces state.documents with fresh list."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

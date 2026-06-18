@@ -1,0 +1,81 @@
+{
+  "handlers": [
+    {
+      "entryPoint": {
+        "method": "Header.onNavigate('search')",
+        "file": "frontend/src/components/Header.jsx",
+        "line": 43,
+        "reads": [],
+        "writes": []
+      },
+      "calls": [
+        {
+          "method": "App.handleNavigate",
+          "file": "frontend/src/App.jsx",
+          "line": 58,
+          "notes": "Sets this.state.activeSection = 'search'; causes Sidebar to highlight the Search item.",
+          "calls": []
+        }
+      ]
+    },
+    {
+      "entryPoint": {
+        "method": "SearchBar.handleSubmit",
+        "file": "frontend/src/components/SearchBar.jsx",
+        "line": 31,
+        "notes": "Triggered by form submit; guards against empty/whitespace queries."
+      },
+      "calls": [
+        {
+          "method": "App.handleSearch",
+          "file": "frontend/src/App.jsx",
+          "line": 70,
+          "notes": "Delegates to DocumentGrid via an imperative ref (this.documentGridRef.handleSearch). If ref is null, silently no-ops.",
+          "calls": [
+            {
+              "method": "DocumentGrid.handleSearch",
+              "file": "frontend/src/components/DocumentGrid.jsx",
+              "line": 566,
+              "notes": "If query is empty/whitespace, falls back to loadDocuments(). Otherwise calls searchDocuments().",
+              "calls": [
+                {
+                  "method": "searchDocuments",
+                  "file": "frontend/src/utils/api.js",
+                  "line": 42,
+                  "notes": "GET /api/search?q={encodedQuery}; attaches Bearer token from localStorage via axios interceptor.",
+                  "calls": [
+                    {
+                      "method": "SearchOrchestrator.search",
+                      "file": "backend/src/services/SearchOrchestrator.js",
+                      "line": 17,
+                      "calls": [
+                        {
+                          "method": "IndexManager.search",
+                          "file": "backend/src/services/IndexManager.js",
+                          "line": 23,
+                          "notes": "isIndexAvailable() always returns false — always delegates to FallbackSearchProvider.",
+                          "calls": [
+                            {
+                              "method": "FallbackSearchProvider.search",
+                              "file": "backend/src/services/FallbackSearchProvider.js",
+                              "line": 9,
+                              "db": {
+                                "table": "documents_v2",
+                                "op": "select"
+                              },
+                              "notes": "SELECT * FROM documents_v2 WHERE name ILIKE $1 ORDER BY uploaded_at DESC. Every row returned with score hardcoded to 1.0."
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

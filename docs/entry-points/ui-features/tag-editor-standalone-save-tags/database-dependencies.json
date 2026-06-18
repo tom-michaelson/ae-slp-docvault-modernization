@@ -1,0 +1,17 @@
+[
+  {
+    "type": "table",
+    "name": "documents_v2",
+    "key": "documents-v2",
+    "operations": ["update"],
+    "columns": ["id", "tags"],
+    "locations": [
+      "backend/src/db/migrations/002-create-documents-v2.sql",
+      "backend/src/routes/tags.js"
+    ],
+    "notes": [
+      "The tags column is a PostgreSQL TEXT[] array; the entire array is overwritten on every save via UPDATE documents_v2 SET tags = $1 WHERE id = $2.",
+      "The row is looked up by id (UUID primary key); a 404 is returned if no matching document exists, which the frontend swallows via console.error."
+    ]
+  }
+]

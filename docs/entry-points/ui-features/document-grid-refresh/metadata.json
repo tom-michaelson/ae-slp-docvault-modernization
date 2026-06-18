@@ -1,0 +1,15 @@
+{
+  "key": "document-grid-refresh",
+  "name": "Refresh Documents Button",
+  "type": "ui-feature",
+  "elementType": "ui-action",
+  "uri": "GET /api/documents",
+  "location": "frontend/src/components/DocumentGrid.jsx:1003-1005",
+  "domain": "documents",
+  "notes": [
+    "onClick fires handleRefresh() which delegates directly to loadDocuments() — the same method called on componentDidMount.",
+    "Sets loading=true and clears error state before issuing GET /api/documents; replaces the entire in-memory documents array on success.",
+    "The error state's Retry button (DocumentGrid.jsx:951) also calls handleRefresh(), making Retry and Refresh functionally identical — both re-run loadDocuments().",
+    "Backend route queries documents_v2 (not the original documents table); auth required via JWT, session, or API key unless DEV_SKIP_AUTH=true env flag is set."
+  ]
+}

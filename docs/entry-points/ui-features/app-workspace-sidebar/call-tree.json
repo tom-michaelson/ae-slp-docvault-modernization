@@ -1,0 +1,16 @@
+{
+  "entryPoint": {
+    "method": "Sidebar (React functional component — render/return)",
+    "file": "frontend/src/components/Sidebar.jsx",
+    "line": 33,
+    "reads": ["props.activeSection", "props.onNavigate"]
+  },
+  "calls": [
+    {
+      "method": "onNavigate (callback prop)",
+      "file": "frontend/src/App.jsx",
+      "line": 58,
+      "notes": "Invoked on <li> onClick with the clicked section.id. App.handleNavigate calls this.setState({ activeSection: section }) — no service or DB call."
+    }
+  ]
+}

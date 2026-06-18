@@ -1,0 +1,15 @@
+{
+  "key": "app-workspace-header-documents-nav",
+  "name": "Documents Header Link",
+  "type": "ui-feature",
+  "elementType": "ui-action",
+  "uri": "client-side only — no route change; sets activeSection='documents' in App state",
+  "location": "frontend/src/components/Header.jsx",
+  "domain": "navigation",
+  "notes": [
+    "Clicking 'Documents' calls onNavigate('documents'), a prop passed from App.jsx as this.handleNavigate.",
+    "App.handleNavigate sets this.state.activeSection = 'documents', causing the workspace content area to re-render showing DocumentGrid.",
+    "The Header component is only mounted when AuthContext.isAuthenticated is true; the entire app tree is replaced by LoginForm otherwise.",
+    "Header nav exposes 3 links (documents, upload, search); Sidebar exposes 4 (adds 'tags'). The two nav surfaces are independent — clicking either sets the same App.state.activeSection field."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "key": "document-grid-tag-editor-save",
+  "name": "Document Grid Tag Editor — Save Tags",
+  "type": "ui-feature",
+  "elementType": "ui-panel",
+  "uri": "PUT /api/documents/:id/tags",
+  "location": "frontend/src/components/DocumentGrid.jsx",
+  "domain": "documents",
+  "notes": [
+    "The Save button (lines 852-858) is part of an inline modal rendered by renderTagEditor() (line 812) inside the god-component DocumentGrid; the modal is triggered by the 🏷️ button on each document card or list row.",
+    "handleSaveTags optimistically patches local documents[] state in-place on success — no full reload is performed; the modal closes and the card immediately reflects the new tags.",
+    "Tags are written directly to documents_v2.tags (a PostgreSQL TEXT[] column); the upload-time sync trigger deliberately omits the tags column, so tag saves are isolated to documents_v2 and do not propagate back to documents.",
+    "On API failure handleSaveTags logs to console.error and clears tagSaving, but shows no error message to the user; the modal stays open so the user can retry."
+  ]
+}

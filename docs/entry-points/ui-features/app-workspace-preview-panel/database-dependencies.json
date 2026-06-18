@@ -1,0 +1,16 @@
+[
+  {
+    "type": "table",
+    "name": "documents_v2",
+    "key": "documents-v2",
+    "operations": ["select"],
+    "columns": ["id", "file_path", "file_type"],
+    "locations": [
+      "backend/src/routes/documents.js"
+    ],
+    "notes": [
+      "Queried by GET /api/documents/:id/preview to retrieve file_path and file_type for the requested document. The query is SELECT * but only file_path and file_type are consumed by the preview handler.",
+      "file_path is resolved to a physical disk path via path.join(config.uploadDir, path.basename(doc.file_path)) and streamed with res.sendFile(); file_type is forwarded as the HTTP Content-Type response header."
+    ]
+  }
+]

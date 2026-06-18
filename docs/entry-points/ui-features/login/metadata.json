@@ -1,0 +1,15 @@
+{
+  "key": "login",
+  "name": "Login Page",
+  "type": "ui-feature",
+  "elementType": "ui-page",
+  "uri": "/",
+  "location": "frontend/src/components/LoginForm.jsx",
+  "domain": "auth",
+  "notes": [
+    "React class component. Shown when AuthContext.isAuthenticated is false; App.jsx renders LoginForm unconditionally when isAuthenticated === false.",
+    "Auth: public route (no authentication required to view the login page itself).",
+    "Calls AuthContext.login(email, password) on submit; login() issues POST /api/auth/login then immediately POSTs /api/auth/refresh.",
+    "login() crashes after the /refresh call because the backend returns { session: {...} } instead of { token: '...' }, causing response.data.token.split('.') to throw (FR-007 / Constitution Principle I)."
+  ]
+}

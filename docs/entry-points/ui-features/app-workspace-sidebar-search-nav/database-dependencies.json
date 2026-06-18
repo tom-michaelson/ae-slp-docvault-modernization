@@ -1,0 +1,18 @@
+[
+  {
+    "type": "table",
+    "name": "documents_v2",
+    "key": "documents-v2",
+    "operations": ["select"],
+    "columns": ["id", "name", "file_type", "file_path", "tags", "uploaded_at", "uploaded_by"],
+    "locations": [
+      "backend/src/db/migrations/002-create-documents-v2.sql",
+      "backend/src/services/FallbackSearchProvider.js",
+      "frontend/src/utils/api.js"
+    ],
+    "notes": [
+      "The search path reads all columns via SELECT * FROM documents_v2 WHERE name ILIKE $1 ORDER BY uploaded_at DESC; the pattern is %{normalizedQuery}%.",
+      "WARNING: tags is always NULL in this table because the sync trigger in 003-create-trigger.sql deliberately omits the tags column when copying rows from the primary documents table — search results will never include tags."
+    ]
+  }
+]

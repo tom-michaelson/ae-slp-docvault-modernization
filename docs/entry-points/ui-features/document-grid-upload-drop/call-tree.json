@@ -1,0 +1,103 @@
+{
+  "handlers": [
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleDragEnter",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 688
+      },
+      "calls": [],
+      "sideEffects": {
+        "writes": ["this.state.isDragging = true"]
+      },
+      "notes": "Calls preventDefault/stopPropagation and sets isDragging to activate the uploadAreaActive CSS style."
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleDragLeave",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 694
+      },
+      "calls": [],
+      "sideEffects": {
+        "writes": ["this.state.isDragging = false"]
+      },
+      "notes": "Clears isDragging to restore default upload area style."
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleDragOver",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 700
+      },
+      "calls": [],
+      "notes": "Only calls preventDefault/stopPropagation to allow the browser drop action. No state changes."
+    },
+    {
+      "entryPoint": {
+        "method": "DocumentGrid.handleDrop",
+        "file": "frontend/src/components/DocumentGrid.jsx",
+        "line": 705
+      },
+      "calls": [
+        {
+          "method": "DocumentGrid.uploadFile",
+          "file": "frontend/src/components/DocumentGrid.jsx",
+          "line": 728,
+          "notes": "Called with files[0] from e.dataTransfer.files. Returns early if files.length === 0.",
+          "calls": [
+            {
+              "method": "uploadDocument",
+              "file": "frontend/src/utils/api.js",
+              "line": 36,
+              "notes": "Constructs FormData with fields 'file' (File object) and 'name' (file.name). Posts multipart/form-data.",
+              "calls": [
+                {
+                  "method": "POST /api/upload",
+                  "file": "backend/src/routes/upload.js",
+                  "line": 35,
+                  "notes": "Multer middleware saves file to config.uploadDir with UUID filename. Returns 400 if no file, 500 on DB error.",
+                  "calls": [
+                    {
+                      "method": "pool.query — INSERT INTO documents",
+                      "file": "backend/src/routes/upload.js",
+                      "line": 45,
+                      "db": {"table": "documents", "op": "insert"}
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "method": "DocumentGrid.loadDocuments",
+              "file": "frontend/src/components/DocumentGrid.jsx",
+              "line": 550,
+              "notes": "Called on success to refresh the document list. Sets uploadProgress='done' then clears it after 2000ms.",
+              "calls": [
+                {
+                  "method": "fetchDocuments",
+                  "file": "frontend/src/utils/api.js",
+                  "line": 34,
+                  "calls": [
+                    {
+                      "method": "GET /api/documents",
+                      "file": "backend/src/routes/documents.js",
+                      "db": {"table": "documents", "op": "select"}
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "sideEffects": {
+        "writes": [
+          "this.state.isDragging = false",
+          "this.state.uploadProgress = 'uploading' | 'done' | null",
+          "this.state.uploadError = null | string"
+        ]
+      }
+    }
+  ]
+}

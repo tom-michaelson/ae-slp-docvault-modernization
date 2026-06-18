@@ -1,0 +1,16 @@
+{
+  "key": "login-form",
+  "name": "Login Credentials Form",
+  "type": "ui-feature",
+  "elementType": "ui-form",
+  "uri": "/",
+  "location": "frontend/src/components/LoginForm.jsx:95-115",
+  "parentKey": "login",
+  "domain": "auth",
+  "notes": [
+    "POST form at LoginForm.jsx lines 95-115 (the <form> element and its children). Rendered by App.jsx when AuthContext.isAuthenticated is false; no dedicated /login route.",
+    "onSubmit calls AuthContext.login(email, password), which chains POST /api/auth/login → POST /api/auth/refresh; the /refresh step throws unconditionally (FR-007) because the backend returns { session: {...} } instead of { token, refreshToken }.",
+    "No client-side validation beyond HTML5 required attribute on both inputs — no regex, no min-length check.",
+    "Two independent error display paths: this.state.error (catches exceptions thrown by login()) and this.context.error (set inside AuthProvider on axios failure); both render as separate <p> elements below the form."
+  ]
+}

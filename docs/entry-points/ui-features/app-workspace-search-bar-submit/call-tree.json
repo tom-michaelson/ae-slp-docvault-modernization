@@ -1,0 +1,81 @@
+{
+  "entryPoint": {
+    "method": "SearchBar.handleSubmit",
+    "file": "frontend/src/components/SearchBar.jsx",
+    "line": 31
+  },
+  "calls": [
+    {
+      "method": "props.onSearch",
+      "notes": "Called only when query.trim() is non-empty. Bound to App.handleSearch at the call site in App.jsx:94.",
+      "calls": [
+        {
+          "method": "App.handleSearch",
+          "file": "frontend/src/App.jsx",
+          "line": 70,
+          "notes": "Delegates immediately to documentGridRef?.handleSearch(query). If the ref is null (component not mounted), the call is silently dropped.",
+          "calls": [
+            {
+              "method": "DocumentGrid.handleSearch",
+              "file": "frontend/src/components/DocumentGrid.jsx",
+              "line": 566,
+              "notes": "Sets loading=true before the API call. On success replaces documents state with response.data.results. On error sets error state.",
+              "calls": [
+                {
+                  "method": "searchDocuments",
+                  "file": "frontend/src/utils/api.js",
+                  "line": 42,
+                  "notes": "axios GET /api/search?q={encodeURIComponent(query)}. Request interceptor attaches Bearer token from localStorage key 'docvault_token'. Response interceptor logs a warning on HTTP 401.",
+                  "calls": [
+                    {
+                      "method": "GET /api/search — router handler",
+                      "file": "backend/src/routes/search.js",
+                      "line": 8,
+                      "notes": "Validates q param; returns HTTP 400 if absent or blank. Returns HTTP 500 on unexpected error.",
+                      "calls": [
+                        {
+                          "method": "SearchOrchestrator.search",
+                          "file": "backend/src/services/SearchOrchestrator.js",
+                          "line": 17,
+                          "calls": [
+                            {
+                              "method": "SearchOrchestrator.normalizeQuery",
+                              "file": "backend/src/services/SearchOrchestrator.js",
+                              "line": 32,
+                              "notes": "Returns query.trim().toLowerCase(). Returns null for empty/non-string input — caller returns [] immediately."
+                            },
+                            {
+                              "method": "IndexManager.search",
+                              "file": "backend/src/services/IndexManager.js",
+                              "line": 23,
+                              "notes": "IndexManager.isIndexAvailable() always returns false (indexReady hardcoded false). Always delegates to FallbackSearchProvider.",
+                              "calls": [
+                                {
+                                  "method": "FallbackSearchProvider.search",
+                                  "file": "backend/src/services/FallbackSearchProvider.js",
+                                  "line": 9,
+                                  "db": { "table": "documents_v2", "op": "select" },
+                                  "notes": "Executes: SELECT * FROM documents_v2 WHERE name ILIKE '%query%' ORDER BY uploaded_at DESC. Adds score:1.0 to every row."
+                                }
+                              ]
+                            },
+                            {
+                              "method": "SearchOrchestrator.rerank",
+                              "file": "backend/src/services/SearchOrchestrator.js",
+                              "line": 44,
+                              "notes": "No-op — maps every result to {...result, score: 1.0}. Intended for TF-IDF/BM25 but never implemented."
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

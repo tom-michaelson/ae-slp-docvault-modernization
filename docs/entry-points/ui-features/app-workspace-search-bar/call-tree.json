@@ -1,0 +1,56 @@
+{
+  "entryPoint": {
+    "method": "SearchBar.handleSubmit",
+    "file": "frontend/src/components/SearchBar.jsx",
+    "line": 31
+  },
+  "calls": [
+    {
+      "method": "props.onSearch",
+      "file": "frontend/src/App.jsx",
+      "line": 70,
+      "notes": "Calls App.handleSearch, which imperatively invokes DocumentGrid.handleSearch via this.documentGridRef; prop is only called when query.trim() is non-empty.",
+      "calls": [
+        {
+          "method": "DocumentGrid.handleSearch",
+          "file": "frontend/src/components/DocumentGrid.jsx",
+          "line": 566,
+          "notes": "If query.trim() is empty, falls back to loadDocuments() (GET /api/documents) instead of search.",
+          "calls": [
+            {
+              "method": "searchDocuments",
+              "file": "frontend/src/utils/api.js",
+              "line": 42,
+              "notes": "HTTP GET /api/search?q={encodeURIComponent(query)}. Sets DocumentGrid state: documents = response.data.results.",
+              "calls": [
+                {
+                  "method": "SearchOrchestrator.search",
+                  "file": "backend/src/services/SearchOrchestrator.js",
+                  "line": 17,
+                  "notes": "Normalizes query (trim + toLowerCase), then delegates to IndexManager. Re-ranks results by setting score=1.0 on every row (no-op).",
+                  "calls": [
+                    {
+                      "method": "IndexManager.search",
+                      "file": "backend/src/services/IndexManager.js",
+                      "line": 27,
+                      "notes": "isIndexAvailable() always returns false; always delegates to FallbackSearchProvider. The index-available branch is dead code.",
+                      "calls": [
+                        {
+                          "method": "FallbackSearchProvider.search",
+                          "file": "backend/src/services/FallbackSearchProvider.js",
+                          "line": 9,
+                          "db": { "table": "documents_v2", "op": "select" },
+                          "notes": "SELECT * FROM documents_v2 WHERE name ILIKE '%{query}%' ORDER BY uploaded_at DESC. Only the name column is searched; tags column is not used in the WHERE clause."
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

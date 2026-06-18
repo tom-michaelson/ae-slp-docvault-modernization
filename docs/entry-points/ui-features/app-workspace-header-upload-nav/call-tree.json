@@ -1,0 +1,30 @@
+{
+  "entryPoint": {
+    "method": "Header — onClick on 'Upload' <span>",
+    "file": "frontend/src/components/Header.jsx",
+    "line": 40
+  },
+  "calls": [
+    {
+      "method": "props.onNavigate('upload')",
+      "file": "frontend/src/components/Header.jsx",
+      "line": 40,
+      "notes": "Guard: onNavigate is called only when the prop is defined (onNavigate && onNavigate('upload')).",
+      "calls": [
+        {
+          "method": "App.handleNavigate",
+          "file": "frontend/src/App.jsx",
+          "line": 58,
+          "calls": [
+            {
+              "method": "App.setState",
+              "file": "frontend/src/App.jsx",
+              "line": 59,
+              "notes": "Sets { activeSection: 'upload' }. Triggers re-render. DocumentGrid is always rendered in the workspace; the Sidebar highlights the Upload item via activeSection === section.id comparison. No API call and no Redux dispatch occur."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

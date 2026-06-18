@@ -1,0 +1,30 @@
+{
+  "entryPoint": {
+    "method": "Header — onClick on 'Documents' <span>",
+    "file": "frontend/src/components/Header.jsx",
+    "line": 37
+  },
+  "calls": [
+    {
+      "method": "props.onNavigate('documents')",
+      "file": "frontend/src/components/Header.jsx",
+      "line": 37,
+      "notes": "Guard: onNavigate is called only when the prop is defined (onNavigate && onNavigate('documents')).",
+      "calls": [
+        {
+          "method": "App.handleNavigate",
+          "file": "frontend/src/App.jsx",
+          "line": 58,
+          "calls": [
+            {
+              "method": "App.setState",
+              "file": "frontend/src/App.jsx",
+              "line": 59,
+              "notes": "Sets { activeSection: 'documents' }. Triggers re-render. DocumentGrid is always rendered in the workspace; the Sidebar highlights the active section via activeSection === section.id comparison."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

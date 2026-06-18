@@ -1,0 +1,21 @@
+{
+  "entryPoint": {
+    "method": "DocumentGrid.handleViewToggle",
+    "file": "frontend/src/components/DocumentGrid.jsx",
+    "line": 606
+  },
+  "calls": [
+    {
+      "method": "React.Component.setState",
+      "file": "frontend/src/components/DocumentGrid.jsx",
+      "line": 607,
+      "notes": "Functional updater: prevState.viewMode === 'grid' ? 'list' : 'grid'. Pure state flip — no side effects, no API call, no persistence."
+    }
+  ],
+  "renderedBy": {
+    "method": "DocumentGrid.render",
+    "file": "frontend/src/components/DocumentGrid.jsx",
+    "line": 961,
+    "notes": "viewMode is read from this.state inside render(). The container div at line 1026 switches between styles.grid and styles.list. The per-document renderer at line 1028 switches between this.renderCard(doc) and this.renderListRow(doc). The toggle button style at line 997 switches between styles.viewToggleActive and styles.viewToggle."
+  }
+}

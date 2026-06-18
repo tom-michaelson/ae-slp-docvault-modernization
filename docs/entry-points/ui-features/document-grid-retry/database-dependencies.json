@@ -1,0 +1,18 @@
+[
+  {
+    "type": "table",
+    "name": "documents_v2",
+    "key": "documents-v2",
+    "operations": ["select"],
+    "columns": ["id", "name", "file_type", "file_path", "tags", "uploaded_at", "uploaded_by"],
+    "locations": [
+      "backend/src/db/migrations/002-create-documents-v2.sql",
+      "backend/src/routes/documents.js",
+      "frontend/src/utils/api.js"
+    ],
+    "notes": [
+      "Fetched in full via SELECT * FROM documents_v2 ORDER BY uploaded_at DESC; all columns are returned and placed in component state.documents.",
+      "The retry action does not narrow the query — it always re-fetches the entire document list, relying on client-side filterDocuments() and sortDocuments() for any active filter/sort state."
+    ]
+  }
+]

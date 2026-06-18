@@ -1,0 +1,18 @@
+[
+  {
+    "type": "table",
+    "name": "documents",
+    "key": "documents",
+    "operations": ["insert", "select"],
+    "columns": ["id", "name", "file_type", "file_path", "tags", "uploaded_at", "uploaded_by"],
+    "locations": [
+      "backend/src/db/migrations/001-create-documents.sql",
+      "backend/src/routes/upload.js"
+    ],
+    "notes": [
+      "A new row is inserted on every successful drag-drop upload. 'name' is taken from file.name sent in FormData; 'file_type' from Multer's detected mimetype; 'file_path' is '/uploads/{uuid}{ext}'. The 'tags' column is always NULL for uploads from this feature because the drop handler passes no tag data.",
+      "After the INSERT, a PostgreSQL trigger (trg_sync_to_v2) copies the row to documents_v2 but deliberately omits the tags column — a known schema bug documented in migration 003-create-trigger.sql.",
+      "The full documents table is also re-queried via GET /api/documents immediately after a successful upload to refresh the grid."
+    ]
+  }
+]

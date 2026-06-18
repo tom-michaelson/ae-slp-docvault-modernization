@@ -1,0 +1,16 @@
+{
+  "key": "document-grid-tag-editor-add-tag",
+  "name": "Add Tag Button",
+  "type": "ui-feature",
+  "elementType": "ui-action",
+  "uri": null,
+  "location": "frontend/src/components/DocumentGrid.jsx",
+  "domain": "tags",
+  "parentKey": "document-grid-tag-editor-modal",
+  "notes": [
+    "onClick fires handleAddTag(); also triggered by Enter key in the tag input via handleTagKeyPress (line 659).",
+    "Adds the trimmed input to tagEditorTags only if: (a) non-empty after trim, (b) not already present in tagEditorTags, (c) tagEditorTags.length < 10.",
+    "No API call — modifies local modal state only; the tag is not persisted until the user clicks Save.",
+    "maxLength={50} on the input element provides a secondary guard on tag length, but handleAddTag itself does not enforce a character-count limit."
+  ]
+}

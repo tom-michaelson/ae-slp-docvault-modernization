@@ -1,0 +1,32 @@
+[
+  {
+    "type": "table",
+    "name": "documents",
+    "key": "documents",
+    "operations": ["insert", "select"],
+    "columns": ["id", "name", "file_type", "file_path", "tags", "uploaded_at", "uploaded_by"],
+    "locations": [
+      "backend/src/routes/upload.js",
+      "backend/src/db/migrations/001-create-documents.sql"
+    ],
+    "notes": [
+      "INSERT fires on every upload; fields name and file_type come from the uploaded file, file_path is /uploads/{uuid}{ext}, tags is NULL (the upload area does not send tags), uploaded_by is req.user.email when a JWT is present.",
+      "SELECT fires via GET /api/documents immediately after a successful upload to refresh the document grid."
+    ]
+  },
+  {
+    "type": "table",
+    "name": "documents_v2",
+    "key": "documents-v2",
+    "operations": ["insert"],
+    "columns": ["id", "name", "file_type", "file_path", "uploaded_at", "uploaded_by"],
+    "locations": [
+      "backend/src/db/migrations/002-create-documents-v2.sql",
+      "backend/src/db/migrations/003-create-trigger.sql"
+    ],
+    "notes": [
+      "Populated indirectly: the AFTER INSERT trigger trg_sync_to_v2 on the documents table copies each new row here, but deliberately omits the tags column — documents_v2 rows will always have NULL tags regardless of what was in documents.",
+      "The upload area itself does not query documents_v2 directly; the side-write is a DB-level concern the Angular replacement must be aware of."
+    ]
+  }
+]
