@@ -1,4 +1,4 @@
-# Functional spec — Application workspace shell
+# Functional spec — Main Application Workspace
 
 **Key:** `app-workspace`
 **URL:** `GET /` (single-page application — URL never changes during use)
@@ -274,7 +274,7 @@ Scenario: Sidebar navigation is cosmetic only
 | Image preview | `<img>`; shown when `file_type` starts with `'image/'` | `PreviewPanel.jsx:131` |
 | "Preview not available" message | text; shown for unsupported file types | `PreviewPanel.jsx:136` |
 | Login email input | `<input type="email">`; required | `LoginForm.jsx:96` |
-| Login password input | `<input type="password">`; required | `LoginForm.jsx:103` |
+| Login password input | `<input type="password">`; required | `LoginForm.jsx:104` |
 | "Sign In" submit button | form submit → `handleSubmit`; disabled during loading | `LoginForm.jsx:112` |
 | Login error message | conditional text; shows AuthContext error | `LoginForm.jsx:116` |
 

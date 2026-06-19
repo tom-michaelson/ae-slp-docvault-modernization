@@ -1,50 +1,56 @@
 {
-  "entryPoint": {
-    "method": "Header",
-    "file": "frontend/src/components/Header.jsx",
-    "line": 32,
-    "notes": "Functional React component. Receives onNavigate callback prop from App.handleNavigate."
-  },
-  "calls": [
+  "handlers": [
     {
-      "method": "onNavigate('documents')",
-      "trigger": "onClick on Documents span",
-      "file": "frontend/src/components/Header.jsx",
-      "line": 37,
+      "entryPoint": {
+        "method": "Header.onNavigate('documents')",
+        "file": "frontend/src/components/Header.jsx",
+        "line": 37,
+        "reads": [],
+        "writes": []
+      },
       "calls": [
         {
           "method": "App.handleNavigate",
           "file": "frontend/src/App.jsx",
           "line": 58,
-          "notes": "Calls this.setState({ activeSection: 'documents' }). No API call. No DB op."
+          "notes": "Calls this.setState({ activeSection: 'documents' }). No API call, no DB op. DocumentGrid is always rendered regardless of activeSection.",
+          "calls": []
         }
       ]
     },
     {
-      "method": "onNavigate('upload')",
-      "trigger": "onClick on Upload span",
-      "file": "frontend/src/components/Header.jsx",
-      "line": 40,
+      "entryPoint": {
+        "method": "Header.onNavigate('upload')",
+        "file": "frontend/src/components/Header.jsx",
+        "line": 40,
+        "reads": [],
+        "writes": []
+      },
       "calls": [
         {
           "method": "App.handleNavigate",
           "file": "frontend/src/App.jsx",
           "line": 58,
-          "notes": "Calls this.setState({ activeSection: 'upload' }). No API call. No DB op."
+          "notes": "Calls this.setState({ activeSection: 'upload' }). No upload panel is rendered — DocumentGrid remains the main content view. The Upload link is a visual-only affordance in the legacy app.",
+          "calls": []
         }
       ]
     },
     {
-      "method": "onNavigate('search')",
-      "trigger": "onClick on Search span",
-      "file": "frontend/src/components/Header.jsx",
-      "line": 43,
+      "entryPoint": {
+        "method": "Header.onNavigate('search')",
+        "file": "frontend/src/components/Header.jsx",
+        "line": 43,
+        "reads": [],
+        "writes": []
+      },
       "calls": [
         {
           "method": "App.handleNavigate",
           "file": "frontend/src/App.jsx",
           "line": 58,
-          "notes": "Calls this.setState({ activeSection: 'search' }). No API call. No DB op."
+          "notes": "Calls this.setState({ activeSection: 'search' }). SearchBar is always mounted regardless of activeSection. Full search flow is documented in app-workspace-header-search-nav.",
+          "calls": []
         }
       ]
     }

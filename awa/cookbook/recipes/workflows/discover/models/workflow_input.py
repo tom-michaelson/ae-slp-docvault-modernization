@@ -76,3 +76,15 @@ class DiscoverWorkflowInput(BaseModel):
             "Useful when the legacy application is not running."
         ),
     )
+    start_phase: int = Field(
+        default=1,
+        ge=1,
+        le=7,
+        description=(
+            "Phase to begin execution from (1-7). Phases before this number are skipped "
+            "and their outputs are loaded from the inventory JSON files already on disk. "
+            "Requires that prior-phase outputs exist: phases 2-7 need "
+            "'docs/entry-points/ui-features/inventory.all.json', and phases 4-7 also need "
+            "'docs/entry-points/api-endpoints/inventory.all.json'."
+        ),
+    )

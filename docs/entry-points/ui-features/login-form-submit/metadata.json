@@ -3,14 +3,14 @@
   "name": "Sign In Button",
   "type": "ui-feature",
   "elementType": "ui-action",
-  "uri": "Client-side form submit; triggers POST /api/auth/login then POST /api/auth/refresh",
+  "uri": "POST /api/auth/login → POST /api/auth/refresh (client-side sequence; no page navigation on success)",
   "location": "frontend/src/components/LoginForm.jsx",
   "codeBehind": "frontend/src/context/AuthContext.jsx",
   "domain": "auth",
   "notes": [
-    "Submit button is disabled and label switches to 'Signing in...' while AuthContext.loading is true (AuthContext.jsx:51).",
-    "On form submit, calls AuthContext.login(email, password) which chains POST /api/auth/login then POST /api/auth/refresh before setting isAuthenticated=true.",
-    "BUG (FR-007): POST /api/auth/refresh returns {session:{...}} instead of {token:'...'}; AuthContext crashes unconditionally with TypeError: Cannot read properties of undefined (reading 'split') on valid credentials.",
-    "Two independent error surfaces exist below the form: this.state.error (set by LoginForm.handleSubmit catch) and this.context.error (set by AuthContext catch); both can render simultaneously."
+    "Submit button is disabled and label switches to 'Signing in...' while AuthContext.loading is true (AuthContext.jsx:51); controlled by context state, not local component state.",
+    "On form submit, calls AuthContext.login(email, password) which chains POST /api/auth/login then immediately POST /api/auth/refresh; only after both succeed does it set isAuthenticated=true.",
+    "BUG (FR-007): POST /api/auth/refresh returns {session:{userId,email,createdAt}} instead of {token,refreshToken}; AuthContext.login crashes unconditionally at line 75 with TypeError: Cannot read properties of undefined (reading 'split') even when credentials are correct.",
+    "Two independent error surfaces render below the form: this.state.error (LoginForm catch, line 81) and this.context.error (AuthContext catch, line 88); both may appear simultaneously if the error propagates through both catch blocks."
   ]
 }

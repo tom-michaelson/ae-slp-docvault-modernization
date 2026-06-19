@@ -1,11 +1,11 @@
 {
   "key": "app-workspace",
-  "name": "Application workspace shell",
+  "name": "Main Application Workspace",
   "type": "ui-feature",
   "elementType": "ui-page",
   "uri": "/",
   "location": "frontend/src/App.jsx",
-  "domain": "workspace",
+  "domain": "documents",
   "notes": [
     "Root SPA shell that orchestrates the entire DocVault UI: auth gate, navigation, document browsing, search, upload, and document preview in a single-page layout.",
     "Authentication gate: renders LoginForm exclusively when AuthContext.isAuthenticated is false; renders the full workspace (Header + Sidebar + SearchBar + DocumentGrid + optional PreviewPanel) when true.",

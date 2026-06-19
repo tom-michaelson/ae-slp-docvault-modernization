@@ -16,8 +16,10 @@ implementations:
 from pathlib import Path
 
 from temporalio import workflow
+from temporalio.exceptions import ApplicationError
 
 from cookbook.recipes.decorators.recipe_exposed import recipe_exposed
+from cookbook.recipes.workflows.discover import utils
 from cookbook.recipes.workflows.discover.child_workflows.analyze_api_endpoints_workflow import (
     AnalyzeApiEndpointsWorkflow,
 )
@@ -39,6 +41,8 @@ from cookbook.recipes.workflows.discover.child_workflows.plan_api_endpoints_work
 from cookbook.recipes.workflows.discover.child_workflows.plan_ui_features_workflow import (
     PlanUiFeaturesWorkflow,
 )
+from cookbook.recipes.workflows.discover.models.inventory_item import InventoryItem
+from cookbook.recipes.workflows.discover.models.ui_inventory_item import UiInventoryItem
 from cookbook.recipes.workflows.discover.models.workflow_input import DiscoverWorkflowInput
 
 
@@ -74,9 +78,14 @@ class DiscoverWorkflow:
         )
         agent_provider = workflow_input.agent_provider
         skip_screenshots = workflow_input.skip_screenshots
+        start_phase = workflow_input.start_phase
+
+        ui_inventory_path = Path(docs_dir) / "entry-points" / "ui-features" / f"inventory.{domain}.json"
+        api_inventory_path = Path(docs_dir) / "entry-points" / "api-endpoints" / f"inventory.{domain}.json"
 
         workflow.set_current_details(
-            f"Discovering {legacy_dir} (domain={domain}, target_stack={target_stack or 'unset'}).",
+            f"Discovering {legacy_dir} "
+            f"(domain={domain}, target_stack={target_stack or 'unset'}, start_phase={start_phase}).",
         )
 
         # All phases cwd into project_root_dir so slash commands under
@@ -84,51 +93,77 @@ class DiscoverWorkflow:
         # legacy_dir as an extra arg so their slash commands can read the legacy source.
 
         # Phase 1: Inventory UI features
-        ui_inventory = await workflow.execute_child_workflow(
-            workflow=InventoryUiFeaturesWorkflow,
-            args=[docs_dir, project_root_dir, legacy_dir, domain, agent_provider],
-        )
-        if not ui_inventory:
-            return f"No UI features found in {legacy_dir} for domain '{domain}'."
+        if start_phase <= 1:
+            ui_inventory = await workflow.execute_child_workflow(
+                workflow=InventoryUiFeaturesWorkflow,
+                args=[docs_dir, project_root_dir, legacy_dir, domain, agent_provider],
+            )
+            if not ui_inventory:
+                return f"No UI features found in {legacy_dir} for domain '{domain}'."
+        else:
+            workflow.logger.info(f"start_phase={start_phase}: loading UI inventory from {ui_inventory_path}.")
+            ui_inventory = await utils.read_inventory(ui_inventory_path, UiInventoryItem)
+            if not ui_inventory:
+                raise ApplicationError(
+                    f"start_phase={start_phase} requires a UI inventory on disk, "
+                    f"but none was found at {ui_inventory_path}. "
+                    "Run from phase 1 first, or check that the path is correct.",
+                    non_retryable=True,
+                )
 
         # Phase 2: Analyze UI features (call trees, api-usage, screenshots)
-        ui_inventory = await workflow.execute_child_workflow(
-            workflow=AnalyzeUiFeaturesWorkflow,
-            args=[
-                ui_inventory,
-                docs_dir,
-                project_root_dir,
-                legacy_dir,
-                app_url,
-                max_concurrency,
-                agent_provider,
-                skip_screenshots,
-            ],
-        )
+        if start_phase <= 2:  # noqa: PLR2004
+            ui_inventory = await workflow.execute_child_workflow(
+                workflow=AnalyzeUiFeaturesWorkflow,
+                args=[
+                    ui_inventory,
+                    docs_dir,
+                    project_root_dir,
+                    legacy_dir,
+                    app_url,
+                    max_concurrency,
+                    agent_provider,
+                    skip_screenshots,
+                ],
+            )
 
         # Phase 3: Gather API inventory from UI features (no agent calls, pure JSON merge)
-        api_inventory = await workflow.execute_child_workflow(
-            workflow=GatherApiInventoryFromUiFeaturesWorkflow,
-            args=[ui_inventory, docs_dir, domain],
-        )
+        if start_phase <= 3:  # noqa: PLR2004
+            api_inventory = await workflow.execute_child_workflow(
+                workflow=GatherApiInventoryFromUiFeaturesWorkflow,
+                args=[ui_inventory, docs_dir, domain],
+            )
+        else:
+            workflow.logger.info(f"start_phase={start_phase}: loading API inventory from {api_inventory_path}.")
+            api_inventory = await utils.read_inventory(api_inventory_path, InventoryItem)
+            if not api_inventory:
+                raise ApplicationError(
+                    f"start_phase={start_phase} requires an API inventory on disk, "
+                    f"but none was found at {api_inventory_path}. "
+                    "Run from phase 3 or earlier first, or check that the path is correct.",
+                    non_retryable=True,
+                )
 
         # Phase 4: Analyze API endpoints
-        api_inventory = await workflow.execute_child_workflow(
-            workflow=AnalyzeApiEndpointsWorkflow,
-            args=[api_inventory, docs_dir, project_root_dir, legacy_dir, max_concurrency, agent_provider],
-        )
+        if start_phase <= 4:  # noqa: PLR2004
+            api_inventory = await workflow.execute_child_workflow(
+                workflow=AnalyzeApiEndpointsWorkflow,
+                args=[api_inventory, docs_dir, project_root_dir, legacy_dir, max_concurrency, agent_provider],
+            )
 
         # Phase 5: Describe entry points
-        await workflow.execute_child_workflow(
-            workflow=DescribeEntryPointsWorkflow,
-            args=[ui_inventory, api_inventory, docs_dir, project_root_dir, max_concurrency, agent_provider],
-        )
+        if start_phase <= 5:  # noqa: PLR2004
+            await workflow.execute_child_workflow(
+                workflow=DescribeEntryPointsWorkflow,
+                args=[ui_inventory, api_inventory, docs_dir, project_root_dir, max_concurrency, agent_provider],
+            )
 
         # Phase 6: Plan API endpoints
-        await workflow.execute_child_workflow(
-            workflow=PlanApiEndpointsWorkflow,
-            args=[api_inventory, docs_dir, project_root_dir, max_concurrency, target_stack, agent_provider],
-        )
+        if start_phase <= 6:  # noqa: PLR2004
+            await workflow.execute_child_workflow(
+                workflow=PlanApiEndpointsWorkflow,
+                args=[api_inventory, docs_dir, project_root_dir, max_concurrency, target_stack, agent_provider],
+            )
 
         # Phase 7: Plan UI features
         await workflow.execute_child_workflow(
